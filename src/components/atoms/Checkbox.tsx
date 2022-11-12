@@ -1,11 +1,12 @@
 import React, { FC, useState } from "react";
 import CONSTANTS from "constants/constants";
-import 'assets/styles/checkbox.scss';
+import 'styles/checkbox.scss';
 
 export interface CheckboxProps {
+  type: string,
   inputId: string,
   defaultChecked?: boolean,
-  label: string,
+  label: any,
   value: string,
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
   disabled?: boolean
@@ -13,7 +14,7 @@ export interface CheckboxProps {
 
 const { BRAND_CLASS } = CONSTANTS.CLASS_NAMES
 
-const Checkbox: FC<CheckboxProps> = ({inputId, value, defaultChecked, label, onChange, disabled}) => {
+const Checkbox: FC<CheckboxProps> = ({type, inputId, value, defaultChecked, label, onChange, disabled}) => {
   const [checked, setChecked] = useState(defaultChecked ? true : false)
   const [checkboxValue, setCheckboxValue] = useState<string>();
 
@@ -27,8 +28,8 @@ const Checkbox: FC<CheckboxProps> = ({inputId, value, defaultChecked, label, onC
 
   return (
     <div className={`${BRAND_CLASS}-checkbox`}>
-      <input id={inputId} type="radio" checked={checked} value={value} onChange={handleOnChange} disabled={disabled} />
-      <label htmlFor={inputId}>{label}</label>
+      <input id={inputId} type={type} checked={checked} value={value} onChange={handleOnChange} disabled={disabled} />
+      <label htmlFor={inputId}>{inputId === 'status' && checked ? 'Active' : label}</label>
     </div>
   )
 }

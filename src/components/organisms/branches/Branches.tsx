@@ -1,8 +1,17 @@
-import { FC } from "react";
+import { FC, Suspense } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "store";
+import AddBranch from "./AddBranch";
+import BranchTable from "./BranchTable";
 
 const Branches: FC = () => {
+  const { isAddBranchButtonClicked } = useSelector((state: RootState) => state.branch);
   return (
-    <h2>Branches</h2>
+    <>
+      <Suspense>
+        {!isAddBranchButtonClicked ? <BranchTable /> : <AddBranch />}
+      </Suspense>
+    </>
   )
 }
 

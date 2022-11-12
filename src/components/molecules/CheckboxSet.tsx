@@ -1,12 +1,13 @@
 import { FC } from "react";
 import Checkbox from "components/atoms/Checkbox";
-import 'assets/styles/checkbox-set.scss';
+import 'styles/checkbox-set.scss';
 import CONSTANTS from "constants/constants";
 
 export interface CheckboxSetProps {
+  type: string
   title: string,
   desc?: string,
-  isUl?: boolean,
+  isHorizontal?: boolean,
   options: {
     id: string,
     label: string
@@ -15,16 +16,17 @@ export interface CheckboxSetProps {
 
 const { BRAND_CLASS } = CONSTANTS.CLASS_NAMES
 
-const CheckboxSet: FC<CheckboxSetProps> = ({ title, desc, options, isUl }) => {
+const CheckboxSet: FC<CheckboxSetProps> = ({ type, title, desc, options, isHorizontal }) => {
   return (
-    <div className={`${BRAND_CLASS}-checkbox-set ${isUl ? 'vertical' : ''}`}>
+    <div className={`${BRAND_CLASS}-checkbox-set ${isHorizontal ? 'horizontal' : 'vertical'}`}>
       <h3 className="title">{title}</h3>
       {desc && <p>{desc}</p>}
-      { !isUl ? (
+      { !isHorizontal ? (
         <ul>
           {options.map((option, i) => (
             <li key={i}>
               <Checkbox
+                type={type}
                 inputId={option.id}
                 label={option.label}
                 value={option.label}
@@ -35,12 +37,15 @@ const CheckboxSet: FC<CheckboxSetProps> = ({ title, desc, options, isUl }) => {
         </ul>
       ) : (
         options.map((option, i) => (
-          <Checkbox
-            inputId={option.id}
-            label={option.label}
-            value={option.label}
-            onChange={() => {}}
-          />
+          <span key={i}>
+            <Checkbox
+              type={type}
+              inputId={option.id}
+              label={option.label}
+              value={option.label}
+              onChange={() => {}}
+            />
+          </span>
         ))
       )}
     </div>

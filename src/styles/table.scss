@@ -1,0 +1,71 @@
+@use 'fonts';
+@use 'colors';
+
+.table {
+  font-family: fonts.$font-regular;
+  color: colors.$stone-grey;
+  border: 1px solid colors.$cool-grey;
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+
+  .action-head {
+    align-items: center;
+    justify-content: center;
+  }
+  thead >  tr {
+    position: sticky;
+    top: 0;
+  }
+
+  th, td {
+    text-align-last: left;
+    padding-left: 10px;
+    border: 1px solid colors.$cool-grey;
+    height: 35px;
+    font-family: fonts.$font-regular;
+    color: colors.$stone-grey;
+    letter-spacing: -0.55px;
+  }
+
+  td {
+    color: colors.$carbon
+  }
+
+  th {
+    background-color: colors.$off-white;
+  }
+
+  th, tr {
+    td {
+      cursor: pointer;
+    }
+    &:nth-child(even) {
+      background-color: colors.$off-white;
+    }
+    &:hover {
+      td {
+        background: colors.$medium-grey;
+        color: #fff
+      }
+    }
+    &.active {
+      td {
+        background: colors.$chits-blue;
+        color: #fff;
+      }
+    }
+  }
+  th, td, tr {
+    transition: all 0.3s ease;
+  }
+  .actions {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    span img:hover {
+      fill: red;
+    }
+  }
+}

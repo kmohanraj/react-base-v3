@@ -1,0 +1,28 @@
+@use 'fonts';
+@use 'colors';
+
+.top-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  
+  .top-panel-buttons {
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 40px;
+  gap: 20px;
+
+  img {
+    cursor: pointer;
+  }
+  div {
+    font-size: 18px;
+    font-family: fonts.$font-medium;
+  }
+}

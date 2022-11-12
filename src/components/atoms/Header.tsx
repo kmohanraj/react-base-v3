@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import 'assets/styles/header.scss';
+import 'styles/header.scss';
 
 export interface IMenusProps {
   path: string,
@@ -41,8 +41,8 @@ const Header = () => {
       <input className="menu-btn" type="checkbox" id="menu-btn" />
       <label className="menu-icon" htmlFor="menu-btn"><span className="navicon"></span></label>
       <ul className="menu">
-        { Menus.map((ele: IMenusProps) => (
-          <li><Link to={ele.path}>{ele.name}</Link></li>
+        { Menus.map((ele: IMenusProps, i: number) => (
+          <li key={i}><Link to={ele.path}>{ele.name}</Link></li>
         ))}
       </ul>
     </header>

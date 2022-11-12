@@ -18,11 +18,11 @@
     transition: all 0.3s ease;
 
     &:checked {
-      background-color: $kohler-blue;
+      background-color: $chits-blue;
       border: none;
 
       & + label {
-        color: $kohler-blue;
+        color: $chits-blue;
       }
 
       &:disabled {

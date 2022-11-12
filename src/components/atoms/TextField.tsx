@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import cx from 'classnames';
-import 'assets/styles/text-field.scss';
+import 'styles/text-field.scss';
 import CONSTANTS from "constants/constants";
 export interface TextFieldProps {
   value: string,
@@ -39,6 +39,7 @@ const TextField: FC<TextFieldProps> = ({ value, onChange, message, error, placeh
         required={required}
         aria-required={required}
         onChange={onChange}
+        autoComplete="off"
       />
       <label className={labelClass} htmlFor={inputId}>
         {placeholder}
