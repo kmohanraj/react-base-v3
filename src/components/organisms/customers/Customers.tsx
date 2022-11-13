@@ -1,18 +1,14 @@
-import { FC } from "react";
-import TopPanel from "components/molecules/TopPanel";
-import Button from "components/atoms/Button";
+import { FC } from 'react';
+import type { RootState } from 'store';
+import { useSelector } from 'react-redux';
+import CustomerTable from './CustomerTable';
+import AddCustomer from './AddCustomer';
 
 const Customers: FC = () => {
-  return (
-    <>
-     <TopPanel panelType="top-panel">
-        <span className="top-panel-entity">No Results</span>
-        <div className="top-panel-buttons">
-          <Button type='ghost' label='Export CSV' onClick={() => console.log('add branch')} />
-          <Button type='primary' label='Add Customer' onClick={() => console.log('add customer')} />
-        </div>
-      </TopPanel>
-    </>
-  )
-}
+  const { isAddCustomerBtnClicked } = useSelector(
+    (state: RootState) => state.customer
+  );
+
+  return <>{!isAddCustomerBtnClicked ? <CustomerTable /> : <AddCustomer />}</>;
+};
 export default Customers;

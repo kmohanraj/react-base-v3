@@ -1,18 +1,14 @@
-import { FC } from "react";
-import TopPanel from "components/molecules/TopPanel";
-import Button from "components/atoms/Button";
+import { FC } from 'react';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'store';
+import GroupTable from './GroupTable';
+import AddGroup from './AddGroup';
 
 const Groups: FC = () => {
-  return (
-    <>
-      <TopPanel panelType="top-panel">
-        <span className="top-panel-entity">No Results</span>
-        <div className="top-panel-buttons">
-          <Button type='ghost' label='Export CSV' onClick={() => console.log('add branch')} />
-          <Button type='primary' label='Add Group' onClick={() => console.log('add group')} />
-        </div>
-      </TopPanel>
-    </>
-  )
-}
+  const { isAddGroupBtnClicked } = useSelector(
+    (state: RootState) => state.group
+  );
+
+  return <>{!isAddGroupBtnClicked ? <GroupTable /> : <AddGroup />}</>;
+};
 export default Groups;
