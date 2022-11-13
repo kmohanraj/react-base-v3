@@ -1,50 +1,61 @@
 import { FC } from 'react';
-import TopPanel from 'components/molecules/TopPanel';
 import arrowBack from 'assets/images/back_button.svg';
-import { setIsAddBranchBtnClicked } from 'store/slice/branchs.slice';
-import { useDispatch } from 'react-redux';
+import TopPanel from 'components/molecules/TopPanel';
 import Input from 'components/atoms/TextField';
-import 'styles/chit-form.scss';
+import { setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
+import { useDispatch } from 'react-redux';
 import Button from 'components/atoms/Button';
 
-const AddBranch: FC = () => {
+const AddGroup: FC = () => {
   const dispatch = useDispatch();
+
   const handleOnSubmit = () => {
     console.log('submit');
-    alert();
   };
-
   return (
     <>
       <TopPanel panelType='breadcrumb'>
         <img
           src={arrowBack}
           alt='Back'
-          onClick={() => dispatch(setIsAddBranchBtnClicked(false))}
+          onClick={() => dispatch(setIsAddGroupBtnClicked(false))}
         />
         <div>Create</div>
       </TopPanel>
-
       <div className='chit-form'>
         <Input
-          inputId='branch_name'
+          inputId='group_code'
           value=''
           onChange={() => {}}
-          placeholder='Enter Branch Name'
+          placeholder='Enter Group Code'
           required
         />
         <Input
-          inputId='branch_code'
+          inputId='chit_amount'
           value=''
           onChange={() => {}}
-          placeholder='Enter Branch Code'
+          placeholder='Select Amount'
           required
         />
         <Input
-          inputId='organization_id'
+          inputId='duration'
           value=''
           onChange={() => {}}
-          placeholder='Select Organization'
+          placeholder='Select Duration'
+          required
+        />
+        <Input
+          inputId='start_date'
+          value=''
+          onChange={() => {}}
+          placeholder='Select Start Date'
+          required
+        />
+        <Input
+          inputId='end_date'
+          value=''
+          onChange={() => {}}
+          placeholder='Select End Date'
           required
         />
       </div>
@@ -52,7 +63,7 @@ const AddBranch: FC = () => {
         <Button
           type='ghost'
           label='Cancel'
-          onClick={() => dispatch(setIsAddBranchBtnClicked(false))}
+          onClick={() => dispatch(setIsAddGroupBtnClicked(false))}
         />
         <Button
           type='primary'
@@ -63,4 +74,4 @@ const AddBranch: FC = () => {
     </>
   );
 };
-export default AddBranch;
+export default AddGroup;

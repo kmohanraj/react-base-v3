@@ -81,6 +81,7 @@
 
     &.error {
       color: $danger;
+      text-overflow: ellipsis;
     }
   }
 

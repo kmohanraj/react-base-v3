@@ -9,7 +9,7 @@ const AddUser = () => {
   const dispatch = useDispatch();
 
   const handleOnSubmit = () => {
-    console.log('8888')
+    console.log('submit')
   }
   return (
     <>
@@ -45,6 +45,8 @@ const AddUser = () => {
           onChange={() => {}}
           placeholder="Enter Password"
           required
+          message="Ex, Password@123"
+          error=""
         />
         <Input
           inputId="phone"
