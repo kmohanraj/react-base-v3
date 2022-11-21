@@ -7,12 +7,20 @@ export const usersSlice = createSlice({
   reducers: {
     setIsAddUserBtnClicked: (state, action) => {
       state.isAddUserBtnClicked = action.payload
+    },
+    setUser: (state, action) => {
+      state.user = action.payload
+    },
+    setLogin: (state, action) => {
+      state.login = action.payload
     }
   }
 });
 
 export const {
-  setIsAddUserBtnClicked
+  setIsAddUserBtnClicked,
+  setUser,
+  setLogin
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import cx from 'classnames';
 import 'styles/text-field.scss';
 import CONSTANTS from 'constants/constants';
+
 export interface TextFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,6 +14,7 @@ export interface TextFieldProps {
   customClass?: string;
   preFixIcon?: any;
   altName?: string;
+  inputType?: string;
 }
 
 const { BRAND_CLASS } = CONSTANTS.CLASS_NAMES;
@@ -28,6 +30,7 @@ const TextField: FC<TextFieldProps> = ({
   customClass,
   preFixIcon,
   altName,
+  inputType
 }) => {
   const errorClass = cx('message', { error: error });
   const labelClass = cx({
@@ -51,6 +54,7 @@ const TextField: FC<TextFieldProps> = ({
           />
         )}
         <input
+          name={inputId}
           className={inputClass}
           id={inputId}
           value={value}
@@ -58,6 +62,7 @@ const TextField: FC<TextFieldProps> = ({
           aria-required={required}
           onChange={onChange}
           autoComplete='off'
+          type={inputType}
         />
         <label className={labelClass} htmlFor={inputId}>
           {placeholder}

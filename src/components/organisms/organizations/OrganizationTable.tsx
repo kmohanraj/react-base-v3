@@ -3,6 +3,9 @@ import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch } from 'react-redux';
 import { setIsAddOrgBtnClicked } from 'store/slice/organizations.slice';
+import organizationData from 'mockData/organizations.json';
+import Pagination from 'components/atoms/Pagination';
+import { useState } from 'react';
 
 const columns = [
   { title: 'Organization Name', dataProperty: 'organization_name' },
@@ -12,27 +15,10 @@ const columns = [
   { title: 'Status', dataProperty: 'status' },
 ];
 
-const datas = [
-  {
-    id: 1,
-    organization_name: 'Test',
-    organization_email: 'example@gmail.com',
-    branch_limit: '1',
-    phone: '1234567890',
-    status: 'Active',
-  },
-  {
-    id: 2,
-    organization_name: 'Test',
-    organization_email: 'example@gmail.com',
-    branch_limit: '1',
-    phone: '1234567890',
-    status: 'Active',
-  },
-];
-
 const OrganizationTable = () => {
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPageSize, setPerPageSize] = useState(10);
 
   const hanldeOnEdit = (data: any) => {
     console.log('edit', data);
@@ -41,6 +27,10 @@ const OrganizationTable = () => {
   const handleOnRemove = (id: number) => {
     console.log('remove -item', id);
   };
+
+  const start = currentPage * perPageSize - perPageSize
+  const end = start + perPageSize;
+  const pageListData = organizationData.slice(start, end)
 
   return (
     <>
@@ -62,10 +52,18 @@ const OrganizationTable = () => {
       <Table
         tableName='organization-table'
         columns={columns}
-        data={datas}
+        data={pageListData}
         action={true}
         onEdit={hanldeOnEdit}
         onRemove={handleOnRemove}
+      />
+      <Pagination
+        perPage={perPageSize}
+        totalPageRecords={organizationData.length}
+        currentPage={currentPage}
+        maxVisibleButton={3}
+        setCurrentPage={setCurrentPage}
+        setPerPageSize={setPerPageSize}
       />
     </>
   );

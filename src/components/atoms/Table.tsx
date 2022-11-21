@@ -40,7 +40,7 @@ const Table: FC<TableType> = ({
           {columns.map((col, i) => (
             <th key={i}>{col.title}</th>
           ))}
-          {action && <th className='action-head'>Action</th>}
+          {/* {action && <th className='action-head'>Action</th>} */}
         </tr>
       </thead>
       <tbody>
@@ -50,7 +50,7 @@ const Table: FC<TableType> = ({
             {columns.map((col, k) => (
               <td key={k}>{d[col.dataProperty]}</td>
             ))}
-            {action && (
+            {/* {action && (
               <td className='actions'>
                 <span onClick={() => handleOnEdit(d, j)}>
                   <img src={editIcon} alt='Edit' />
@@ -59,7 +59,8 @@ const Table: FC<TableType> = ({
                   <img src={deleteIcon} alt='Delete' />
                 </span>
               </td>
-            )}
+            )} */}
+            
           </tr>
         ))}
       </tbody>

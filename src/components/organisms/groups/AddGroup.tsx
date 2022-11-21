@@ -1,16 +1,24 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 import arrowBack from 'assets/images/back_button.svg';
 import TopPanel from 'components/molecules/TopPanel';
 import Input from 'components/atoms/TextField';
-import { setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
-import { useDispatch } from 'react-redux';
+import { setGroup, setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
+import { useDispatch, useSelector } from 'react-redux';
 import Button from 'components/atoms/Button';
+import type { RootState } from 'store';
 
 const AddGroup: FC = () => {
   const dispatch = useDispatch();
+  const { group } = useSelector((state: RootState) => state.group)
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    dispatch(setGroup({
+      ...group, [name]: value
+    }))
+  }
   const handleOnSubmit = () => {
-    console.log('submit');
+    console.log('submit', group);
   };
   return (
     <>
@@ -25,36 +33,36 @@ const AddGroup: FC = () => {
       <div className='chit-form'>
         <Input
           inputId='group_code'
-          value=''
-          onChange={() => {}}
+          value={group.group_code}
+          onChange={handleOnChange}
           placeholder='Enter Group Code'
           required
         />
         <Input
           inputId='chit_amount'
-          value=''
-          onChange={() => {}}
+          value={group.chit_amount}
+          onChange={handleOnChange}
           placeholder='Select Amount'
           required
         />
         <Input
           inputId='duration'
-          value=''
-          onChange={() => {}}
+          value={group.duration}
+          onChange={handleOnChange}
           placeholder='Select Duration'
           required
         />
         <Input
           inputId='start_date'
-          value=''
-          onChange={() => {}}
+          value={group.start_date}
+          onChange={handleOnChange}
           placeholder='Select Start Date'
           required
         />
         <Input
           inputId='end_date'
-          value=''
-          onChange={() => {}}
+          value={group.end_date}
+          onChange={handleOnChange}
           placeholder='Select End Date'
           required
         />

@@ -7,12 +7,16 @@ export const cutomersSlice = createSlice({
   reducers: {
     setIsAddCustomerBtnClicked: (state, action) => {
       state.isAddCustomerBtnClicked = action.payload
+    },
+    setCustomer: (state, action) => {
+      state.customer = action.payload
     }
   }
 });
 
 export const {
-  setIsAddCustomerBtnClicked
+  setIsAddCustomerBtnClicked,
+  setCustomer
 } = cutomersSlice.actions;
 
 export default cutomersSlice.reducer;
