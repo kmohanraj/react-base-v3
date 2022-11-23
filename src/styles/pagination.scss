@@ -1,0 +1,70 @@
+@use 'colors';
+
+@mixin setPaginationDirection($position) {
+  display: flex;
+  justify-content: $position;
+}
+
+@mixin pagination-button {
+  background: transparent;
+  color: colors.$slate-grey;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  user-select: none;
+  border-radius: 50%;
+  border: 1px solid colors.$light-grey;
+}
+
+.page-right {
+  @include setPaginationDirection(right);
+}
+.page-left {
+  @include setPaginationDirection((left));
+}
+
+.pagination {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+
+  :is(.next, .previous):hover {
+    color: colors.$slate-grey;
+    border: 1px solid colors.$slate-grey;
+  }
+  .pages-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .page-previous, .page-next {
+    cursor: pointer;
+    &.is-disabled {
+      cursor: no-drop
+    }
+    &:hover {
+      transform: scale(1.025)
+    }
+    @include pagination-button();
+  }
+  .page-item {
+    cursor: pointer;
+    @include pagination-button();
+    &.active {
+      background: colors.$charcoal-grey;
+      color: colors.$off-white;
+      border: none;
+      &:hover {
+        transform: scale(1.025);
+      }
+    }
+    &:hover {
+      transform: scale(1.025);
+    }
+  }
+  .page-item .is-disabled {
+    cursor: no-drop !important;
+    transform: none !important;
+  }
+}

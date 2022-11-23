@@ -1,15 +1,25 @@
+import React from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import arrowBack from 'assets/images/back_button.svg';
-import { setIsAddCustomerBtnClicked } from 'store/slice/customers.slice';
-import { useDispatch } from 'react-redux';
+import { setCustomer, setIsAddCustomerBtnClicked } from 'store/slice/customers.slice';
+import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import Button from 'components/atoms/Button';
+import { RootState } from 'store';
 
 const AddCustomer = () => {
   const dispatch = useDispatch();
+  const { customer } = useSelector((state: RootState) => state.customer)
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value} = e.target;
+    dispatch(setCustomer({
+      ...customer, [name]: value
+    }))
+
+  }
   const handleOnSubmit = () => {
-    console.log('submit');
+    console.log('submit', customer);
   };
   return (
     <>
@@ -24,99 +34,99 @@ const AddCustomer = () => {
       <div className='chit-form'>
         <Input
           inputId='customer_id'
-          value=''
-          onChange={() => {}}
+          value={customer.customer_id}
+          onChange={handleOnChange}
           placeholder='Enter Customer ID'
           required
         />
         <Input
           inputId='org_id'
-          value=''
-          onChange={() => {}}
+          value={customer.org_id}
+          onChange={handleOnChange}
           placeholder='Select Organization'
           required
         />
         <Input
           inputId='branch_id'
-          value=''
-          onChange={() => {}}
+          value={customer.branch_id}
+          onChange={handleOnChange}
           placeholder='Select Branch'
           required
         />
         <Input
           inputId='customer_name'
-          value=''
-          onChange={() => {}}
+          value={customer.customer_name}
+          onChange={handleOnChange}
           placeholder='Enter Name'
           required
         />
         <Input
           inputId='age'
-          value=''
-          onChange={() => {}}
+          value={customer.age}
+          onChange={handleOnChange}
           placeholder='Enter Age'
           required
         />
         <Input
           inputId='gender'
-          value=''
-          onChange={() => {}}
+          value={customer.gender}
+          onChange={handleOnChange}
           placeholder='Select Gender'
           required
         />
         <Input
           inputId='phone'
-          value=''
-          onChange={() => {}}
+          value={customer.phone}
+          onChange={handleOnChange}
           placeholder='Enter Phone'
           required
         />
         <Input
           inputId='alter_phone'
-          value=''
-          onChange={() => {}}
+          value={customer.alter_phone}
+          onChange={handleOnChange}
           placeholder='Enter Alternative Phone'
           required
         />
         <Input
           inputId='address'
-          value=''
-          onChange={() => {}}
+          value={customer.address}
+          onChange={handleOnChange}
           placeholder='Enter Address'
           required
         />
         <Input
           inputId='pin_code'
-          value=''
-          onChange={() => {}}
+          value={customer.pin_code}
+          onChange={handleOnChange}
           placeholder='Enter Pincode'
           required
         />
         <Input
           inputId='nominee_name'
-          value=''
-          onChange={() => {}}
+          value={customer.nominee_name}
+          onChange={handleOnChange}
           placeholder='Enter Nominee Name'
           required
         />
         <Input
           inputId='nominee_phone'
-          value=''
-          onChange={() => {}}
+          value={customer.nominee_phone}
+          onChange={handleOnChange}
           placeholder='Enter Nominee Phone'
           required
         />
         <Input
           inputId='id_proof'
-          value=''
-          onChange={() => {}}
+          value={customer.id_proof}
+          onChange={handleOnChange}
           placeholder='Select ID Proof'
           required
         />
         <Input
           inputId='locality'
-          value=''
-          onChange={() => {}}
+          value={customer.locality}
+          onChange={handleOnChange}
           placeholder='Select Locality'
           required
         />
@@ -130,7 +140,7 @@ const AddCustomer = () => {
         <Button
           type='primary'
           label='Create'
-          onClick={() => handleOnSubmit()}
+          onClick={handleOnSubmit}
         />
       </div>
     </>

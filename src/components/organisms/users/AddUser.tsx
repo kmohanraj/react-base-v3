@@ -1,15 +1,24 @@
-import TopPanel from "components/molecules/TopPanel";
 import React from "react";
+import TopPanel from "components/molecules/TopPanel";
 import arrowBack from 'assets/images/back_button.svg';
 import Input from "components/atoms/TextField";
-import { useDispatch } from "react-redux";
-import { setIsAddUserBtnClicked } from "store/slice/users.slice";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsAddUserBtnClicked, setUser } from "store/slice/users.slice";
 import Button from "components/atoms/Button";
+import type { RootState } from "store";
+
 const AddUser = () => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.user);
 
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    dispatch(setUser({
+      ...user, [name]: value
+    }))
+  }
   const handleOnSubmit = () => {
-    console.log('submit')
+    console.log('submit', user)
   }
   return (
     <>
@@ -20,59 +29,60 @@ const AddUser = () => {
       <div className="chit-form">
         <Input
           inputId="name"
-          value=""
-          onChange={() => {}}
+          value={user.name}
+          onChange={handleOnChange}
           placeholder="Enter Name"
           required
         />
         <Input
           inputId="email"
-          value=""
-          onChange={() => {}}
+          value={user.email}
+          onChange={handleOnChange}
           placeholder="Enter Email"
           required
         />
         <Input
           inputId="confirm_email"
-          value=""
-          onChange={() => {}}
+          value={user.confirm_email}
+          onChange={handleOnChange}
           placeholder="Confirm Email"
           required
         />
         <Input
           inputId="password"
-          value=""
-          onChange={() => {}}
+          value={user.password}
+          onChange={handleOnChange}
           placeholder="Enter Password"
           required
           message="Ex, Password@123"
           error=""
+          inputType="password"
         />
         <Input
           inputId="phone"
-          value=""
-          onChange={() => {}}
+          value={user.phone}
+          onChange={handleOnChange}
           placeholder="Enter phone"
           required
         />
         <Input
           inputId="role_id"
-          value=""
-          onChange={() => {}}
+          value={user.role_id}
+          onChange={handleOnChange}
           placeholder="Select Role"
           required
         />
         <Input
           inputId="org_id"
-          value=""
-          onChange={() => {}}
+          value={user.org_id}
+          onChange={handleOnChange}
           placeholder="Select Organization"
           required
         />
         <Input
           inputId="branch_id"
-          value=""
-          onChange={() => {}}
+          value={user.branch_id}
+          onChange={handleOnChange}
           placeholder="Select Branch"
           required
         />

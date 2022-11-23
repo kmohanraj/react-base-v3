@@ -7,15 +7,17 @@ import Organizations from "components/organisms/organizations/Organizations";
 import Users from "components/organisms/users/Users";
 import { IRouteConfig } from "types/routes.types";
 import AppRoutes from "./AppRoutes";
+import Login from "components/organisms/users/Login";
 
 const Routes = () => {
   const config: IRouteConfig[] = [
-    { path: '/', component: DashboardPage },
-    { path: '/organizations', component: Organizations },
-    { path: '/branches', component: Branches },
-    { path: '/users', component: Users },
-    { path: '/customers', component: Customers},
-    { path: '/groups', component: Groups}
+    { path: '/login', component: Login },
+    { path: '/', component: DashboardPage , isLoginRequired: true },
+    { path: '/organizations', component: Organizations, isLoginRequired: true },
+    { path: '/branches', component: Branches, isLoginRequired: true },
+    { path: '/users', component: Users, isLoginRequired: true },
+    { path: '/customers', component: Customers, isLoginRequired: true },
+    { path: '/groups', component: Groups, isLoginRequired: true }
   ]
 
   return (

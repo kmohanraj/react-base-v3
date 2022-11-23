@@ -6,6 +6,11 @@
   justify-content: space-between;
   margin-bottom: 40px;
   
+  .top-panel-entity {
+    display: grid;
+    align-items: center;
+    font-family: fonts.$font-bold;
+  }
   .top-panel-buttons {
     display: flex;
     gap: 20px;

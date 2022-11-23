@@ -8,7 +8,8 @@
   width: 100%;
   border-collapse: collapse;
   border-spacing: 0;
-
+  user-select: none;
+  
   .action-head {
     align-items: center;
     justify-content: center;
@@ -23,19 +24,20 @@
     padding-left: 10px;
     border: 1px solid colors.$cool-grey;
     height: 35px;
-    font-family: fonts.$font-regular;
     color: colors.$stone-grey;
-    letter-spacing: -0.55px;
+    line-height: 1.71;
   }
 
   td {
-    color: colors.$carbon
+    color: colors.$carbon;
+    letter-spacing: -0.55px;
+    font-family: fonts.$font-regular;
   }
 
   th {
-    background-color: colors.$off-white;
+    font-family: fonts.$font-bold;
+    letter-spacing: -0.48px;
   }
-
   th, tr {
     td {
       cursor: pointer;
@@ -45,7 +47,7 @@
     }
     &:hover {
       td {
-        background: colors.$medium-grey;
+        background: colors.$chits-blue;
         color: #fff
       }
     }
@@ -63,9 +65,5 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-
-    span img:hover {
-      fill: red;
-    }
   }
 }

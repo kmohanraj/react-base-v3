@@ -26,13 +26,14 @@
 
       &.has-prefix {
         text-indent: 50px;
+        padding-left: 36px;
       }
 
       &:focus {
         &+label {
           top: 5px;
           transform: none;
-          font-size: 12px;
+          font-size: 0.75rem;
           letter-spacing: -0.35px;
         }
       }
@@ -49,16 +50,18 @@
       transform: translateY(-50%);
       font-family: $font-regular;
       color: $dark-grey;
-      font-size: 18px;
+      font-size: 1.125rem;
       transition: all 0.2s ease-out;
       cursor: inherit;
       letter-spacing: -0.7px;
 
       &.has-value {
         top: 5px;
-        transform: none;
+        transform: none !important;
+        -webkit-transform: none !important;
         letter-spacing: -0.35px;
         transform: scale(0.66);
+        font-size: 0.75rem;
       }
 
       &.has-prefix {

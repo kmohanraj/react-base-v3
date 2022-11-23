@@ -7,12 +7,16 @@ export const organizationSlice = createSlice({
   reducers: {
     setIsAddOrgBtnClicked: (state, action) => {
       state.isAddOrgBtnClicked = action.payload
+    },
+    setOrganization: (state, action) => {
+      state.organization = action.payload
     }
   }
 });
 
 export const {
-  setIsAddOrgBtnClicked
+  setIsAddOrgBtnClicked,
+  setOrganization
 } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

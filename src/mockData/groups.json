@@ -1,0 +1,156 @@
+[
+  {
+    "id": 1,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 2,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 3,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 4,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 5,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 6,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 7,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 8,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 9,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 10,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 11,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 12,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  },
+  {
+    "id": 13,
+    "group_code": "ASNOV01",
+    "chit_amount": "100000",
+    "total_customers": "10",
+    "duration": "10 months",
+    "is_active": "Yes",
+    "is_started": "No",
+    "start_date": "19/01/2022",
+    "end_date": "19/11/2022"
+  },
+  {
+    "id": 14,
+    "group_code": "ASNOV01",
+    "chit_amount": "200000",
+    "total_customers": "20",
+    "duration": "20 months",
+    "is_active": "Yes",
+    "is_started": "Yes",
+    "start_date": "19/01/2022",
+    "end_date": "19/10/2023"
+  }
+]

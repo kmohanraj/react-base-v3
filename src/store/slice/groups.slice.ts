@@ -7,12 +7,16 @@ export const groupsSlice = createSlice({
   reducers: {
     setIsAddGroupBtnClicked: (state, action) => {
       state.isAddGroupBtnClicked = action.payload
+    },
+    setGroup: (state, action) => {
+      state.group = action.payload
     }
   }
 });
 
 export const {
-  setIsAddGroupBtnClicked
+  setIsAddGroupBtnClicked,
+  setGroup
 } = groupsSlice.actions;
 
 export default groupsSlice.reducer;

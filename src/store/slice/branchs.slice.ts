@@ -7,12 +7,16 @@ export const branchSlice = createSlice({
   reducers: {
     setIsAddBranchBtnClicked: (state, action) => {
       state.isAddBranchButtonClicked = action.payload
+    },
+    setBranch: (state, action) => {
+      state.branch = action.payload
     }
   }
 });
 
 export const {
-  setIsAddBranchBtnClicked
+  setIsAddBranchBtnClicked,
+  setBranch
 } = branchSlice.actions;
 
 export default branchSlice.reducer;

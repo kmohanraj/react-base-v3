@@ -3,6 +3,9 @@ import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch } from 'react-redux';
 import { setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
+import groupsData from 'mockData/groups.json';
+import { useState } from 'react';
+import Pagination from 'components/atoms/Pagination';
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
@@ -16,33 +19,16 @@ const columns = [
   { title: 'End Date', dataProperty: 'end_date' },
 ];
 
-const datas = [
-  {
-    id: 1,
-    group_code: 'ASNOV01',
-    chit_amount: '100000',
-    total_customers: '10',
-    duration: '10 months',
-    is_active: 'Yes',
-    is_started: 'No',
-    start_date: '19/01/2022',
-    end_date: '19/11/2022',
-  },
-  {
-    id: 2,
-    group_code: 'ASNOV01',
-    chit_amount: '200000',
-    total_customers: '20',
-    duration: '20 months',
-    is_active: 'Yes',
-    is_started: 'Yes',
-    start_date: '19/01/2022',
-    end_date: '19/10/2023',
-  },
-];
-
 const GroupTable = () => {
   const dispatch = useDispatch();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPageSize, setPerPageSize] = useState(10);
+
+  const start = currentPage * perPageSize - perPageSize
+  const end = start + perPageSize;
+  const datas = groupsData.slice(start, end)
+
   const hanldeOnEdit = (id: number) => {
     console.log('edit', id);
   };
@@ -75,6 +61,14 @@ const GroupTable = () => {
         action={true}
         onEdit={hanldeOnEdit}
         onRemove={handleOnRemove}
+      />
+      <Pagination
+        perPage={perPageSize}
+        totalPageRecords={groupsData.length}
+        currentPage={currentPage}
+        maxVisibleButton={3}
+        setCurrentPage={setCurrentPage}
+        setPerPageSize={setPerPageSize}
       />
     </>
   );
