@@ -48,7 +48,10 @@ const Table: FC<TableType> = ({
           // <tr className={cx({ active: Number(selected) === i})} key={i} onClick={() => handleOnSelect(d, i)} >
           <tr key={j}>
             {columns.map((col, k) => (
-              <td key={k}>{d[col.dataProperty]}</td>
+              <>
+              {/* {console.log(col.dataProperty, '--------d-d-d-d--d-d')} */}
+                <td key={k}>{d[col.dataProperty]}</td>
+              </>
             ))}
             {/* {action && (
               <td className='actions'>

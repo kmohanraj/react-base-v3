@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import initialState from 'store/initialStates/cutomers.initialState';
+import { initialState } from 'store/initialStates/cutomers.initialState';
 
 export const cutomersSlice = createSlice({
   name: 'customers',
@@ -10,13 +10,17 @@ export const cutomersSlice = createSlice({
     },
     setCustomer: (state, action) => {
       state.customer = action.payload
+    },
+    setCustomersData: (state, action) => {
+      state.customersData = action.payload
     }
   }
 });
 
 export const {
   setIsAddCustomerBtnClicked,
-  setCustomer
+  setCustomer,
+  setCustomersData
 } = cutomersSlice.actions;
 
 export default cutomersSlice.reducer;

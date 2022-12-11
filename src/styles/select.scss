@@ -1,0 +1,214 @@
+@use 'colors';
+@use 'fonts';
+
+.company-select {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.select_control {
+  border: 1px solid colors.$slate-grey;
+  border-radius: 4px;
+  min-height: 60px;
+  box-sizing: border-box;
+
+  &.is-disabled {
+    background-color: #f2f2f2;
+    cursor: no-drop;
+
+    .right-section  {
+      &:hover {
+        cursor: no-drop;
+      }
+    }
+  }
+  &.is-focused {
+    border: 1px solid colors.$slate-grey;
+  }
+  
+  .select_value_container {
+    display: flex;
+    position: relative;
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-right: 100px;
+    padding-bottom: 6px;
+
+    .select__values {
+      &.is-single {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      &.is-multi {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        overflow: hidden;
+        user-select: none;
+        
+        .select__multi__value {
+          display: flex;
+          border-radius: 2px;
+          margin: 2px;
+          background-color: colors.$chits-blue;
+          color: #fff;
+          font-size: 85%;
+          font-family: fonts.$font-regular;
+          overflow: hidden;
+
+          &__label {
+            color: #fff;
+            padding-left: 6px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            border-radius: 2px;
+          }
+
+          &__remove {
+            padding-left: 4px;
+            padding-right: 4px;
+            display: flex;
+            align-items: center;
+            border-radius: 2px;
+
+            &:hover {
+              cursor: pointer;
+              background-color: red;
+            }
+          }
+        }
+      }
+    }
+    .right-section {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      box-sizing: border-box;
+
+      .clear-all {
+        cursor: pointer;
+        transform: translateY(-50%);
+        width: 12px;
+        height: 16px;
+      }
+      .loader {
+        height: 20px;
+      }
+      .loader, .clear-all {
+        position: absolute;
+        right: 50px;
+        transform: translateY(-50%);
+        object-fit: contain;
+      }
+    }
+    
+
+    input {
+      border: 0;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    .suffix-icon {
+      cursor: pointer;
+      position: absolute;
+      right: 20px;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      transition: all 0.3s ease;
+
+      &.is-open {
+        transform: rotate(180deg);
+        transform-origin: 50% 20%;
+        transition: all 0.3s ease;
+      }
+    }
+    
+    label {
+      color: colors.$dark-grey;
+      cursor: inherit;
+      font-size: 18px;
+      left: 15px;
+      letter-spacing: -.7px;
+      position: absolute;
+      top: 60%;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      transition: all .2s ease-out;
+
+      &.is-focus, &.has-value {
+        top: 5px;
+        transform: none !important;
+        letter-spacing: -0.35px;
+        transform: scale(0.66);
+        font-size: 0.75rem;
+      }
+    }
+
+    &:focus {
+      border: 2px solid red;
+    }
+    .select__placeholder {
+      color: colors.$slate-grey;
+      left: 15px;
+      position: absolute;
+      top: 60%;
+      transform: translateY(-50%);
+      box-sizing: border-box;
+      word-break: break-word;
+    }
+  }
+}
+
+.select__menu {
+  top: 100%;
+  background-color: hsl(0,0%,100%);
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px hsl(0deg 0% 0% / 10%), 0 4px 11px hsl(0deg 0% 0% / 10%);
+  margin-bottom: 8px;
+  margin-top: 8px;
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  box-sizing: border-box;
+
+  &-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    position: relative;
+    box-sizing: border-box;
+
+    .no-options {
+      text-align: center;
+      padding: 5px;
+    }
+
+    .select__option {
+      background-color: transparent;
+      padding: 8px 12px;
+      user-select: none;
+      box-sizing: border-box;
+      cursor: pointer;
+
+      &:hover {
+        color: colors.$slate-grey;
+        background-color: colors.$off-white;
+      }
+      &.is-selected {
+        background-color: colors.$chits-blue;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.select_control.is-disabled .select_value_container .select__values .select__multi__value__remove:hover {
+  cursor: no-drop !important;
+  background-color: transparent;
+}

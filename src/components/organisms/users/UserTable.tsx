@@ -1,11 +1,13 @@
 import Button from "components/atoms/Button";
 import Table from "components/atoms/Table";
 import TopPanel from "components/molecules/TopPanel";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setIsAddUserBtnClicked } from "store/slice/users.slice";
-import usersData from 'mockData/users.json';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "components/atoms/Pagination";
+import type { RootState } from "store";
+import useItToGetAllUsers from "hooks/user/useItToGetAllUsers";
+import CONSTANTS from "constants/constants";
 
 const columns = [
   { title: 'Name', dataProperty: 'name'},
@@ -16,7 +18,12 @@ const columns = [
   { title: 'Branch Name', dataProperty: 'branch_id'}
 ]
 
+const {SESSION_STORAGE} = CONSTANTS;
+
 const UserTable = () => {
+  const { usersData } = useSelector((state: RootState) => state.user)
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const [isUsersLoading] = useItToGetAllUsers(Number(currentUserID))
   const dispatch = useDispatch()
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
@@ -28,6 +35,8 @@ const UserTable = () => {
   const handleOnRemove = (data: any) => {
     console.log('remove -item', data)
   }
+
+  useEffect(() => {}, [isUsersLoading])
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;

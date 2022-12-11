@@ -1,7 +1,18 @@
+.form-section {
+  margin: 0 auto;
+  // width: 80%;
+  // max-width: 1200px;
+  max-width: 1080px;
+}
+
 .chit-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 30px;
+  // display: grid;
+  // grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  // gap: 30px;
+  display: flex;
+  flex-direction: column;
+ 
+  gap: 40px;
 
   .chit-checkbox-set.horizontal {
     display: flex;

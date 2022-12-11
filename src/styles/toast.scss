@@ -1,0 +1,15 @@
+.toaster-notification {
+  position: fixed;
+  right: 1rem;
+  top: 4rem;
+  // background-color: #222222;
+  background-color: red;
+  min-height: 2.5rem;
+  border-radius: 0.25rem;
+  max-width: 4.5rem;
+  padding: 0.75rem;
+  z-index: 99999;
+  display: flex;
+  justify-content: flex-start;
+  will-change: transform;
+}

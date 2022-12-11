@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import initialState from 'store/initialStates/organizations.initialState';
+import { initialState, organization } from 'store/initialStates/organizations.initialState';
 
 export const organizationSlice = createSlice({
   name: "organizations",
@@ -10,13 +10,29 @@ export const organizationSlice = createSlice({
     },
     setOrganization: (state, action) => {
       state.organization = action.payload
-    }
+    },
+    setOrganizationsData: (state, action) => {
+      state.organizationsData = action.payload
+    },
+    setOrganizationOption: (state, action) => {
+      state.organizationOptions = action.payload
+    },
+    setIsOrgOptionLoading: (state, action) => {
+      state.isOrgOptionLoading = action.payload
+    },
+    clearOrganization: (state) => ({
+      ...state, organization: organization
+    })
   }
 });
 
 export const {
   setIsAddOrgBtnClicked,
-  setOrganization
+  setOrganization,
+  setOrganizationsData,
+  setOrganizationOption,
+  clearOrganization,
+  setIsOrgOptionLoading
 } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

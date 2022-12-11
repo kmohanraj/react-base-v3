@@ -1,17 +1,22 @@
 import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
-import groupsData from 'mockData/groups.json';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
+import CONSTANTS from 'constants/constants';
+import useItToGetGroups from 'hooks/group/useItToGetGroups';
+import { RootState } from 'store';
+
+
+const { SESSION_STORAGE } = CONSTANTS;
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
   { title: 'Group Code', dataProperty: 'group_code' },
-  { title: 'Chit Amount', dataProperty: 'chit_amount' },
-  { title: 'Customers', dataProperty: 'total_customers' },
+  { title: 'Chit Amount', dataProperty: 'amount' },
+  { title: 'Customers', dataProperty: 'total_members' },
   { title: 'Duration', dataProperty: 'duration' },
   { title: 'Active ', dataProperty: 'is_active' },
   { title: 'Is Started', dataProperty: 'is_started' },
@@ -25,6 +30,11 @@ const GroupTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
 
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID))
+
+  const { groupsData } = useSelector((state: RootState) => state.group)
+
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
   const datas = groupsData.slice(start, end)
@@ -36,6 +46,8 @@ const GroupTable = () => {
   const handleOnRemove = (data: any) => {
     console.log('remove -item', data);
   };
+
+  useEffect(() => {}, [isGroupsDataLoading])
 
   return (
     <>

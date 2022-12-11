@@ -1,21 +1,27 @@
-/* eslint-disable import/no-anonymous-default-export */
 
-export default {
+const customer = {
+  customer_id: '',
+  org_id: null,
+  branch_id: null,
+  customer_name: '',
+  age: '',
+  gender: null,
+  phone: '',
+  alter_phone: '',
+  address: '',
+  pincode: '',
+  nominee_name: '',
+  nominee_phone: '',
+  id_proof: null,
+  locality: ''
+}
+
+const initialState = {
   isAddCustomerBtnClicked: false,
-  customer: {
-    customer_id: '',
-    org_id: '',
-    branch_id: '',
-    customer_name: '',
-    age: '',
-    gender: '',
-    phone: '',
-    alter_phone: '',
-    address: '',
-    pin_code: '',
-    nominee_name: '',
-    nominee_phone: '',
-    id_proof: '',
-    locality: ''
-  }
+  customer: customer,
+  customersData: []
+}
+
+export {
+  initialState
 }

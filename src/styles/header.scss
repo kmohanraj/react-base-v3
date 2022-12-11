@@ -3,26 +3,43 @@
 /* header */
 .header {
   overflow: hidden;
-  background-color: colors.$light-grey;
-  padding: 20px 20px;
-  position: sticky;
+  background-color: colors.$charcoal-grey;
+  // padding: 20px 20px;
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 1;
+  
   .logo {
     display: block;
     font-size: 2em;
     padding: 2px 20px;
     float: left;
+    color: #fff;
   }
   a {
     display: block;
     padding: 16.5px 10px;
     text-decoration: none;
+    color: #fff;
   }
   li a:hover,
   .menu-btn:hover {
     color: #ed7676;
     font-weight: bold;
+  }
+
+  .dropdown-content {
+    display: none;
+    right: 0;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgb(0 0 0 / 20%);
+    z-index: 1;
+  }
+  .dropdown:hover ~ .dropdown-content {
+    display: block;
   }
 }
 
@@ -70,20 +87,20 @@
 .menu-btn {
   display: none;
 }
-.menu-btn:checked ~ .menu {
-  max-height: 240px;
+.menu.show {
+  max-height: fit-content;
 }
-.menu-btn:checked ~ .menu-icon .navicon {
+.menu-icon.show .navicon {
   background: transparent;
 }
-.menu-btn:checked ~ .menu-icon .navicon:before {
+.menu-icon.show .navicon:before {
   transform: rotate(-45deg);
 }
-.menu-btn:checked ~ .menu-icon .navicon:after {
+.menu-icon.show .navicon:after {
   transform: rotate(45deg);
 }
-.menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
-.menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+.menu-icon.show:not(.steps) .navicon:before,
+.menu-icon.show:not(.steps) .navicon:after {
   top: 0;
 }
 

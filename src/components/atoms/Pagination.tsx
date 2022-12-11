@@ -57,24 +57,32 @@ const Pagination: FC<PaginationProps> = ({totalPageRecords, currentPage, perPage
   
   return (
     // <nav className={`page-${direction}`}>
-    <nav className='page-right'>
-      {/* <section>
-        <li>Show Items:
-          <select onChange={ (e) => onChangeRecordsPerPage(e)}>
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="30">30</option>
-            <option value="40">40</option>
-            <option value="50">50</option>
-          </select>
-        </li>
-      </section> */}
-      <section className="pagination">
-        <button className={previousClass} disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1) }>{"<"}</button>
-        {renderControlIndexes()}
-        <button className={nextClass} disabled={totalPages === currentPage} onClick={() => setCurrentPage((prev: any) => prev + 1 )}>{">"}</button>
-      </section>
-    </nav>
+    <>
+      {totalPageRecords > perPage && (
+        <nav className='page-right'>
+          {/* <section>
+            <li>Show Items:
+              <select onChange={ (e) => onChangeRecordsPerPage(e)}>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="40">40</option>
+                <option value="50">50</option>
+              </select>
+            </li>
+          </section> */}
+          <section className="pagination">
+            <button className={previousClass} disabled={currentPage === 1} onClick={() => goToPage(1) }>{"<<"}</button>
+            <button className={previousClass} disabled={currentPage === 1} onClick={() => setCurrentPage(currentPage - 1) }>{"<"}</button>
+            {renderControlIndexes()}
+            <button className={nextClass} disabled={totalPages === currentPage} onClick={() => setCurrentPage((prev: any) => prev + 1 )}>{">"}</button>
+            <button className={nextClass} disabled={totalPages === currentPage} onClick={() => goToPage(totalPages) }>{">>"}</button>
+          </section>
+        </nav>
+      )}
+    
+    </>
+   
   )
 }
 

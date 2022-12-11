@@ -1,12 +1,13 @@
 import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setIsAddCustomerBtnClicked } from 'store/slice/customers.slice';
-import customersData from 'mockData/customers.json';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
-
+import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
+import CONSTANTS from 'constants/constants';
+import { RootState } from 'store';
 const columns = [
   { title: 'Customer ID', dataProperty: 'customer_id' },
   { title: 'Customer Name', dataProperty: 'customer_name' },
@@ -17,10 +18,17 @@ const columns = [
   { title: 'District', dataProperty: 'district' },
 ];
 
+const { SESSION_STORAGE } = CONSTANTS;
+
 const CustomerTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
+  const { customersData } = useSelector((state: RootState) => state.customer)
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+
+  const [isCustomersLoading] = useItToGetCustomers(Number(currentUserID))
+
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
@@ -32,6 +40,11 @@ const CustomerTable = () => {
   const handleOnRemove = () => {
     console.log('&&&');
   };
+
+  useEffect(() => {
+
+  }, [isCustomersLoading])
+
 
   return (
     <>

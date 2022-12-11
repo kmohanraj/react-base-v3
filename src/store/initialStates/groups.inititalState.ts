@@ -1,12 +1,18 @@
-/* eslint-disable import/no-anonymous-default-export */
-
-export default {
-  isAddGroupBtnClicked: false,
-  group: {
-    group_code: '',
-    chit_amount: '',
-    duration: '',
-    start_date: '',
-    end_date: ''
-  }
+const group = {
+  group_code: '',
+  amount: '',
+  total_members: '',
+  duration: null,
+  org_id: null,
+  branch_id: null,
+  start_date: null,
+  end_date: null
 }
+
+const initialState = {
+  isAddGroupBtnClicked: false,
+  group: group,
+  groupsData: []
+}
+
+export { initialState }
