@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import Input from 'components/atoms/TextField';
 import TopPanel from 'components/molecules/TopPanel';
 import arrowBack from 'assets/images/back_button.svg';
-import { setIsAddOrgBtnClicked, setOrganization, clearOrganization } from 'store/slice/organizations.slice';
+import { setIsAddOrgBtnClicked, setOrganization, clearOrganization, setIsEditOrgBtnClicked } from 'store/slice/organizations.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'components/atoms/Button';
 import 'styles/chit-form.scss';
@@ -14,7 +14,7 @@ const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 
 const AddOrganization: FC = () => {
   const dispatch = useDispatch();
-  const { organization } = useSelector((state: RootState) => state.organization);
+  const { organization, isEditOrgBtnClicked } = useSelector((state: RootState) => state.organization);
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +39,13 @@ const AddOrganization: FC = () => {
           <img
             src={arrowBack}
             alt='Back'
-            onClick={() => dispatch(setIsAddOrgBtnClicked(false))}
+            onClick={() => {
+              dispatch(setIsAddOrgBtnClicked(false))
+              dispatch(setIsEditOrgBtnClicked(false))
+              dispatch(clearOrganization())
+            }}
           />
-          <div>Create</div>
+          <div>{isEditOrgBtnClicked ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className='chit-form'>
           <Input
@@ -96,11 +100,15 @@ const AddOrganization: FC = () => {
           <Button
             type='ghost'
             label='Cancel'
-            onClick={() => dispatch(setIsAddOrgBtnClicked(false))}
+            onClick={() => {
+              dispatch(setIsAddOrgBtnClicked(false))
+              dispatch(setIsEditOrgBtnClicked(false))
+              dispatch(clearOrganization())
+            }}
           />
           <Button
             type='primary'
-            label='Create'
+            label={isEditOrgBtnClicked ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
           />
         </div>

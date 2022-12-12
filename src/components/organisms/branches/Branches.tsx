@@ -5,13 +5,13 @@ import AddBranch from './AddBranch';
 import BranchTable from './BranchTable';
 
 const Branches: FC = () => {
-  const { isAddBranchButtonClicked } = useSelector(
+  const { isAddBranchBtnClicked } = useSelector(
     (state: RootState) => state.branch
   );
   return (
     <>
       <Suspense>
-        {!isAddBranchButtonClicked ? <BranchTable /> : <AddBranch />}
+        {!isAddBranchBtnClicked ? <BranchTable /> : <AddBranch />}
       </Suspense>
     </>
   );

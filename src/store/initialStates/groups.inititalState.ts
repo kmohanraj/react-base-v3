@@ -5,6 +5,11 @@ const group = {
   duration: null,
   org_id: null,
   branch_id: null,
+  start_date: '' || null,
+  end_date: '' || null
+}
+
+const clearDate = {
   start_date: null,
   end_date: null
 }
@@ -12,7 +17,8 @@ const group = {
 const initialState = {
   isAddGroupBtnClicked: false,
   group: group,
-  groupsData: []
+  groupsData: [],
+  clearDates: clearDate
 }
 
-export { initialState }
+export { initialState, clearDate }

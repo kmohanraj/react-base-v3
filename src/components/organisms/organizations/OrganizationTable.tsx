@@ -2,7 +2,7 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddOrgBtnClicked } from 'store/slice/organizations.slice';
+import { setIsAddOrgBtnClicked, setIsEditOrgBtnClicked, setOrganization } from 'store/slice/organizations.slice';
 import Pagination from 'components/atoms/Pagination';
 import { useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
@@ -27,7 +27,9 @@ const OrganizationTable = () => {
   const { organizationsData } = useSelector((state: RootState) => state.organization)
 
   const hanldeOnEdit = (data: any) => {
-    console.log('edit', data);
+    dispatch(setIsAddOrgBtnClicked(true))
+    dispatch(setOrganization(data))
+    dispatch(setIsEditOrgBtnClicked(true))
   };
 
   const handleOnRemove = (id: number) => {

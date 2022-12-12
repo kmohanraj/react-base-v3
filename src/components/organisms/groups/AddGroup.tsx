@@ -17,72 +17,81 @@ import 'react-datepicker/dist/react-datepicker.css';
 const durationOptions = [
   {
     id: 1,
-    label: '10 Months'
+    label: '10 Months',
   },
   {
     id: 2,
-    label: '20 Months'
-  }
-]
+    label: '20 Months',
+  },
+];
 
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 const AddGroup: FC = () => {
   const dispatch = useDispatch();
-  const { group } = useSelector((state: RootState) => state.group)
-  const { organizationOptions } = useSelector((state: RootState) => state.organization)
-  const { branchOptions } = useSelector((state: RootState) => state.branch)
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
-  const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID))
-  const [isBranchLoading] = useToGetBranches(Number(currentUserID))
+  const { group } = useSelector((state: RootState) => state.group);
+  const { organizationOptions } = useSelector(
+    (state: RootState) => state.organization
+  );
+  const { branchOptions } = useSelector((state: RootState) => state.branch);
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
+  const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID));
+  const [isBranchLoading] = useToGetBranches(Number(currentUserID));
 
-  const [endDate, setEndDate] = useState<any>()
-
+  const [endDate, setEndDate] = useState<any>();
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    dispatch(setGroup({
-      ...group, [name]: value
-    }))
-  }
+    dispatch(
+      setGroup({
+        ...group,
+        [name]: value,
+      })
+    );
+  };
 
   const handleOnSelect = (value: any, fieldName: string) => {
-    dispatch(setGroup({
-      ...group, [fieldName]: value.id
-    }))
-  }
+    dispatch(
+      setGroup({
+        ...group,
+        [fieldName]: value.id,
+      })
+    );
+  };
 
   const handleOnSelectDate = (e: Date, fieldName: string) => {
-    console.log('Date', e)
-    let date;
-    console.log('-------', group.duration)
-    const duration = durationOptions.filter((ele) => ele.id === group.duration)[0].label.split(' ')[0]
-    console.log('DURATION---', duration)
+    const duration = durationOptions
+      .filter((ele) => ele.id === group.duration)[0]
+      .label.split(' ')[0];
+    dispatch(
+      setGroup({
+        ...group,
+        [fieldName]: e,
+      })
+    );
     if (fieldName === 'start_date' && group.duration) {
-      date = e;
-      const currentDate = new Date(e)
-      const nextDate = currentDate.setMonth(currentDate.getMonth() + Number(duration))
-      setEndDate(new Date(nextDate))
-    } else {
-      date = e;
+      const currentDate = new Date(e);
+      const nextDate = currentDate.setMonth(
+        currentDate.getMonth() + Number(duration)
+      );
+      const finalDate = new Date(nextDate);
+      const resultDate = finalDate.setDate(finalDate.getDate() - 1)
+      setEndDate(new Date(resultDate));
     }
-    dispatch(setGroup({
-      ...group, [fieldName]: date
-    }))
-  }
+  };
 
   const handleOnSubmit = async () => {
     console.log('submit', group);
-    await createGroup()
+    await createGroup();
   };
 
   const createGroup = async () => {
-    const response = await GroupService.create(group, Number(currentUserID))
+    const response = await GroupService.create(group, Number(currentUserID));
     if (response?.status === STATUS_CODE.STATUS_200) {
-      dispatch(setIsAddGroupBtnClicked(false))
+      dispatch(setIsAddGroupBtnClicked(false));
     }
-  }
+  };
 
-  console.log('group---end-date-and-start-date', endDate)
+  console.log('group---end-date-and-start-date', endDate);
 
   return (
     <>
@@ -152,23 +161,22 @@ const AddGroup: FC = () => {
             disabledKeyboardNavigation
             startDate={group.start_date}
             maxDate={group.end_date}
-            dateFormat="dd/MM/yyyy"
-            className="chit-start-date-field"
+            dateFormat='dd/MM/yyyy'
+            className='chit-start-date-field'
             disabled={!group.duration}
           />
-           <DatePicker
+          <DatePicker
             name='end_date'
             placeholderText='MM - DD - YYYY'
-            selected={endDate}
-            autoComplete="nope"
+            selected={group.end_date || endDate}
+            autoComplete='nope'
             onChange={(e: Date) => handleOnSelectDate(e, 'end_date')}
             selectsEnd
             disabledKeyboardNavigation
-            minDate={group.start_date}
-            maxDate={group.end_date}
-            dateFormat="dd/MM/yyyy"
-            className="chit-start-date-field"
-            disabled
+            minDate={endDate}
+            maxDate={endDate}
+            dateFormat='dd/MM/yyyy'
+            className='chit-start-date-field'
           />
           {/* <Input
             inputId='start_date'

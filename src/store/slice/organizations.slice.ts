@@ -8,12 +8,18 @@ export const organizationSlice = createSlice({
     setIsAddOrgBtnClicked: (state, action) => {
       state.isAddOrgBtnClicked = action.payload
     },
+    setIsEditOrgBtnClicked: (state, action) => {
+      state.isEditOrgBtnClicked = action.payload
+    },
     setOrganization: (state, action) => {
       state.organization = action.payload
     },
     setOrganizationsData: (state, action) => {
       state.organizationsData = action.payload
     },
+    // setOrgSelectedRow: (state, action) => {
+    //   state.orgSelectedRow = action.payload
+    // },
     setOrganizationOption: (state, action) => {
       state.organizationOptions = action.payload
     },
@@ -28,8 +34,10 @@ export const organizationSlice = createSlice({
 
 export const {
   setIsAddOrgBtnClicked,
+  setIsEditOrgBtnClicked,
   setOrganization,
   setOrganizationsData,
+  // setOrgSelectedRow,
   setOrganizationOption,
   clearOrganization,
   setIsOrgOptionLoading

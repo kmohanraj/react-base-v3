@@ -11,14 +11,14 @@ const useToGetBranches = (userId: number): [boolean] => {
     setLoading(true);
     BranchService.getAll(userId)
       .then((response: any) => {
-        const columnData = response?.info.map((ele: any) => ({
-          id: ele.id,
-          branch_name: ele.branch_name,
-          branch_code: ele.branch_code,
-          organization_id: ele.organizations.org_name 
+        // const columnData = response?.info.map((ele: any) => ({
+        //   id: ele.id,
+        //   branch_name: ele.branch_name,
+        //   branch_code: ele.branch_code,
+        //   organization_id: ele.organizations.org_name 
 
-        }))
-        dispatch(setBranchesData(columnData));
+        // }))
+        dispatch(setBranchesData(response?.info));
         const branchOption = response?.info.map((ele: any) => ({
           id: ele.id,
           label: ele.branch_name

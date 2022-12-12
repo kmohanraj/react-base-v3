@@ -16,8 +16,10 @@ const isOptionLoading = true;
 
 const initialState = {
   isAddOrgBtnClicked: false,
+  isEditOrgBtnClicked: false,
   organization: organization,
   organizationsData: [],
+  // orgSelectedRow: {},
   organizationOptions: [],
   isOrgOptionLoading: isOptionLoading
 }

@@ -2,7 +2,7 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddCustomerBtnClicked } from 'store/slice/customers.slice';
+import { clearCustomer, setCustomer, setIsAddCustomerBtnClicked, setIsEditCustomerBtnclicked } from 'store/slice/customers.slice';
 import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
@@ -34,8 +34,11 @@ const CustomerTable = () => {
   const end = start + perPageSize;
   const datas = customersData.slice(start, end)
 
-  const handleOnEdit = () => {
+  const handleOnEdit = (data: any) => {
     console.log('0000000');
+    dispatch(setIsAddCustomerBtnClicked(true))
+    dispatch(setCustomer(data))
+    dispatch(setIsEditCustomerBtnclicked(true))
   };
   const handleOnRemove = () => {
     console.log('&&&');
@@ -45,6 +48,11 @@ const CustomerTable = () => {
 
   }, [isCustomersLoading])
 
+  const handleCheckCondition = () => {
+    dispatch(setIsAddCustomerBtnClicked(false))
+    dispatch(clearCustomer())
+    dispatch(setIsEditCustomerBtnclicked(true))
+  }
 
   return (
     <>

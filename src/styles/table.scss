@@ -1,6 +1,39 @@
 @use 'fonts';
 @use 'colors';
 
+.table .edit-col {
+  // visibility: hidden;
+  display: none;
+}
+
+.table .action-btn {
+  display: flex;
+  justify-content: end;
+  position: absolute;
+  right: 0;
+  // gap: 5px;
+}
+
+.table tr:hover .edit-col  {
+  // visibility: visible;
+  display: block;
+  // position: absolute;
+  right: 0;
+  border-radius: 5px;
+  padding: 0px 10px;
+  font-size: 10px;
+}
+
+// .table td:hover .edit-col.edit {
+//   background-color: green;
+// }
+
+// .table td:hover .edit-col.delete {
+//   background-color: red;
+// }
+
+
+
 .table {
   font-family: fonts.$font-regular;
   color: colors.$stone-grey;
@@ -9,6 +42,8 @@
   border-collapse: collapse;
   border-spacing: 0;
   user-select: none;
+
+
   
   .action-head {
     align-items: center;
@@ -29,6 +64,7 @@
   }
 
   td {
+    position: relative;
     color: colors.$carbon;
     letter-spacing: -0.55px;
     font-family: fonts.$font-regular;
@@ -47,8 +83,10 @@
     }
     &:hover {
       td {
-        background: colors.$chits-blue;
-        color: #fff
+        // background: colors.$chits-blue;
+        // background: colors.$cool-grey;
+        color: #fff;
+        color: colors.$chits-blue
       }
     }
     &.active {

@@ -18,10 +18,11 @@ const customer = {
 
 const initialState = {
   isAddCustomerBtnClicked: false,
+  isEditCustomerBtnClicked: false,
   customer: customer,
   customersData: []
 }
 
 export {
-  initialState
+  initialState, customer
 }

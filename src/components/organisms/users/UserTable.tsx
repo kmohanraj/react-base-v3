@@ -2,7 +2,7 @@ import Button from "components/atoms/Button";
 import Table from "components/atoms/Table";
 import TopPanel from "components/molecules/TopPanel";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsAddUserBtnClicked } from "store/slice/users.slice";
+import { setIsAddUserBtnClicked, setIsEditUserBtnClicked, setUser } from "store/slice/users.slice";
 import { useEffect, useState } from "react";
 import Pagination from "components/atoms/Pagination";
 import type { RootState } from "store";
@@ -28,8 +28,10 @@ const UserTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
   
-  const hanldeOnEdit = (id: number) => {
-    console.log('edit', id)
+  const hanldeOnEdit = (data: any) => {
+    dispatch(setIsAddUserBtnClicked(true))
+    dispatch(setUser(data))
+    dispatch(setIsEditUserBtnClicked(true))
   }
 
   const handleOnRemove = (data: any) => {

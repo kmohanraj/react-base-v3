@@ -15,7 +15,10 @@ export const store = configureStore({
     customer: customerReducer,
     group: groupReducer,
     roles: roleSlice
-  }
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  })
 });
 
 export type RootState = ReturnType<typeof store.getState>;

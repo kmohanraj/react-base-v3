@@ -1,5 +1,3 @@
-const isAddUserBtnClicked = false;
-
 const user = {
   name: '',
   email: '',
@@ -19,8 +17,9 @@ const login = {
 const initialState = {
   user: user,
   login: login,
-  isAddUserBtnClicked: isAddUserBtnClicked,
+  isAddUserBtnClicked: false,
+  isEditUserBtnClicked: false,
   usersData: []
 }
 
-export { initialState } 
+export { initialState, user } 

@@ -3,7 +3,7 @@ import TopPanel from "components/molecules/TopPanel";
 import arrowBack from 'assets/images/back_button.svg';
 import Input from "components/atoms/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsAddUserBtnClicked, setUser } from "store/slice/users.slice";
+import { clearUser, setIsAddUserBtnClicked, setIsEditUserBtnClicked, setUser } from "store/slice/users.slice";
 import Button from "components/atoms/Button";
 import type { RootState } from "store";
 import Select from "components/atoms/Select";
@@ -15,7 +15,7 @@ import useItToGetOrganizations from "hooks/organization/useItToGetOrganizations"
 
 const AddUser = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state: RootState) => state.user);
+  const { user, isEditUserBtnClicked } = useSelector((state: RootState) => state.user);
   const { organizationOptions } = useSelector((state: RootState) => state.organization);
   const { branchOptions } = useSelector((state: RootState) => state.branch);
   const { roleOptions } = useSelector((state: RootState) => state.roles);
@@ -32,7 +32,6 @@ const AddUser = () => {
   }
 
   const handleOnSelect = (value: any, name: string) => {
-    console.log('SELECT', value)
     dispatch(setUser({
       ...user, [name]: value?.id
     }))
@@ -50,12 +49,18 @@ const AddUser = () => {
     }
   }
 
+  const handleCheckCondition = () => {
+    dispatch(setIsAddUserBtnClicked(false))
+    dispatch(clearUser())
+    dispatch(setIsEditUserBtnClicked(false))
+  }
+
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType="breadcrumb">
-          <img src={arrowBack} alt="Back" onClick={() =>dispatch(setIsAddUserBtnClicked(false))}  />
-          <div>Create</div>
+          <img src={arrowBack} alt="Back" onClick={handleCheckCondition}  />
+          <div>{isEditUserBtnClicked ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className="chit-form">
           <Input
@@ -128,8 +133,8 @@ const AddUser = () => {
           
         </div>
         <div className="form-submit">
-          <Button type="ghost" label="Cancel" onClick={() => dispatch(setIsAddUserBtnClicked(false))} />
-          <Button type="primary" label="Create" onClick={() => handleOnSubmit()} />
+          <Button type="ghost" label="Cancel" onClick={handleCheckCondition} />
+          <Button type="primary" label={isEditUserBtnClicked ? 'Update' : 'Create'} onClick={() => handleOnSubmit()} />
         </div>
       </div>
     </>

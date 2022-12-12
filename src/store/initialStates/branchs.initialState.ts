@@ -10,7 +10,8 @@ const branchOption = {
 }
 
 const initialState = {
-  isAddBranchButtonClicked: false,
+  isAddBranchBtnClicked: false,
+  isEditBranchBtnClicked: false,
   branch: branch,
   branchesData: [],
   branchOptions: []

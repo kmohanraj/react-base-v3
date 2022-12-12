@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {initialState} from 'store/initialStates/users.initialState';
+import { initialState, user} from 'store/initialStates/users.initialState';
 
 export const usersSlice = createSlice({
   name: 'users',
@@ -7,6 +7,9 @@ export const usersSlice = createSlice({
   reducers: {
     setIsAddUserBtnClicked: (state, action) => {
       state.isAddUserBtnClicked = action.payload
+    },
+    setIsEditUserBtnClicked: (state, action) => {
+      state.isEditUserBtnClicked = action.payload
     },
     setUser: (state, action) => {
       state.user = action.payload
@@ -16,15 +19,21 @@ export const usersSlice = createSlice({
     },
     setUsersData: (state, action) => {
       state.usersData = action.payload
-    }
+    },
+    clearUser: (state) => ({
+      ...state,
+      user: user
+    })
   }
 });
 
 export const {
   setIsAddUserBtnClicked,
+  setIsEditUserBtnClicked,
   setUser,
   setLogin,
-  setUsersData
+  setUsersData,
+  clearUser
 } = usersSlice.actions;
 
 export default usersSlice.reducer;

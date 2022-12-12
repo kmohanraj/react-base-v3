@@ -1,7 +1,7 @@
 import React from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import arrowBack from 'assets/images/back_button.svg';
-import { setCustomer, setIsAddCustomerBtnClicked } from 'store/slice/customers.slice';
+import { clearCustomer, setCustomer, setIsAddCustomerBtnClicked, setIsEditCustomerBtnclicked } from 'store/slice/customers.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import Button from 'components/atoms/Button';
@@ -40,7 +40,7 @@ const idProofOptions = [
 
 const AddCustomer = () => {
   const dispatch = useDispatch();
-  const { customer } = useSelector((state: RootState) => state.customer)
+  const { customer, isEditCustomerBtnClicked } = useSelector((state: RootState) => state.customer)
   const { organizationOptions } = useSelector((state: RootState) => state.organization)
   const { branchOptions } = useSelector((state: RootState) => state.branch)
   const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
@@ -62,13 +62,18 @@ const AddCustomer = () => {
 
   const handleOnSubmit = async () => {
     console.log('submit', customer);
-    // const response = await customerService.create(customer, Number(currentUserID))
-    // console.log('response---', response)
-    // if (response) {
-    //   dispatch(setIsAddCustomerBtnClicked(false))
-    // }
+    const response = await customerService.create(customer, Number(currentUserID))
+    if (response) {
+      dispatch(setIsAddCustomerBtnClicked(false))
+    }
   };
 
+  const handleCheckCondition = () => {
+    dispatch(setIsAddCustomerBtnClicked(false))
+    dispatch(clearCustomer())
+    dispatch(setIsEditCustomerBtnclicked(false))
+  }
+  
   return (
     <>
       <div className='form-section'>
@@ -76,9 +81,9 @@ const AddCustomer = () => {
           <img
             src={arrowBack}
             alt='Back'
-            onClick={() => dispatch(setIsAddCustomerBtnClicked(false))}
+            onClick={handleCheckCondition}
           />
-          <div>Create</div>
+          <div>{isEditCustomerBtnClicked ? 'Update' : 'Create' }</div>
         </TopPanel>
         <div className='chit-form'>
           <Input
@@ -190,11 +195,11 @@ const AddCustomer = () => {
           <Button
             type='ghost'
             label='Cancel'
-            onClick={() => dispatch(setIsAddCustomerBtnClicked(false))}
+            onClick={handleCheckCondition}
           />
           <Button
             type='primary'
-            label='Create'
+            label={isEditCustomerBtnClicked ? 'Update' : 'Create' }
             onClick={handleOnSubmit}
           />
         </div>

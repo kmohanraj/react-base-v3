@@ -6,7 +6,10 @@ export const branchSlice = createSlice({
   initialState,
   reducers: {
     setIsAddBranchBtnClicked: (state, action) => {
-      state.isAddBranchButtonClicked = action.payload;
+      state.isAddBranchBtnClicked = action.payload;
+    },
+    setIsEditBranchBtnClicked: (state, action) => {
+      state.isEditBranchBtnClicked = action.payload
     },
     setBranch: (state, action) => {
       state.branch = action.payload;
@@ -26,6 +29,7 @@ export const branchSlice = createSlice({
 
 export const {
   setIsAddBranchBtnClicked,
+  setIsEditBranchBtnClicked,
   setBranch,
   setBranchesData,
   setBranchOption,

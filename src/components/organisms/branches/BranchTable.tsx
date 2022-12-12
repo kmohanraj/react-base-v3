@@ -1,7 +1,7 @@
 import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
-import { setIsAddBranchBtnClicked } from 'store/slice/branchs.slice';
+import { setBranch, setIsAddBranchBtnClicked, setIsEditBranchBtnClicked } from 'store/slice/branchs.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from 'components/atoms/Pagination';
 import { useEffect, useState } from 'react';
@@ -25,8 +25,10 @@ const BranchTable = () => {
   const { branchesData } = useSelector((state: RootState) => state.branch)
 
 
-  const handleOnEdit = () => {
-    console.log('edit-branch');
+  const handleOnEdit = (data: any) => {
+    dispatch(setIsEditBranchBtnClicked(true))
+    dispatch(setIsAddBranchBtnClicked(true))
+    dispatch(setBranch(branchesData.filter((ele: any) => ele.id === data.id)[0]))
   };
 
   const handleOnRemove = () => {
