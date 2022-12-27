@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import arrowBack from 'assets/images/back_button.svg';
 import TopPanel from 'components/molecules/TopPanel';
 import Input from 'components/atoms/TextField';
-import { setGroup, setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
+import { setGroup, setIsAddGroupBtnClicked, setIsEditGroupBtnClicked } from 'store/slice/groups.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'components/atoms/Button';
 import type { RootState } from 'store';
@@ -13,6 +13,7 @@ import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations'
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import 'styles/date-picker.scss';
 
 const durationOptions = [
   {
@@ -25,10 +26,22 @@ const durationOptions = [
   },
 ];
 
+const groupAmounts = [
+  {
+    id: 1,
+    label: '500000'
+  },
+  {
+    id: 2,
+    label: '100000'
+  }
+]
+
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 const AddGroup: FC = () => {
+ 
   const dispatch = useDispatch();
-  const { group } = useSelector((state: RootState) => state.group);
+  const { group, isEditGroupBtnClicked } = useSelector((state: RootState) => state.group);
   const { organizationOptions } = useSelector(
     (state: RootState) => state.organization
   );
@@ -37,61 +50,80 @@ const AddGroup: FC = () => {
   const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID));
   const [isBranchLoading] = useToGetBranches(Number(currentUserID));
 
-  const [endDate, setEndDate] = useState<any>();
+
+  const initialState = {
+    group_code: '',
+    amount: '',
+    total_members: '',
+    duration: null,
+    org_id: null,
+    branch_id: null,
+    start_date: null,
+    end_date: null
+  }
+  const dateFormat: any = { ...group }
+  dateFormat.start_date = new Date(group.start_date)
+  dateFormat.end_date = new Date(group.end_date)
+
+  const [groupData, setGroupData] = useState(isEditGroupBtnClicked ? dateFormat : initialState)
+  
+  const [startDate, setStartDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.start_date) : initialState.start_date)
+  const [endDate, setEndDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.end_date) : initialState.end_date);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    dispatch(
-      setGroup({
-        ...group,
-        [name]: value,
-      })
-    );
+    setGroupData({...groupData, [name]: value})
   };
 
   const handleOnSelect = (value: any, fieldName: string) => {
-    dispatch(
-      setGroup({
-        ...group,
-        [fieldName]: value.id,
-      })
-    );
+    setGroupData({
+      ...group, [fieldName]: value.id
+    })
+    if (fieldName === 'duration') {
+      setStartDate('')
+      setEndDate('')
+    }
   };
 
-  const handleOnSelectDate = (e: Date, fieldName: string) => {
+  const handleOnSelectDate = (e: any, fieldName: string) => {
+    console.log('SSSSSSSS', groupData)
     const duration = durationOptions
-      .filter((ele) => ele.id === group.duration)[0]
+      .filter((ele) => ele.id === groupData?.duration)[0]
       .label.split(' ')[0];
-    dispatch(
-      setGroup({
-        ...group,
-        [fieldName]: e,
-      })
-    );
-    if (fieldName === 'start_date' && group.duration) {
+    setStartDate(e)
+    if (fieldName === 'start_date' && duration) {
       const currentDate = new Date(e);
       const nextDate = currentDate.setMonth(
         currentDate.getMonth() + Number(duration)
       );
       const finalDate = new Date(nextDate);
-      const resultDate = finalDate.setDate(finalDate.getDate() - 1)
+      const resultDate: any = new Date(finalDate.setDate(finalDate.getDate() - 1))
       setEndDate(new Date(resultDate));
     }
   };
 
   const handleOnSubmit = async () => {
-    console.log('submit', group);
-    await createGroup();
+    const {start_date, end_date, ...filterData } = group
+    const data = {
+      ...filterData,
+      start_date: new Date(startDate),
+      end_date: new Date(endDate)
+    }
+    console.log('submit', data);
+    await createGroup(data);
   };
 
-  const createGroup = async () => {
-    const response = await GroupService.create(group, Number(currentUserID));
+  const createGroup = async (data: any) => {
+    const response = await GroupService.create(data, Number(currentUserID));
     if (response?.status === STATUS_CODE.STATUS_200) {
       dispatch(setIsAddGroupBtnClicked(false));
     }
   };
 
-  console.log('group---end-date-and-start-date', endDate);
+  const handleOnCheckCondition = () => {
+    dispatch(setIsAddGroupBtnClicked(false))
+    dispatch(setIsEditGroupBtnClicked(false))
+  }
 
   return (
     <>
@@ -100,37 +132,44 @@ const AddGroup: FC = () => {
           <img
             src={arrowBack}
             alt='Back'
-            onClick={() => dispatch(setIsAddGroupBtnClicked(false))}
+            onClick={handleOnCheckCondition}
           />
-          <div>Create</div>
+          <div>{isEditGroupBtnClicked ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className='chit-form'>
           <Input
             inputId='group_code'
-            value={group.group_code}
+            value={groupData.group_code}
             onChange={handleOnChange}
             placeholder='Enter Group Code'
             required
           />
           <Input
             inputId='amount'
-            value={group.amount}
+            value={groupData.amount}
             onChange={handleOnChange}
             placeholder='Select Amount'
             required
           />
           <Input
             inputId='total_members'
-            value={group.total_members}
+            value={groupData.total_members}
             onChange={handleOnChange}
             placeholder='Enter Total Members'
             required
           />
+          {/* <Input
+            inputId='duration'
+            value={group.duration || ''}
+            onChange={handleOnChange}
+            placeholder='Enter Duration'
+            required
+          /> */}
           <Select
             inputId='duration'
             placeholder='Select Duration'
             required
-            value={group.duration}
+            value={groupData.duration}
             options={durationOptions}
             onSelect={(value) => handleOnSelect(value, 'duration')}
           />
@@ -139,7 +178,7 @@ const AddGroup: FC = () => {
             placeholder='Select Organization'
             required
             options={organizationOptions}
-            value={group.org_id}
+            value={groupData.org_id}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
             isLoading={isOrgLoading}
           />
@@ -148,35 +187,36 @@ const AddGroup: FC = () => {
             placeholder='Select Branch'
             required
             options={branchOptions}
-            value={group.branch_id}
+            value={groupData.branch_id}
             onSelect={(value) => handleOnSelect(value, 'branch_id')}
             isLoading={isBranchLoading}
           />
           <DatePicker
             name='start_date'
             placeholderText='MM - DD - YYYY'
-            selected={group.start_date}
-            onChange={(e: Date) => handleOnSelectDate(e, 'start_date')}
+            selected={startDate}
+            onChange={(e: any) => handleOnSelectDate(e, 'start_date')}
             selectsStart
             disabledKeyboardNavigation
-            startDate={group.start_date}
-            maxDate={group.end_date}
+            startDate={startDate}
+            maxDate={groupData.end_date as any}
             dateFormat='dd/MM/yyyy'
-            className='chit-start-date-field'
-            disabled={!group.duration}
+            className='chit-start-date-field chit-date'
+            disabled={!groupData.duration}
           />
           <DatePicker
             name='end_date'
             placeholderText='MM - DD - YYYY'
-            selected={group.end_date || endDate}
+            selected={endDate}
             autoComplete='nope'
-            onChange={(e: Date) => handleOnSelectDate(e, 'end_date')}
+            onChange={(e: any) => handleOnSelectDate(e, 'end_date')}
             selectsEnd
             disabledKeyboardNavigation
             minDate={endDate}
             maxDate={endDate}
             dateFormat='dd/MM/yyyy'
-            className='chit-start-date-field'
+            className='chit-start-date-field chit-date'
+            disabled
           />
           {/* <Input
             inputId='start_date'
@@ -200,11 +240,11 @@ const AddGroup: FC = () => {
           <Button
             type='ghost'
             label='Cancel'
-            onClick={() => dispatch(setIsAddGroupBtnClicked(false))}
+            onClick={handleOnCheckCondition}
           />
           <Button
             type='primary'
-            label='Create'
+            label={isEditGroupBtnClicked ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
           />
         </div>

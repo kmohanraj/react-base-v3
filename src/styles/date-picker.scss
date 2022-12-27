@@ -1,0 +1,7 @@
+@import './global-mixin';
+
+.react-datepicker-wrapper {
+  .chit-date {
+    @include input-field();
+  }
+}

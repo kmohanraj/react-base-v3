@@ -2,7 +2,7 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddGroupBtnClicked } from 'store/slice/groups.slice';
+import { setGroup, setIsAddGroupBtnClicked, setIsEditGroupBtnClicked } from 'store/slice/groups.slice';
 import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
 import CONSTANTS from 'constants/constants';
@@ -39,8 +39,11 @@ const GroupTable = () => {
   const end = start + perPageSize;
   const datas = groupsData.slice(start, end)
 
-  const hanldeOnEdit = (id: number) => {
-    console.log('edit', id);
+  const hanldeOnEdit = (data: any) => {
+    console.log('edit', data);
+    dispatch(setIsAddGroupBtnClicked(true))
+    dispatch(setIsEditGroupBtnClicked(true))
+    dispatch(setGroup(data))
   };
 
   const handleOnRemove = (data: any) => {

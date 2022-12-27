@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState } from 'store/initialStates/groups.inititalState';
+import { initialState, clearDate } from 'store/initialStates/groups.inititalState';
 
 export const groupsSlice = createSlice({
   name: 'groups',
@@ -7,6 +7,9 @@ export const groupsSlice = createSlice({
   reducers: {
     setIsAddGroupBtnClicked: (state, action) => {
       state.isAddGroupBtnClicked = action.payload
+    },
+    setIsEditGroupBtnClicked: (state, action) => {
+      state.isEditGroupBtnClicked = action.payload
     },
     setGroup: (state, action) => {
       state.group = action.payload
@@ -19,6 +22,7 @@ export const groupsSlice = createSlice({
 
 export const {
   setIsAddGroupBtnClicked,
+  setIsEditGroupBtnClicked,
   setGroup,
   setGroupsData
 } = groupsSlice.actions;

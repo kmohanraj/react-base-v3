@@ -1,0 +1,40 @@
+@use 'colors';
+
+.asr_modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+  z-index: 13;
+}
+
+.asr_modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.asr_modal_content {
+  padding: 40px 30px 40px 40px;
+  border: 0.5px solid colors.$cool-grey;
+  background-color: white;
+  height: fit-content;
+  width: 600px;
+  transition: 0.4s all;
+}
+
+.asr_modal_content.active {
+  transform: scale(1);
+}
+
+.asr_close_btn {
+  float: right;
+  cursor: pointer;
+}

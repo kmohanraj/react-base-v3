@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
+import Modal from 'components/atoms/Modal';
 
 const columns = [
   { title: 'Organization Name', dataProperty: 'org_name' },
@@ -61,6 +62,7 @@ const OrganizationTable = () => {
           />
         </div>
       </TopPanel>
+      {/* <Modal children={(<h1>SSD</h1>)} /> */}
       <Table
         tableName='organization-table'
         columns={columns}

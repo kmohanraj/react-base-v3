@@ -42,9 +42,9 @@ const Select: FC<SelectProps> = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  console.log('___________VALUE', value, options)
+  // console.log('___________VALUE', value, options)
   const [selectedValue, setSelectedValue] = useState( value ? options.filter((ele: any) => ele.id === value) : initialState);
-  console.log('__________SELECTED_VALUE', selectedValue)
+  // console.log('__________SELECTED_VALUE', selectedValue)
   const inputRef = useRef<HTMLInputElement>(null);
   const selectClass = cx('select_control',{ 'is-focused': isMenuOpen },{ 'is-disabled': isDisabled });
   const selectValueClass = cx('select__values',{ 'is-multi': isMulti },{ 'is-single': !isMulti });
