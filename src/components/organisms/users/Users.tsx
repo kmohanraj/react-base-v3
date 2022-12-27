@@ -6,7 +6,7 @@ import AddUser from "./AddUser";
 
 const Users: FC = () => {
   const { isAddUserBtnClicked } = useSelector((state: RootState) => state.user)
-  console.log('ssss', isAddUserBtnClicked)
+
   return (
     <>
     <Suspense>

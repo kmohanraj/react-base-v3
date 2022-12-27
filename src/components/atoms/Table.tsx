@@ -40,7 +40,7 @@ const Table: FC<TableType> = ({
           {columns.map((col, i) => (
             <th key={i}>{col.title}</th>
           ))}
-          {/* {action && <th className='action-head'>Action</th>} */}
+          {action && <th className='action-head'>Action</th>}
         </tr>
       </thead>
       <tbody>
@@ -48,9 +48,16 @@ const Table: FC<TableType> = ({
           // <tr className={cx({ active: Number(selected) === i})} key={i} onClick={() => handleOnSelect(d, i)} >
           <tr key={j}>
             {columns.map((col, k) => (
-              <td key={k}>{d[col.dataProperty]}</td>
+              <>
+                <td key={k}>
+                  {/* <span className='action-btn'>
+                    <span className='edit-col edit' onClick={() => handleOnSelectRow()}><img src={editIcon} alt="" /></span>
+                    <span className='edit-col delete' onClick={() => handleOnRemoveRow()}><img src={deleteIcon} alt="" /></span>
+                  </span> */}
+                {d[col.dataProperty]}</td>
+              </>
             ))}
-            {/* {action && (
+            {action && (
               <td className='actions'>
                 <span onClick={() => handleOnEdit(d, j)}>
                   <img src={editIcon} alt='Edit' />
@@ -59,8 +66,7 @@ const Table: FC<TableType> = ({
                   <img src={deleteIcon} alt='Delete' />
                 </span>
               </td>
-            )} */}
-            
+            )}
           </tr>
         ))}
       </tbody>

@@ -1,10 +1,19 @@
-/* eslint-disable import/no-anonymous-default-export */
-
-export default {
-  isAddBranchButtonClicked: false,
-  branch: {
-    branch_name: '',
-    branch_code: '',
-    organization_id: ''
-  }
+const branch = {
+  branch_name: '',
+  branch_code: '',
+  org_id: null
 }
+
+const branchOption = {
+  id: null,
+  label: ''
+}
+
+const initialState = {
+  isAddBranchBtnClicked: false,
+  isEditBranchBtnClicked: false,
+  branch: branch,
+  branchesData: [],
+  branchOptions: []
+}
+export { initialState, branch, branchOption };

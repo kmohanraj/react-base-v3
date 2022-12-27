@@ -4,6 +4,7 @@ import branchReducer from 'store/slice/branchs.slice';
 import userReducer from 'store/slice/users.slice';
 import customerReducer from 'store/slice/customers.slice';
 import groupReducer from 'store/slice/groups.slice';
+import roleSlice from "./slice/role.slice";
 
 
 export const store = configureStore({
@@ -12,8 +13,12 @@ export const store = configureStore({
     branch: branchReducer,
     user: userReducer,
     customer: customerReducer,
-    group: groupReducer
-  }
+    group: groupReducer,
+    roles: roleSlice
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  })
 });
 
 export type RootState = ReturnType<typeof store.getState>;

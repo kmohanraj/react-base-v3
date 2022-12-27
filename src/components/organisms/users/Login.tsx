@@ -8,10 +8,11 @@ import type { RootState } from 'store';
 import userService from 'service/user.service';
 import CONSTANTS from 'constants/constants';
 
+const { SESSION_STORAGE } = CONSTANTS;
+
 const Login: FC = () => {
   const { login } = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch();
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(setLogin({
@@ -21,8 +22,13 @@ const Login: FC = () => {
 
   const handlOnSubmit = async () => {
     const response = await userService.login(login)
-    sessionStorage.setItem(CONSTANTS.SESSION_STORAGE.AUTH_TOKEN_KEY, response.headers['authorization'])
-    sessionStorage.setItem(CONSTANTS.SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY, 'false')
+    console.log('response', response)
+    sessionStorage.setItem(SESSION_STORAGE.AUTH_TOKEN_KEY, response.headers['authorization'])
+    sessionStorage.setItem(SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY, response.data.info.isFirstLogin)
+    sessionStorage.setItem(SESSION_STORAGE.USER_ID_KEY, response.data.info.user)
+    sessionStorage.setItem(SESSION_STORAGE.NAME_KEY, response.data.info.name)
+    sessionStorage.setItem(SESSION_STORAGE.ROLE_KEY, response.data.info.role)
+    window.location.pathname = '/'
   }
   
   return (

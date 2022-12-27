@@ -7,6 +7,7 @@ import Footer from "components/atoms/Footer";
 import 'styles/app-routes.scss'
 
 import CONSTANTS from "constants/constants";
+import ToastNotification from "components/atoms/Toast";
 const AppRoutes: FC<IAppRouteProps> = (props) => {
 
   const currentUserId = sessionStorage.getItem(
@@ -15,7 +16,6 @@ const AppRoutes: FC<IAppRouteProps> = (props) => {
   const isFirstLogin = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY
   );
-
   return (
     <BrowserRouter>
       <Routes>
@@ -29,18 +29,21 @@ const AppRoutes: FC<IAppRouteProps> = (props) => {
                 isFirstLogin === 'false' ? (
                   <Navigate to='/' />
                 ) : (
-                  <>
-                    <ele.component />
-                  </>
+                  <React.Fragment>
+                      <ele.component />
+                  </React.Fragment>
                 )
               ) : currentUserId !== undefined &&
                 currentUserId !== null &&
                 isFirstLogin === 'false' ? (
-                <>
+                <React.Fragment>
                   <Header/>
-                    <ele.component />
+                    <div className="container">
+                      {/* <ToastNotification /> */}
+                      <ele.component />
+                    </div>
                   <Footer />
-                </>
+                </React.Fragment>
               ) : (
                 <Navigate to='/login' />
               )
