@@ -5,10 +5,10 @@ import GroupTable from './GroupTable';
 import AddGroup from './AddGroup';
 
 const Groups: FC = () => {
-  const { isAddGroupBtnClicked } = useSelector(
+  const { isAddGroupBtnClicked, isManageCustomerBtnClicked } = useSelector(
     (state: RootState) => state.group
   );
-
+  console.log("SSSSS", isManageCustomerBtnClicked)
   return <>{!isAddGroupBtnClicked ? <GroupTable /> : <AddGroup />}</>;
 };
 export default Groups;

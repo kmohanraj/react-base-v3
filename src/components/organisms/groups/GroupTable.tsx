@@ -2,12 +2,13 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setGroup, setIsAddGroupBtnClicked, setIsEditGroupBtnClicked } from 'store/slice/groups.slice';
+import * as GroupSlice from 'store/slice/groups.slice';
 import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
 import CONSTANTS from 'constants/constants';
 import useItToGetGroups from 'hooks/group/useItToGetGroups';
 import { RootState } from 'store';
+import ManageCustomer from './ManageCustomer';
 
 
 const { SESSION_STORAGE } = CONSTANTS;
@@ -33,7 +34,7 @@ const GroupTable = () => {
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
   const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID))
 
-  const { groupsData } = useSelector((state: RootState) => state.group)
+  const { groupsData, isManageCustomerBtnClicked } = useSelector((state: RootState) => state.group)
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
@@ -41,16 +42,27 @@ const GroupTable = () => {
 
   const hanldeOnEdit = (data: any) => {
     console.log('edit', data);
-    dispatch(setIsAddGroupBtnClicked(true))
-    dispatch(setIsEditGroupBtnClicked(true))
-    dispatch(setGroup(data))
+    dispatch(GroupSlice.setIsAddGroupBtnClicked(true))
+    dispatch(GroupSlice.setIsEditGroupBtnClicked(true))
+    dispatch(GroupSlice.setGroup(data))
+    dispatch(GroupSlice.setSelectedGroup(data))
   };
 
   const handleOnRemove = (data: any) => {
     console.log('remove -item', data);
   };
 
+  const handleOnManageCustomer = (data: any) => {
+    console.log('edit', data);
+    dispatch(GroupSlice.setGroup(data))
+    dispatch(GroupSlice.setIsManageCustomerBtnClicked(true))
+  }
+
   useEffect(() => {}, [isGroupsDataLoading])
+
+  if (isManageCustomerBtnClicked) {
+    return <ManageCustomer />
+  }
 
   return (
     <>
@@ -65,7 +77,7 @@ const GroupTable = () => {
           <Button
             type='primary'
             label='Add Group'
-            onClick={() => dispatch(setIsAddGroupBtnClicked(true))}
+            onClick={() => dispatch(GroupSlice.setIsAddGroupBtnClicked(true))}
           />
         </div>
       </TopPanel>
@@ -76,6 +88,7 @@ const GroupTable = () => {
         action={true}
         onEdit={hanldeOnEdit}
         onRemove={handleOnRemove}
+        onManageCustomer={handleOnManageCustomer}
       />
       <Pagination
         perPage={perPageSize}

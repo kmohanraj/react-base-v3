@@ -5,6 +5,7 @@ import userReducer from 'store/slice/users.slice';
 import customerReducer from 'store/slice/customers.slice';
 import groupReducer from 'store/slice/groups.slice';
 import roleSlice from "./slice/role.slice";
+import collectionSlice from "./slice/collection.slice";
 
 
 export const store = configureStore({
@@ -14,7 +15,8 @@ export const store = configureStore({
     user: userReducer,
     customer: customerReducer,
     group: groupReducer,
-    roles: roleSlice
+    roles: roleSlice,
+    collection: collectionSlice
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false

@@ -100,8 +100,10 @@
     transition: all 0.3s ease;
   }
   .actions {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    text-align: center;
+    text-align-last: center;
+    span {
+      padding: 6px;
+    }
   }
 }

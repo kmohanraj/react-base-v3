@@ -7,4 +7,5 @@ export interface IErrorProps {
 
 export type ModalType = {
   children: React.ReactNode
+  onClose: () => void
 }

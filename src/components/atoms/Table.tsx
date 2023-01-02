@@ -13,6 +13,7 @@ type TableType = {
   action?: true;
   onEdit: (data: any) => void;
   onRemove: (id: number) => void;
+  onManageCustomer?: (data: any) => void;
 };
 
 const Table: FC<TableType> = ({
@@ -22,6 +23,7 @@ const Table: FC<TableType> = ({
   action,
   onEdit,
   onRemove,
+  onManageCustomer
 }) => {
   const [selected, setSelected] = useState<number>();
 
@@ -32,6 +34,10 @@ const Table: FC<TableType> = ({
   const handleOnRemove = (id: number) => {
     onRemove(id);
   };
+
+  const handleOnManageCustomer = (selectedRow: any) => {
+    onManageCustomer && onManageCustomer(selectedRow)
+  }
 
   return (
     <table className={`table ${tableName}`}>
@@ -64,6 +70,9 @@ const Table: FC<TableType> = ({
                 </span>
                 <span onClick={() => handleOnRemove(d.id)}>
                   <img src={deleteIcon} alt='Delete' />
+                </span>
+                <span onClick={() => handleOnManageCustomer(d)}>
+                  <img src={deleteIcon} alt='Add Customer' />
                 </span>
               </td>
             )}

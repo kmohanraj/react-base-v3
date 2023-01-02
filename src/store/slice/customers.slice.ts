@@ -17,6 +17,12 @@ export const cutomersSlice = createSlice({
     setCustomersData: (state, action) => {
       state.customersData = action.payload
     },
+    setCustomerOptions: (state, action) => {
+      state.customerOptions =action.payload
+    },
+    setCurrentCustomerCode: (state, action) => {
+      state.currentCustomerCode = action.payload
+    },
     clearCustomer: (state) => ({
       ...state,
       customer: customer
@@ -29,6 +35,8 @@ export const {
   setIsEditCustomerBtnclicked,
   setCustomer,
   setCustomersData,
+  setCustomerOptions,
+  setCurrentCustomerCode,
   clearCustomer
 } = cutomersSlice.actions;
 

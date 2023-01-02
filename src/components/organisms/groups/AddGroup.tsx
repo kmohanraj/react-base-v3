@@ -14,6 +14,7 @@ import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'styles/date-picker.scss';
+import ManageCustomer from './ManageCustomer';
 
 const durationOptions = [
   {
@@ -71,18 +72,20 @@ const AddGroup: FC = () => {
   const [endDate, setEndDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.end_date) : initialState.end_date);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("************type")
     const { name, value } = e.target;
     setGroupData({...groupData, [name]: value})
   };
 
   const handleOnSelect = (value: any, fieldName: string) => {
+    console.log("************select", fieldName, value)
     setGroupData({
-      ...group, [fieldName]: value.id
+      ...groupData, [fieldName]: value.id
     })
-    if (fieldName === 'duration') {
-      setStartDate('')
-      setEndDate('')
-    }
+    // if (fieldName === 'duration') {
+    //   setStartDate('')
+    //   setEndDate('')
+    // }
   };
 
   const handleOnSelectDate = (e: any, fieldName: string) => {
@@ -91,6 +94,7 @@ const AddGroup: FC = () => {
       .filter((ele) => ele.id === groupData?.duration)[0]
       .label.split(' ')[0];
     setStartDate(e)
+    console.log('SSSSSSSS', '------------->>')
     if (fieldName === 'start_date' && duration) {
       const currentDate = new Date(e);
       const nextDate = currentDate.setMonth(
@@ -103,7 +107,7 @@ const AddGroup: FC = () => {
   };
 
   const handleOnSubmit = async () => {
-    const {start_date, end_date, ...filterData } = group
+    const {start_date, end_date, ...filterData } = groupData
     const data = {
       ...filterData,
       start_date: new Date(startDate),

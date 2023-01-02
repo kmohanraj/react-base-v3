@@ -11,8 +11,20 @@ export const groupsSlice = createSlice({
     setIsEditGroupBtnClicked: (state, action) => {
       state.isEditGroupBtnClicked = action.payload
     },
+    setIsManageCustomerBtnClicked: (state, action) => {
+      state.isManageCustomerBtnClicked = action.payload
+    },
+    setIsModalShow: (state, action) => {
+      state.isModalShow = action.payload
+    },
+    setIsCollectionDetail: (state, action) => {
+      state.isCollectionDetail = action.payload
+    },
     setGroup: (state, action) => {
       state.group = action.payload
+    },
+    setSelectedGroup: (state, action) => {
+      state.selectedGroup = action.payload
     },
     setGroupsData: (state, action) => {
       state.groupsData = action.payload
@@ -23,7 +35,11 @@ export const groupsSlice = createSlice({
 export const {
   setIsAddGroupBtnClicked,
   setIsEditGroupBtnClicked,
+  setIsManageCustomerBtnClicked,
+  setIsModalShow,
+  setIsCollectionDetail,
   setGroup,
+  setSelectedGroup,
   setGroupsData
 } = groupsSlice.actions;
 

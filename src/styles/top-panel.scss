@@ -1,10 +1,14 @@
 @use 'fonts';
 @use 'colors';
 
-.top-panel {
+@mixin panel-style($position) {
   display: flex;
-  justify-content: space-between;
+  justify-content: $position;
   margin-bottom: 40px;
+}
+
+.top-panel {
+  @include panel-style(space-between);
   
   .top-panel-entity {
     display: grid;
@@ -18,9 +22,7 @@
 }
 
 .breadcrumb {
-  display: flex;
-  justify-content: start;
-  margin-bottom: 40px;
+  @include panel-style(start);
   gap: 20px;
 
   img {

@@ -20,7 +20,9 @@ const initialState = {
   isAddCustomerBtnClicked: false,
   isEditCustomerBtnClicked: false,
   customer: customer,
-  customersData: []
+  customersData: [],
+  customerOptions: [],
+  currentCustomerCode: ''
 }
 
 export {
