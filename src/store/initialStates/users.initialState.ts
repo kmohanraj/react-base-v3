@@ -4,9 +4,9 @@ const user = {
   confirm_email: '',
   password: '',
   phone: '',
-  role_id: '',
-  org_id: '',
-  branch_id: ''
+  role_id: null,
+  org_id: null,
+  branch_id: null
 }
 
 const login = {

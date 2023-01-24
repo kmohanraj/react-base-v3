@@ -1,6 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import arrowDown from 'assets/images/arrow-down.svg';
-import Close from 'assets/images/close.svg';
+import * as Icons from 'constants/icons';
 import cx from 'classnames';
 import 'styles/select.scss';
 import EllipsisLoader from './EllipsisLoader';
@@ -42,9 +41,7 @@ const Select: FC<SelectProps> = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // console.log('___________VALUE', value, options)
-  const [selectedValue, setSelectedValue] = useState( value ? options.filter((ele: any) => ele.id === value) : initialState);
-  // console.log('__________SELECTED_VALUE', selectedValue)
+  const [selectedValue, setSelectedValue] = useState( value ? value : initialState);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectClass = cx('select_control',{ 'is-focused': isMenuOpen },{ 'is-disabled': isDisabled });
   const selectValueClass = cx('select__values',{ 'is-multi': isMulti },{ 'is-single': !isMulti });
@@ -216,7 +213,7 @@ const Select: FC<SelectProps> = ({
             {(isClearable && (selectedValue.length > 0 ||
               Object.keys(selectedValue).length > 0)) && (
               <img
-                src={Close}
+                src={Icons.close}
                 alt=''
                 className='clear-all'
                 onClick={() =>
@@ -226,7 +223,7 @@ const Select: FC<SelectProps> = ({
             )}
             <img
               className={suffixIConClass}
-              src={arrowDown}
+              src={Icons.arrowDown}
               alt=''
               role='presentation'
             />

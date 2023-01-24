@@ -1,0 +1,76 @@
+@import './colors';
+@import './fonts';
+@import './global-mixin';
+
+.customer-mapping-btn {
+  text-align: end;
+  margin-bottom: 40px;
+}
+
+.manage-customer {
+  @include grid-auto-fit();
+  .section {
+    @include chit-box-shadow();
+  }
+  .group-content {
+    display: flex;
+    column-gap: 10px;
+    justify-content: space-between;
+    .name {
+      color: $slate-grey;
+      padding: 5px 0;
+    }
+    .value {
+      color: $slate-grey;
+    }
+  }
+}
+
+.customer-section {
+  @include grid-auto-fit();
+  margin-top: 2rem;
+
+  .item {
+    @include chit-box-shadow();
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 10%;
+    align-items: center;
+    font-size: 0.875rem;
+
+    .customer-info {
+      cursor: pointer;
+    }
+
+    &:hover {
+      transform: scale(1.025);
+      transition: all 0.2s ease;
+    }
+  }
+
+  .add-collection-btn {
+    @include custom-btn();
+  }
+
+  .customer-position {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.4rem;
+    width: 0.875rem;
+    font-weight: 500;
+    background-color: red;
+    border-radius: 10% 30% 50% 70%;
+    color: $light-grey;
+    // backdrop-filter: blur(8px) brightness(80%);
+
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    // padding: 1rem;
+    // font-size: 2rem;
+    // font-weight: 100;
+    // color: white;
+    // backdrop-filter: blur(8px) brightness(80%);
+  }
+}

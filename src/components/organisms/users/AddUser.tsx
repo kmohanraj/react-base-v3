@@ -1,9 +1,9 @@
 import React from "react";
 import TopPanel from "components/molecules/TopPanel";
-import arrowBack from 'assets/images/back_button.svg';
+import { backButton } from "constants/icons";
 import Input from "components/atoms/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUser, setIsAddUserBtnClicked, setIsEditUserBtnClicked, setUser } from "store/slice/users.slice";
+import * as UserSlice from "store/slice/users.slice";
 import Button from "components/atoms/Button";
 import type { RootState } from "store";
 import Select from "components/atoms/Select";
@@ -16,23 +16,23 @@ import useItToGetOrganizations from "hooks/organization/useItToGetOrganizations"
 const AddUser = () => {
   const dispatch = useDispatch();
   const { user, isEditUserBtnClicked } = useSelector((state: RootState) => state.user);
-  const { organizationOptions } = useSelector((state: RootState) => state.organization);
-  const { branchOptions } = useSelector((state: RootState) => state.branch);
-  const { roleOptions } = useSelector((state: RootState) => state.roles);
   const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
   const [isOrgOptionloading] = useItToGetOrganizations(Number(currentUserID));
   const [isRoleOptionLoading] = useItToGetRoles(Number(currentUserID))
   const [isBranchOptionLoading] = useToGetBranches(Number(currentUserID))
+  const { organizationOptions } = useSelector((state: RootState) => state.organization);
+  const { roleOptions } = useSelector((state: RootState) => state.roles);
+  const { branchOptions } = useSelector((state: RootState) => state.branch);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    dispatch(setUser({
+    dispatch(UserSlice.setUser({
       ...user, [name]: value
     }))
   }
 
   const handleOnSelect = (value: any, name: string) => {
-    dispatch(setUser({
+    dispatch(UserSlice.setUser({
       ...user, [name]: value?.id
     }))
   }
@@ -45,21 +45,29 @@ const AddUser = () => {
     }
     const response = await UserService.create(filterData, Number(currentUserID))
     if(response?.status === CONSTANTS.STATUS_CODE.STATUS_200) {
-      dispatch(setIsAddUserBtnClicked(false))
+      dispatch(UserSlice.setIsAddUserBtnClicked(false))
     }
   }
 
   const handleCheckCondition = () => {
-    dispatch(setIsAddUserBtnClicked(false))
-    dispatch(clearUser())
-    dispatch(setIsEditUserBtnClicked(false))
+    dispatch(UserSlice.setIsAddUserBtnClicked(false))
+    dispatch(UserSlice.clearUser())
+    dispatch(UserSlice.setIsEditUserBtnClicked(false))
+  }
+
+  const checkCurrentOption = (options: any, value: any) => {
+    if (isEditUserBtnClicked) {
+      return options.filter((option: any) => option.id === value)[0]
+    } else {
+      return options[0]
+    }
   }
 
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType="breadcrumb">
-          <img src={arrowBack} alt="Back" onClick={handleCheckCondition}  />
+          <img src={backButton} alt="Back" onClick={handleCheckCondition}  />
           <div>{isEditUserBtnClicked ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className="chit-form">
@@ -105,16 +113,17 @@ const AddUser = () => {
             inputId="role_id"
             placeholder="Select Role"
             required
-            value={user.role_id}
+            value={checkCurrentOption(roleOptions, user.role_id)}
             options={roleOptions}
             isLoading={isRoleOptionLoading}
             onSelect={(value) => handleOnSelect(value, 'role_id')}
+            isDisabled={ isEditUserBtnClicked && user.role_id === CONSTANTS.ROLE.ORG_ID}
           />
           <Select
             inputId="org_id"
             placeholder="Select Organization"
             required
-            value={user.org_id}
+            value={checkCurrentOption(organizationOptions, user.org_id)}
             options={organizationOptions}
             isLoading={isOrgOptionloading}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
@@ -124,7 +133,7 @@ const AddUser = () => {
               inputId="branch_id"
               placeholder="Select Branch"
               required
-              value={user.branch_id}
+              value={checkCurrentOption(branchOptions , user.branch_id)}
               options={branchOptions}
               isLoading={isBranchOptionLoading}
               onSelect={(value) => handleOnSelect(value, 'branch_id')}

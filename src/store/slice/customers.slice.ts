@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState, customer } from 'store/initialStates/cutomers.initialState';
+import { initialState, customer } from 'store/initialStates/customers.initialState';
 
-export const cutomersSlice = createSlice({
+export const customersSlice = createSlice({
   name: 'customers',
   initialState,
   reducers: {
     setIsAddCustomerBtnClicked: (state, action) => {
       state.isAddCustomerBtnClicked = action.payload
     },
-    setIsEditCustomerBtnclicked: (state, action) => {
+    setIsEditCustomerBtnClicked: (state, action) => {
       state.isEditCustomerBtnClicked = action.payload
     },
     setCustomer: (state, action) => {
@@ -16,6 +16,12 @@ export const cutomersSlice = createSlice({
     },
     setCustomersData: (state, action) => {
       state.customersData = action.payload
+    },
+    setCustomerOptions: (state, action) => {
+      state.customerOptions =action.payload
+    },
+    setCurrentCustomerCode: (state, action) => {
+      state.currentCustomerCode = action.payload
     },
     clearCustomer: (state) => ({
       ...state,
@@ -26,10 +32,12 @@ export const cutomersSlice = createSlice({
 
 export const {
   setIsAddCustomerBtnClicked,
-  setIsEditCustomerBtnclicked,
+  setIsEditCustomerBtnClicked,
   setCustomer,
   setCustomersData,
+  setCustomerOptions,
+  setCurrentCustomerCode,
   clearCustomer
-} = cutomersSlice.actions;
+} = customersSlice.actions;
 
-export default cutomersSlice.reducer;
+export default customersSlice.reducer;

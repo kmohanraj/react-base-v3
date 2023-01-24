@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, lazy } from 'react';
 import type { RootState } from 'store';
 import { useSelector } from 'react-redux';
-import CustomerTable from './CustomerTable';
 import AddCustomer from './AddCustomer';
+const  CustomerTable = lazy(() => import('./CustomerTable'));
 
 const Customers: FC = () => {
   const { isAddCustomerBtnClicked } = useSelector(

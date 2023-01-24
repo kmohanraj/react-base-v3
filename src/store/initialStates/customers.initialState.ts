@@ -1,6 +1,6 @@
 
 const customer = {
-  customer_id: '',
+  customer_code: '',
   org_id: null,
   branch_id: null,
   customer_name: '',
@@ -20,7 +20,9 @@ const initialState = {
   isAddCustomerBtnClicked: false,
   isEditCustomerBtnClicked: false,
   customer: customer,
-  customersData: []
+  customersData: [],
+  customerOptions: [],
+  currentCustomerCode: ''
 }
 
 export {

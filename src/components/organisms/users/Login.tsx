@@ -7,8 +7,9 @@ import { setLogin } from 'store/slice/users.slice';
 import type { RootState } from 'store';
 import userService from 'service/user.service';
 import CONSTANTS from 'constants/constants';
+import iziToast from 'izitoast';
 
-const { SESSION_STORAGE } = CONSTANTS;
+const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const Login: FC = () => {
   const { login } = useSelector((state: RootState) => state.user)
@@ -20,15 +21,24 @@ const Login: FC = () => {
     }))
   }
 
-  const handlOnSubmit = async () => {
+  const handleOnSubmit = async () => {
     const response = await userService.login(login)
-    console.log('response', response)
-    sessionStorage.setItem(SESSION_STORAGE.AUTH_TOKEN_KEY, response.headers['authorization'])
-    sessionStorage.setItem(SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY, response.data.info.isFirstLogin)
-    sessionStorage.setItem(SESSION_STORAGE.USER_ID_KEY, response.data.info.user)
-    sessionStorage.setItem(SESSION_STORAGE.NAME_KEY, response.data.info.name)
-    sessionStorage.setItem(SESSION_STORAGE.ROLE_KEY, response.data.info.role)
-    window.location.pathname = '/'
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      sessionStorage.setItem(SESSION_STORAGE.AUTH_TOKEN_KEY, response.headers['authorization'])
+      sessionStorage.setItem(SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY, response?.data?.info?.isFirstLogin)
+      sessionStorage.setItem(SESSION_STORAGE.USER_ID_KEY, response?.data?.info?.user)
+      sessionStorage.setItem(SESSION_STORAGE.NAME_KEY, response?.data?.info?.name)
+      sessionStorage.setItem(SESSION_STORAGE.ROLE_KEY, response?.data?.info?.role)
+      sessionStorage.setItem(SESSION_STORAGE.CURRENT_ORG_ID, response?.data?.info?.org_id)
+      window.location.pathname = '/'
+    }
+
+    if (response?.status !== STATUS_CODE.STATUS_200) {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+    }
   }
   
   return (
@@ -53,7 +63,7 @@ const Login: FC = () => {
           message='Eg: Password@123'
         />
         <div className="form-submit">
-          <Button type="primary" label="Login" onClick={handlOnSubmit} />
+          <Button type="primary" label="Login" onClick={handleOnSubmit} />
         </div>
       </div>
     </div>

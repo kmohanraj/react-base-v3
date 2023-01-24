@@ -1,8 +1,10 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 const organization = {
+  id: null,
   org_name: '',
   org_email: '',
   branch_limit: '',
+  group_limit: '',
   org_logo: '',
   org_phone: '',
   org_address: ''
@@ -26,4 +28,4 @@ const initialState = {
 
 
 
-export {initialState, organization} ;
+export { initialState, organization } ;

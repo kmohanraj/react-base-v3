@@ -1,4 +1,5 @@
 const group = {
+  id: null,
   group_code: '',
   amount: '',
   total_members: '',
@@ -17,7 +18,11 @@ const clearDate = {
 const initialState = {
   isAddGroupBtnClicked: false,
   isEditGroupBtnClicked: false,
+  isManageCustomerBtnClicked: false,
+  isCollectionDetail: false,
+  isModalShow: false,
   group: group,
+  selectedGroup: group,
   groupsData: [],
   clearDates: clearDate
 }

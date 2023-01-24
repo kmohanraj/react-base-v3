@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as customerService from 'service/customer.service';
-import { setCustomersData } from 'store/slice/customers.slice';
+import { setCustomerOptions, setCustomersData } from 'store/slice/customers.slice';
 
 const useItToGetCustomers = (userId: number): [boolean] => {
   const [loading, setLoading] = useState(false);
@@ -19,6 +19,11 @@ const useItToGetCustomers = (userId: number): [boolean] => {
         // }))
         // dispatch(setOrganizationOption(orgOptions))
         // dispatch(setIsOrgOptionLoading(false))
+        const customerOptions = response?.info.map((ele: any) => ({
+          id: ele.id,
+          label: ele.customer_code
+        }))
+        dispatch(setCustomerOptions(customerOptions))
         setLoading(false);
       })
       .then((err: any) => {

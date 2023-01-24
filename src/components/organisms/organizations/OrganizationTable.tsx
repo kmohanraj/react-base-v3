@@ -2,44 +2,60 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsAddOrgBtnClicked, setIsEditOrgBtnClicked, setOrganization } from 'store/slice/organizations.slice';
+import * as OrgSlice from 'store/slice/organizations.slice';
+import { setIsModalShow } from 'store/slice/groups.slice';
 import Pagination from 'components/atoms/Pagination';
 import { useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
-import Modal from 'components/atoms/Modal';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
 
 const columns = [
   { title: 'Organization Name', dataProperty: 'org_name' },
   { title: 'Organization Email', dataProperty: 'org_email' },
   { title: 'Branch Limit', dataProperty: 'branch_limit' },
+  { title: 'Group Limit', dataProperty: 'group_limit'},
   { title: 'Phone', dataProperty: 'org_phone' },
   { title: 'Status', dataProperty: 'is_active' },
 ];
+
+const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
 
 const OrganizationTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(30);
-  const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const [title, setTitle] = useState<string>('')
+  const [actionMode, setActionMode] = useState<string>('')
 
   const [loading] = useItToGetOrganizations(Number(currentUserID));
   const { organizationsData } = useSelector((state: RootState) => state.organization)
 
-  const hanldeOnEdit = (data: any) => {
-    dispatch(setIsAddOrgBtnClicked(true))
-    dispatch(setOrganization(data))
-    dispatch(setIsEditOrgBtnClicked(true))
+  const handleOnEdit = (data: any) => {
+    dispatch(OrgSlice.setIsAddOrgBtnClicked(true))
+    dispatch(OrgSlice.setOrganization(data))
+    dispatch(OrgSlice.setIsEditOrgBtnClicked(true))
   };
 
-  const handleOnRemove = (id: number) => {
-    console.log('remove -item', id);
+  const handleOnRemove = (data: any) => {
+    dispatch(setIsModalShow(true))
+    setTitle(data.org_name)
+    setActionMode('Delete')
+    console.log('remove -item', data.id);
   };
+  const handleOnChangeStatus = (column: string, selectedItem: any) => {
+    if(column === 'is_active') {
+      setActionMode(selectedItem.is_active ? 'In Active' : 'Active')
+      setTitle(selectedItem.org_name)
+      dispatch(setIsModalShow(true))
+    }
+  }
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
-  const pageListData = organizationsData.slice(start, end)
+  const pageListData = organizationsData.slice(start, end) ?? []
 
   useEffect(() => {
     
@@ -48,7 +64,7 @@ const OrganizationTable = () => {
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <div className='top-panel-entity'>{organizationsData.length} {organizationsData.length > 1 ? 'Oranizations' : 'Organization'}</div>
+        <div className='top-panel-entity'>{organizationsData.length} {organizationsData.length > 1 ? 'Organizations' : 'Organization'}</div>
         <div className='top-panel-buttons'>
           <Button
             type='ghost'
@@ -58,18 +74,18 @@ const OrganizationTable = () => {
           <Button
             type='primary'
             label='Add Organization'
-            onClick={() => dispatch(setIsAddOrgBtnClicked(true))}
+            onClick={() => dispatch(OrgSlice.setIsAddOrgBtnClicked(true))}
           />
         </div>
       </TopPanel>
-      {/* <Modal children={(<h1>SSD</h1>)} /> */}
       <Table
         tableName='organization-table'
         columns={columns}
         data={pageListData}
-        action={true}
-        onEdit={hanldeOnEdit}
+        action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
+        onEdit={handleOnEdit}
         onRemove={handleOnRemove}
+        onChangeStatus={handleOnChangeStatus}
       />
       <Pagination
         perPage={perPageSize}
@@ -79,6 +95,11 @@ const OrganizationTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
+      <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
+        dispatch(setIsModalShow(false))
+      }} onClose={() => {
+        dispatch(setIsModalShow(false))
+      }} onClick={() => {}} />
     </>
   );
 };

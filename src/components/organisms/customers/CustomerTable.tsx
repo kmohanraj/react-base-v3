@@ -2,23 +2,24 @@ import Button from 'components/atoms/Button';
 import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearCustomer, setCustomer, setIsAddCustomerBtnClicked, setIsEditCustomerBtnclicked } from 'store/slice/customers.slice';
+import * as CustomerSlice from 'store/slice/customers.slice';
 import { useEffect, useState } from 'react';
 import Pagination from 'components/atoms/Pagination';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { RootState } from 'store';
+
 const columns = [
-  { title: 'Customer ID', dataProperty: 'customer_id' },
+  { title: 'Customer Code', dataProperty: 'customer_code' },
   { title: 'Customer Name', dataProperty: 'customer_name' },
-  { title: 'Organization Name', dataProperty: 'org_id' },
-  { title: 'Branch Name', dataProperty: 'branch_id' },
+  { title: 'Organization Name', dataProperty: 'organizations', selector: 'org_name'},
+  { title: 'Branch Name', dataProperty: 'branches', selector: 'branch_name' },
   { title: 'Gender', dataProperty: 'gender' },
   { title: 'Locality', dataProperty: 'locality' },
   { title: 'District', dataProperty: 'district' },
 ];
 
-const { SESSION_STORAGE } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
 
 const CustomerTable = () => {
   const dispatch = useDispatch();
@@ -32,13 +33,12 @@ const CustomerTable = () => {
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
-  const datas = customersData.slice(start, end)
+  const customers = customersData.slice(start, end)
 
   const handleOnEdit = (data: any) => {
-    console.log('0000000');
-    dispatch(setIsAddCustomerBtnClicked(true))
-    dispatch(setCustomer(data))
-    dispatch(setIsEditCustomerBtnclicked(true))
+    dispatch(CustomerSlice.setIsAddCustomerBtnClicked(true))
+    dispatch(CustomerSlice.setCustomer(data))
+    dispatch(CustomerSlice.setIsEditCustomerBtnClicked(true))
   };
   const handleOnRemove = () => {
     console.log('&&&');
@@ -48,11 +48,6 @@ const CustomerTable = () => {
 
   }, [isCustomersLoading])
 
-  const handleCheckCondition = () => {
-    dispatch(setIsAddCustomerBtnClicked(false))
-    dispatch(clearCustomer())
-    dispatch(setIsEditCustomerBtnclicked(true))
-  }
 
   return (
     <>
@@ -67,15 +62,15 @@ const CustomerTable = () => {
           <Button
             type='primary'
             label='Add Customer'
-            onClick={() => dispatch(setIsAddCustomerBtnClicked(true))}
+            onClick={() => dispatch(CustomerSlice.setIsAddCustomerBtnClicked(true))}
           />
         </div>
       </TopPanel>
       <Table
         tableName='customer-table'
         columns={columns}
-        data={datas}
-        action={true}
+        data={customers}
+        action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
       />
