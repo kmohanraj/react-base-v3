@@ -21,7 +21,7 @@ const useItToGetCustomers = (userId: number): [boolean] => {
         // dispatch(setIsOrgOptionLoading(false))
         const customerOptions = response?.info.map((ele: any) => ({
           id: ele.id,
-          label: ele.customer_id
+          label: ele.customer_code
         }))
         dispatch(setCustomerOptions(customerOptions))
         setLoading(false);

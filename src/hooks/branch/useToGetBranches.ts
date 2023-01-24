@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import BranchService from 'service/branch.service';
-import { setBranchesData, setBranchOption } from 'store/slice/branchs.slice';
+import { setBranchesData, setBranchOption } from 'store/slice/branches.slice';
 
 const useToGetBranches = (userId: number): [boolean] => {
   const [loading, setLoading] = useState(false);

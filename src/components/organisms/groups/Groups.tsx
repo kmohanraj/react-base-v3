@@ -1,14 +1,13 @@
-import { FC } from 'react';
+import { FC, lazy } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import GroupTable from './GroupTable';
 import AddGroup from './AddGroup';
+const GroupTable = lazy(() => import('./GroupTable'))
 
 const Groups: FC = () => {
-  const { isAddGroupBtnClicked, isManageCustomerBtnClicked } = useSelector(
+  const { isAddGroupBtnClicked } = useSelector(
     (state: RootState) => state.group
   );
-  console.log("SSSSS", isManageCustomerBtnClicked)
   return <>{!isAddGroupBtnClicked ? <GroupTable /> : <AddGroup />}</>;
 };
 export default Groups;

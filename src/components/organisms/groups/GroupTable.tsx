@@ -11,7 +11,7 @@ import { RootState } from 'store';
 import ManageCustomer from './ManageCustomer';
 
 
-const { SESSION_STORAGE } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
@@ -85,7 +85,7 @@ const GroupTable = () => {
         tableName='group-table'
         columns={columns}
         data={datas}
-        action={true}
+        action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.ADD_GROUP]}
         onEdit={hanldeOnEdit}
         onRemove={handleOnRemove}
         onManageCustomer={handleOnManageCustomer}

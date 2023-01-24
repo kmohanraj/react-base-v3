@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react';
-import arrowBack from 'assets/images/back_button.svg';
+import { backButton } from 'constants/icons';
 import TopPanel from 'components/molecules/TopPanel';
 import Input from 'components/atoms/TextField';
-import { setGroup, setIsAddGroupBtnClicked, setIsEditGroupBtnClicked } from 'store/slice/groups.slice';
+import * as GroupSlice from 'store/slice/groups.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'components/atoms/Button';
 import type { RootState } from 'store';
@@ -14,7 +14,6 @@ import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'styles/date-picker.scss';
-import ManageCustomer from './ManageCustomer';
 
 const durationOptions = [
   {
@@ -27,20 +26,9 @@ const durationOptions = [
   },
 ];
 
-const groupAmounts = [
-  {
-    id: 1,
-    label: '500000'
-  },
-  {
-    id: 2,
-    label: '100000'
-  }
-]
-
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
-const AddGroup: FC = () => {
- 
+
+const AddGroup: FC = () => { 
   const dispatch = useDispatch();
   const { group, isEditGroupBtnClicked } = useSelector((state: RootState) => state.group);
   const { organizationOptions } = useSelector(
@@ -50,7 +38,6 @@ const AddGroup: FC = () => {
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
   const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID));
   const [isBranchLoading] = useToGetBranches(Number(currentUserID));
-
 
   const initialState = {
     group_code: '',
@@ -120,13 +107,21 @@ const AddGroup: FC = () => {
   const createGroup = async (data: any) => {
     const response = await GroupService.create(data, Number(currentUserID));
     if (response?.status === STATUS_CODE.STATUS_200) {
-      dispatch(setIsAddGroupBtnClicked(false));
+      dispatch(GroupSlice.setIsAddGroupBtnClicked(false));
     }
   };
 
   const handleOnCheckCondition = () => {
-    dispatch(setIsAddGroupBtnClicked(false))
-    dispatch(setIsEditGroupBtnClicked(false))
+    dispatch(GroupSlice.setIsAddGroupBtnClicked(false))
+    dispatch(GroupSlice.setIsEditGroupBtnClicked(false))
+  }
+
+  const checkCurrentOption = (options: any, value: number) => {
+    if (isEditGroupBtnClicked) {
+      return options.filter((option: any) => option.id === value)[0]
+    } else {
+      return options[0]
+    }
   }
 
   return (
@@ -134,7 +129,7 @@ const AddGroup: FC = () => {
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
           <img
-            src={arrowBack}
+            src={backButton}
             alt='Back'
             onClick={handleOnCheckCondition}
           />
@@ -173,7 +168,7 @@ const AddGroup: FC = () => {
             inputId='duration'
             placeholder='Select Duration'
             required
-            value={groupData.duration}
+            value={checkCurrentOption(durationOptions, groupData.duration)}
             options={durationOptions}
             onSelect={(value) => handleOnSelect(value, 'duration')}
           />
@@ -182,7 +177,7 @@ const AddGroup: FC = () => {
             placeholder='Select Organization'
             required
             options={organizationOptions}
-            value={groupData.org_id}
+            value={checkCurrentOption(organizationOptions, groupData.org_id)}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
             isLoading={isOrgLoading}
           />
@@ -191,7 +186,7 @@ const AddGroup: FC = () => {
             placeholder='Select Branch'
             required
             options={branchOptions}
-            value={groupData.branch_id}
+            value={checkCurrentOption(branchOptions, groupData.branch_id)}
             onSelect={(value) => handleOnSelect(value, 'branch_id')}
             isLoading={isBranchLoading}
           />

@@ -1,8 +1,16 @@
+const initialCollection = {
+  collection_amount: '',
+  description: '',
+  // collection_date: null
+}
 
 const initialState = {
-  isEditCollectionBtnClicked: false
+  isEditCollectionBtnClicked: false,
+  collection: initialCollection,
+  collectionsData: []
 }
 
 export {
-  initialState
+  initialState,
+  initialCollection
 }

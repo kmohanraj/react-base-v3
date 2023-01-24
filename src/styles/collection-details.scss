@@ -1,7 +1,7 @@
 @import './global-mixin';
 
 .collection-details {
-  @include grid-autofit();
+  @include grid-auto-fit();
   &__item {
     @include chit-box-shadow();
     position: relative;

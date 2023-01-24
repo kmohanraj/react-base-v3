@@ -14,7 +14,7 @@
   box-sizing: border-box;
 }
 
-@mixin grid-autofit {
+@mixin grid-auto-fit {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));;
   gap: 20px;

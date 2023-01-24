@@ -1,6 +1,5 @@
 import TopPanel from "components/molecules/TopPanel";
-import arrowBack from 'assets/images/back_button.svg';
-import editIcon from 'assets/images/edit.svg';
+import * as Icons from 'constants/icons';
 import { useDispatch, useSelector } from "react-redux";
 import * as GroupSlice from "store/slice/groups.slice";
 import * as CollectionSlice from 'store/slice/collection.slice';
@@ -11,38 +10,18 @@ import Button from "components/atoms/Button";
 import Modal from "components/atoms/Modal";
 import Collection from "./Collection";
 import { RootState } from "store";
+import { initialCollection } from 'store/initialStates/collection.initialState';
+import useToGetCollections from "hooks/collection/useToGetCollections";
+import CONSTANTS from "constants/constants";
+import { useEffect } from "react";
+import moment from "moment";
 
 const CollectionDetails = () => {
   const dispatch = useDispatch();
-  const { isEditCollectionBtnClicked} = useSelector((state: RootState) => state.collection)
-  
-  const collectionDetails = [
-    {
-      id: 1,
-      amount: useItToRupees('1000'),
-      collection_date: `12/12/2023`
-    },
-    {
-      id: 2,
-      amount: useItToRupees('1000'),
-      collection_date: `12/12/2023`
-    },
-    {
-      id: 3,
-      amount: useItToRupees('1000'),
-      collection_date: `12/12/2023`
-    },
-    {
-      id: 4,
-      amount: useItToRupees('1000'),
-      collection_date: `12/12/2023`
-    },
-    {
-      id: 5,
-      amount: useItToRupees('1000'),
-      collection_date: `12/12/2023`
-    }
-  ]
+  const { collectionsData, isEditCollectionBtnClicked} = useSelector((state: RootState) => state.collection)
+  const { selected_manage } = useSelector((state: RootState) => state.manage_customer)
+  const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
+  const [loading] = useToGetCollections(Number(currentUserID), Number(sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID)))
 
   const handleOnCheckCondition = () => {
     dispatch(GroupSlice.setIsCollectionDetail(false))
@@ -51,25 +30,31 @@ const CollectionDetails = () => {
 
   const handleOnModal = () => {
     dispatch(GroupSlice.setIsModalShow(true))
-    // dispatch(CollectionSlice.setIsEditCollectionBtnClicked(true))
   }
 
   const handleOnCloseModal = () => {
     dispatch(GroupSlice.setIsModalShow(false))
     dispatch(CollectionSlice.setIsEditCollectionBtnClicked(false))
+    dispatch(CollectionSlice.setCollection(initialCollection))
   }
 
-  const handleOnEdit = (id: number) => {
-    console.log('ID', id)
+  const handleOnEdit = (collection: any) => {
+    console.log('ID', collection)
     dispatch(GroupSlice.setIsModalShow(true))
     dispatch(CollectionSlice.setIsEditCollectionBtnClicked(true))
+    dispatch(CollectionSlice.setCollection(collection))
   }
 
+  useEffect(() => {
+
+  }, [loading])
+
+  console.log("SSSSS", collectionsData)
   return (
     <>
       <TopPanel panelType="breadcrumb">
         <img
-          src={arrowBack}
+          src={Icons.backButton}
           alt='Back'
           onClick={handleOnCheckCondition}
         />
@@ -87,18 +72,18 @@ const CollectionDetails = () => {
         </div>  
       </TopPanel>
       <section className="collection-details">
-        {collectionDetails.map((collection: any) => (
+        {collectionsData.map((collection: any) => (
           <section className="collection-details__item">
             <div>
-              <div>Collected Amount: <span>{collection.amount}</span></div>
-              <div>Collection Date: <span>{collection.collection_date}</span></div>
+              <div>Amount: <span>{collection.collection_amount}</span></div>
+              <div>Date: <span>{moment(collection.collection_date).format('DD/MM/YYYY, h:mm a')}</span></div>
             </div>
             <div>
             <button
                 className='collection-details__btn'
-                onClick={() => handleOnEdit(collection.id)}
+                onClick={() => handleOnEdit(collection)}
               >
-                <img src={editIcon} alt="Edit" />
+                <img src={Icons.edit} alt="Edit" />
               </button>
             </div>
           </section>

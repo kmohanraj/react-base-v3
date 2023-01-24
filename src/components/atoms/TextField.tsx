@@ -2,10 +2,6 @@ import React, { FC, useState } from 'react';
 import cx from 'classnames';
 import 'styles/text-field.scss';
 import CONSTANTS from 'constants/constants';
-import Select from './Select';
-// import Select from './Select';
-
-
 export interface TextFieldProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,6 +18,7 @@ export interface TextFieldProps {
   selectOptions?: any,
   onSelect?: any;
   onBlur?: () => void;
+  isDisabled?: boolean;
 }
 
 const { BRAND_CLASS } = CONSTANTS.CLASS_NAMES;
@@ -38,10 +35,8 @@ const TextField: FC<TextFieldProps> = ({
   preFixIcon,
   altName,
   inputType,
-  isSelect,
-  selectOptions,
-  onSelect,
-  onBlur
+  onBlur,
+  isDisabled
 }) => {
   const [isShow, setIsShow] = useState(false)
   const errorClass = cx('message', { error: error });
@@ -56,7 +51,6 @@ const TextField: FC<TextFieldProps> = ({
   });
 
   const handleOnBlur = () => {
-    console.log('sss-----', inputId)
     setIsShow(false)
   }
 
@@ -86,12 +80,12 @@ const TextField: FC<TextFieldProps> = ({
           onFocus={handleOnFocus}
           autoComplete='off'
           type={inputType}
+          disabled={isDisabled}
         />
         <label className={labelClass} htmlFor={inputId}>
           {placeholder}
           {required && '*'}
         </label>
-        {/* {isSelect && <Select options={selectOptions} onSelect={onSelect && onSelect } inputId={inputId} isShow={isShow} /> } */}
       </span>
       {message && <span className='message'>{message}</span>}
       {error && <span className={errorClass}>{error}</span>}

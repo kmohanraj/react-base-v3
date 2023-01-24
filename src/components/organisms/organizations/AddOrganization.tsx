@@ -1,48 +1,90 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Input from 'components/atoms/TextField';
 import TopPanel from 'components/molecules/TopPanel';
-import arrowBack from 'assets/images/back_button.svg';
-import { setIsAddOrgBtnClicked, setOrganization, clearOrganization, setIsEditOrgBtnClicked } from 'store/slice/organizations.slice';
+import { backButton } from 'constants/icons';
+import * as OrgSlice from 'store/slice/organizations.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from 'components/atoms/Button';
 import 'styles/chit-form.scss';
 import type { RootState } from 'store';
 import organizationService from 'service/organization.service';
 import CONSTANTS from 'constants/constants';
+import iziToast from 'izitoast';
+import { OrganizationType } from 'types/components.types';
 
-const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
+const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const AddOrganization: FC = () => {
   const dispatch = useDispatch();
   const { organization, isEditOrgBtnClicked } = useSelector((state: RootState) => state.organization);
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const [updateChanges, setUpdateChanges] = useState({} as OrganizationType);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    dispatch(setOrganization({
+    dispatch(OrgSlice.setOrganization({
       ...organization, [name]: value
+    }))
+    setUpdateChanges((prevState: OrganizationType) => ({
+      ...prevState, [name]: value
     }))
   }
 
   const handleOnSubmit = async () => {
-    const response = await organizationService.create(organization, Number(currentUserID))
-    if (response?.status === STATUS_CODE.STATUS_200) {
-      dispatch(setIsAddOrgBtnClicked(false))
-      dispatch(clearOrganization())
+    const { id, ...filterData } = organization;
+    if (isEditOrgBtnClicked) {
+      const data = {
+        id: id,
+        data: filterData
+      }
+      if (Object.keys(updateChanges).length) {
+        updateOrganization(data)
+      } else {
+        dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
+        dispatch(OrgSlice.clearOrganization())
+      }
+    } else {
+      console.log("filterData", filterData, organization)
+      createOrganization(filterData);
     }
   };
+
+  const createOrganization = async (filterData: any) => {
+    const response = await organizationService.create(filterData, Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
+      dispatch(OrgSlice.clearOrganization())
+    }
+  }
+
+  const updateOrganization = async (data: any) => {  
+    const response = await organizationService.update(data, Number(currentUserID))
+    console.log('response', response)
+    if(response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
+      dispatch(OrgSlice.clearOrganization())
+    }
+  }
 
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
           <img
-            src={arrowBack}
+            src={backButton}
             alt='Back'
             onClick={() => {
-              dispatch(setIsAddOrgBtnClicked(false))
-              dispatch(setIsEditOrgBtnClicked(false))
-              dispatch(clearOrganization())
+              dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
+              dispatch(OrgSlice.setIsEditOrgBtnClicked(false))
+              dispatch(OrgSlice.clearOrganization())
             }}
           />
           <div>{isEditOrgBtnClicked ? 'Update' : 'Create'}</div>
@@ -69,6 +111,13 @@ const AddOrganization: FC = () => {
             value={organization.branch_limit}
             onChange={handleOnChange}
             placeholder='Enter Branch Limit'
+            required
+          />
+          <Input
+            inputId='group_limit'
+            value={organization.group_limit}
+            onChange={handleOnChange}
+            placeholder='Enter Group Limit'
             required
           />
 
@@ -101,9 +150,9 @@ const AddOrganization: FC = () => {
             type='ghost'
             label='Cancel'
             onClick={() => {
-              dispatch(setIsAddOrgBtnClicked(false))
-              dispatch(setIsEditOrgBtnClicked(false))
-              dispatch(clearOrganization())
+              dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
+              dispatch(OrgSlice.setIsEditOrgBtnClicked(false))
+              dispatch(OrgSlice.clearOrganization())
             }}
           />
           <Button

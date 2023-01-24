@@ -8,7 +8,7 @@
 }
 
 .manage-customer {
-  @include grid-autofit();
+  @include grid-auto-fit();
   .section {
     @include chit-box-shadow();
   }
@@ -27,7 +27,7 @@
 }
 
 .customer-section {
-  @include grid-autofit();
+  @include grid-auto-fit();
   margin-top: 2rem;
 
   .item {
@@ -56,7 +56,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    padding: 0.75rem;
+    padding: 0.4rem;
+    width: 0.875rem;
     font-weight: 500;
     background-color: red;
     border-radius: 10% 30% 50% 70%;

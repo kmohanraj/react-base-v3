@@ -3,12 +3,19 @@ export default {
   CLASS_NAMES: {
     BRAND_CLASS: 'chit'
   },
+  ACTION_BTN: {
+    EDIT: 'Edit',
+    DELETE: 'Delete',
+    ADD_GROUP: 'AddGroup'
+  },
   SESSION_STORAGE: {
     ROLE_KEY: 'currentUserRole',
     USER_ID_KEY: 'currentUserId',
     NAME_KEY: 'currentUserName',
     AUTH_TOKEN_KEY: 'currentUserAuthToken',
-    FIRST_LOGIN_STATUS_KEY: 'isFirstLogin'
+    FIRST_LOGIN_STATUS_KEY: 'isFirstLogin',
+    CURRENT_ORG_ID: 'currentOrgId',
+    CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id'
   },
   STATUS_CODE: {
     STATUS_200: 200,
@@ -29,4 +36,11 @@ export default {
     EMPLOYEE: 'EMPLOYEE',
     EMPLOYEE_ID: 4
   },
+  TOAST_DEFAULTS: {
+    TIMEOUT: 6000,
+    POSITION: 'topRight',
+    DISPLAY_MODE: 1,
+    INFO_TITLE: 'Info',
+    SUCCESS_TITLE: 'Success',
+  }
 }

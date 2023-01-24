@@ -101,9 +101,14 @@
   }
   .actions {
     text-align: center;
-    text-align-last: center;
+    text-align-last: auto;
     span {
       padding: 6px;
+      display: inline-block;
+      vertical-align: middle;
+      img {
+        display: block;
+      }
     }
   }
 }

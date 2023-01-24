@@ -1,7 +1,7 @@
 import React from 'react';
 import TopPanel from 'components/molecules/TopPanel';
-import arrowBack from 'assets/images/back_button.svg';
-import { clearCustomer, setCustomer, setIsAddCustomerBtnClicked, setIsEditCustomerBtnclicked } from 'store/slice/customers.slice';
+import { backButton } from 'constants/icons';
+import * as CustomerSlice from 'store/slice/customers.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import Button from 'components/atoms/Button';
@@ -49,13 +49,13 @@ const AddCustomer = () => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value} = e.target;
-    dispatch(setCustomer({
+    dispatch(CustomerSlice.setCustomer({
       ...customer, [name]: value
     }))
   }
 
   const handleOnSelect = (value: any, fieldName: string) => {
-    dispatch(setCustomer({
+    dispatch(CustomerSlice.setCustomer({
       ...customer, [fieldName]: value.id
     }))
   }
@@ -64,14 +64,22 @@ const AddCustomer = () => {
     console.log('submit', customer);
     const response = await customerService.create(customer, Number(currentUserID))
     if (response) {
-      dispatch(setIsAddCustomerBtnClicked(false))
+      dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false))
     }
   };
 
   const handleCheckCondition = () => {
-    dispatch(setIsAddCustomerBtnClicked(false))
-    dispatch(clearCustomer())
-    dispatch(setIsEditCustomerBtnclicked(false))
+    dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false))
+    dispatch(CustomerSlice.clearCustomer())
+    dispatch(CustomerSlice.setIsEditCustomerBtnClicked(false))
+  }
+
+  const checkCurrentOption = (options: any, value: any) => {
+    if (isEditCustomerBtnClicked) {
+      return options.filter((option: any) => option.id === value)[0]
+    } else {
+      return options[0]
+    }
   }
   
   return (
@@ -79,7 +87,7 @@ const AddCustomer = () => {
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
           <img
-            src={arrowBack}
+            src={backButton}
             alt='Back'
             onClick={handleCheckCondition}
           />
@@ -87,10 +95,10 @@ const AddCustomer = () => {
         </TopPanel>
         <div className='chit-form'>
           <Input
-            inputId='customer_id'
-            value={customer.customer_id}
+            inputId='customer_code'
+            value={customer.customer_code}
             onChange={handleOnChange}
-            placeholder='Enter Customer ID'
+            placeholder='Enter Customer code'
             required
           />
           <Select
@@ -99,7 +107,7 @@ const AddCustomer = () => {
             required
             options={organizationOptions}
             isLoading={isOrgLoading}
-            value={customer.org_id}
+            value={checkCurrentOption(organizationOptions, customer.org_id)}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
           />
           <Select
@@ -108,7 +116,7 @@ const AddCustomer = () => {
             required
             options={branchOptions}
             isLoading={isBranchLoading}
-            value={customer.branch_id}
+            value={checkCurrentOption(branchOptions, customer.branch_id)}
             onSelect={(value) => handleOnSelect(value, 'branch_id')}
           />
           <Input
@@ -130,7 +138,7 @@ const AddCustomer = () => {
             placeholder='Select Gender'
             required
             options={genderOptions}
-            value={customer.gender}
+            value={checkCurrentOption(genderOptions, customer.gender)}
             onSelect={(value) => handleOnSelect(value, 'gender')}
           />
           <Input
@@ -176,11 +184,11 @@ const AddCustomer = () => {
             required
           />
           <Select
-            inputId='id_prrof'
+            inputId='id_proof'
             placeholder='Select ID Proof'
             required
             options={idProofOptions}
-            value={customer.id_proof}
+            value={checkCurrentOption(idProofOptions, customer.id_proof)}
             onSelect={(value) => handleOnSelect(value, 'id_proof')}
           />
           <Input

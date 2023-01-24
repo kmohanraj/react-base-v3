@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
-import arrowBack from 'assets/images/back_button.svg';
-import { setBranch, setIsAddBranchBtnClicked, setIsEditBranchBtnClicked } from 'store/slice/branchs.slice';
+import { backButton } from 'constants/icons'
+import * as BranchSlice from 'store/slice/branches.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import 'styles/chit-form.scss';
@@ -9,7 +9,7 @@ import Button from 'components/atoms/Button';
 import type { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
 import BranchService from 'service/branch.service';
-import { clearBranch } from 'store/slice/branchs.slice';
+import { clearBranch } from 'store/slice/branches.slice';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 
 const Select = React.lazy(() =>  import('components/atoms/Select'));
@@ -25,13 +25,13 @@ const AddBranch: FC = () => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    dispatch(setBranch({
+    dispatch(BranchSlice.setBranch({
       ...branch, [name]: value
     }))
   }
 
   const handleOnSelect = (name: any) => {
-    dispatch(setBranch({
+    dispatch(BranchSlice.setBranch({
       ...branch, org_id: name.id
     }))
   }
@@ -40,15 +40,23 @@ const AddBranch: FC = () => {
     // const payload = {...branch, org_id: Number(branch.org_id)}
     const response = await BranchService.create(branch, Number(currentUserID))
     if (response?.status === STATUS_CODE.STATUS_200) {
-      dispatch(setIsAddBranchBtnClicked(false));
+      dispatch(BranchSlice.setIsAddBranchBtnClicked(false));
       dispatch(clearBranch());
     }
   };
 
   const handleCheckCondition = () => {
-    dispatch(setIsAddBranchBtnClicked(false))
+    dispatch(BranchSlice.setIsAddBranchBtnClicked(false))
     dispatch(clearBranch())
-    dispatch(setIsEditBranchBtnClicked(false))
+    dispatch(BranchSlice.setIsEditBranchBtnClicked(false))
+  }
+
+  const checkCurrentOption = (options: any, value: any) => {
+    if (isEditBranchBtnClicked) {
+      return options.filter((option: any) => option.id === value)[0]
+    } else {
+      return options[0]
+    }
   }
 
   useEffect(() => {
@@ -60,7 +68,7 @@ const AddBranch: FC = () => {
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
           <img
-            src={arrowBack}
+            src={backButton}
             alt='Back'
             onClick={handleCheckCondition}
           />
@@ -86,7 +94,7 @@ const AddBranch: FC = () => {
             inputId='org_id'
             placeholder='Select Organization'
             required
-            value={branch.org_id}
+            value={checkCurrentOption(organizationOptions, branch.org_id)}
             options={organizationOptions}
             isLoading={isOrgOptionLoading}
             onSelect={handleOnSelect}

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { initialState, clearDate } from 'store/initialStates/groups.inititalState';
+import { initialState } from 'store/initialStates/groups.inititalState';
 
 export const groupsSlice = createSlice({
   name: 'groups',

@@ -9,22 +9,25 @@ import * as GroupSlice from 'store/slice/groups.slice';
 import * as CustomerSlice from 'store/slice/customers.slice';
 import CustomerMapping from './CustomerMapping';
 import TopPanel from 'components/molecules/TopPanel';
-import arrowBack from 'assets/images/back_button.svg';
 import useItToRupees from 'hooks/common/useItToRupees';
 import Collection from '../collections/Collection';
 import CollectionDetails from '../collections/CollectionDetails';
+import { addMoney, backButton } from 'constants/icons';
+import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
+import CONSTANTS from 'constants/constants';
+import * as ManageSlice from 'store/slice/manage_customer.slice';
 
 const ManageCustomer = () => {
   const dispatch = useDispatch();
+  const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
 
   const {group, isCollectionDetail } = useSelector((state: RootState) => state.group);
-  // const { organizationOptions } = useSelector(
-  //   (state: RootState) => state.organization
-  // );
+  const { manage_customers } = useSelector((state: RootState) => state.manage_customer)
+  const [loading] = useItToGetAllManages(Number(currentUserID))
 
   const [isMapToCustomer, setIsMapToCustomer] = useState(false);
 
-  const slectedGroup = [
+  const selectedGroup = [
     {
       title: 'Group Code:',
       value: group.group_code,
@@ -48,47 +51,6 @@ const ManageCustomer = () => {
     {
       title: 'End Date:',
       value: moment(group.end_date).format('DD/MM/YYYY'),
-    },
-  ];
-
-  const cutomersData = [
-    {
-      name: 'Mohanraj Kandasamy',
-      code: 'ABCD0012',
-      last_month: useItToRupees('2900'),
-      current_month: useItToRupees('5600'),
-      delevered_position: '1',
-    },
-    {
-      name: 'Santhoash',
-      code: 'ABCD0013',
-      last_month: useItToRupees('1900'),
-      current_month: useItToRupees('1100'),
-    },
-    {
-      name: 'Sakthi',
-      code: 'ABCD0014',
-      last_month: useItToRupees('1900'),
-      current_month: useItToRupees('1100'),
-      delevered_position: '2',
-    },
-    {
-      name: 'Ananya',
-      code: 'ABCD0015',
-      last_month: useItToRupees('1900'),
-      current_month: useItToRupees('1100'),
-    },
-    {
-      name: 'Ranjitha',
-      code: 'ABCD0016',
-      last_month: useItToRupees('1900'),
-      current_month: useItToRupees('1100'),
-    },
-    {
-      name: 'Kandasamy',
-      code: 'ABCD0017',
-      last_month: useItToRupees('1900'),
-      current_month: useItToRupees('1100'),
     },
   ];
 
@@ -117,11 +79,11 @@ const ManageCustomer = () => {
   return (
     <>
       <TopPanel panelType='breadcrumb'>
-        <img src={arrowBack} alt='Back' onClick={handleOnBackBtn} />
+        <img src={backButton} alt='Back' onClick={handleOnBackBtn} />
         <div>Manage Customers</div>
       </TopPanel>
       <TopPanel panelType="top-panel">
-        <span className='top-panel-entity'>Total Customers { cutomersData && cutomersData.length}</span>
+        <span className='top-panel-entity'>Total Customers { manage_customers && manage_customers.length}</span>
         <div className='top-panel-buttons'>
           <Button
             type='primary'
@@ -133,7 +95,7 @@ const ManageCustomer = () => {
 
       <section className='manage-customer'>
         <section className='section'>
-          {slectedGroup.map((data, i) => (
+          {selectedGroup.map((data, i) => (
             <section key={i} className='group-content'>
               <div className='name'>{data.title}</div>
               <div className='value'>{data.value}</div>
@@ -145,36 +107,41 @@ const ManageCustomer = () => {
         </section>
       </section>
       <section className='customer-section'>
-        {cutomersData.map((customer: any) => (
+        {manage_customers.map((manage: any) => (
           <section className='item'>
-            <div className='customer-info' onClick={() => handleOnCollectionDetails(customer.code)}>
+            <div className='customer-info' onClick={() => {
+                handleOnCollectionDetails(manage.customer_code)
+                sessionStorage.setItem(CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID, manage.id)
+                dispatch(ManageSlice.setSelectedManage(manage))
+              }
+            }>
               <div>
-                Name: <span>{customer.name}</span>
+                Name: <span>{manage.customer_name}</span>
               </div>
               <div>
-                Code: <span>{customer.code}</span>
+                Code: <span>{manage.customer_code}</span>
               </div>
               <div>
-                Last Month: <span>{customer.last_month}</span>
+                Last Month: <span>{manage?.last_month}</span>
               </div>
               <div>
-                Current Month: <span>{customer.current_month}</span>
+                Current Month: <span>{manage?.current_month}</span>
               </div>
             </div>
             <div>
-              {customer.delevered_position && (
+              {manage.taken_position && (
                 <div className='customer-position'>
-                  {customer.delevered_position}
+                  {manage.taken_position}
                 </div>
               )}
               <button
                 className='add-collection-btn'
                 onClick={() => {
-                  dispatch(CustomerSlice.setCurrentCustomerCode(customer.code));
+                  dispatch(CustomerSlice.setCurrentCustomerCode(manage.code));
                   handleModalOption(false);
                 }}
               >
-                +
+                <img src={addMoney} alt="Add Money" />
               </button>
             </div>
           </section>
