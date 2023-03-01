@@ -7,6 +7,8 @@ import calender from 'assets/images/calendar.svg';
 import close from 'assets/images/close.svg';
 import deleteIcon from 'assets/images/delete.svg';
 import edit from 'assets/images/edit.svg';
+import showPassword from 'assets/images/show-password.svg';
+import hidePassword from 'assets/images/hide-password.svg';
 
 export {
   addGroup,
@@ -17,5 +19,7 @@ export {
   calender,
   close,
   deleteIcon,
-  edit
+  edit,
+  showPassword,
+  hidePassword
 }

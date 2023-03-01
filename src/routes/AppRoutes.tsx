@@ -14,7 +14,7 @@ const AppRoutes: FC<IAppRouteProps> = (props) => {
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
   const isFirstLogin = sessionStorage.getItem(
-    CONSTANTS.SESSION_STORAGE.FIRST_LOGIN_STATUS_KEY
+    CONSTANTS.SESSION_STORAGE.IS_FIRST_LOGIN
   );
   return (
     <BrowserRouter>

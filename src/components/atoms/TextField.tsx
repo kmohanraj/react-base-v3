@@ -12,6 +12,8 @@ export interface TextFieldProps {
   required?: boolean;
   customClass?: string;
   preFixIcon?: any;
+  sufFixIcon?: any;
+  suffixOnClick?: any;
   altName?: string;
   inputType?: string;
   isSelect?: boolean
@@ -33,6 +35,8 @@ const TextField: FC<TextFieldProps> = ({
   required,
   customClass,
   preFixIcon,
+  sufFixIcon,
+  suffixOnClick,
   altName,
   inputType,
   onBlur,
@@ -48,6 +52,7 @@ const TextField: FC<TextFieldProps> = ({
   const inputClass = cx(customClass, {
     error: error,
     'has-prefix': preFixIcon,
+    'has-suffix': sufFixIcon
   });
 
   const handleOnBlur = () => {
@@ -66,6 +71,15 @@ const TextField: FC<TextFieldProps> = ({
             src={preFixIcon}
             alt={altName}
             role='presentation'
+          />
+        )}
+        { sufFixIcon && (
+          <img
+            className='suffix-icon'
+            src={sufFixIcon}
+            alt=""
+            role="presentation"
+            onClick={suffixOnClick}
           />
         )}
         <input

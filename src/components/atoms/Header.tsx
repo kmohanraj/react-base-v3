@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import 'styles/header.scss';
 import CONSTANTS from "constants/constants";
@@ -39,9 +39,9 @@ const menuConfigs = [
 const Header = () => {
   const [isToggle, setIsToggle] = useState(false)
   const currentUserName = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.NAME_KEY)
-  // const currentUserId = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
   const currentUserRole = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.ROLE_KEY)
   const isMenuOpenClass = cx({'show': isToggle})
+  const [isProfileShow, setIsProfileShow] = useState(false)
 
   const createMenuConfig = (menuConfigs: any) => {
     switch (Number(currentUserRole)) {
@@ -77,16 +77,17 @@ const Header = () => {
         {createMenuConfig(menuConfigs).map((ele: IMenusProps, i: number) => (
           <li key={i} id="menu-btn" onClick={() => setIsToggle(!isToggle)}><Link to={ele.path} id="menu-btn">{ele.name}</Link></li>
         ))}
-        <li className="dropdown">
-          <Link className="logged-user" to=''>{currentUserName}</Link>
-          <div className="dropdown-content">
-            <Link to='' onClick={() => {
-              sessionStorage.clear();
-              window.location.pathname = '/login'
-            }}>Logout</Link>
-          </div>
+        <li id="menu-btn" className="profile" onClick={() => setIsProfileShow(!isProfileShow)} >
+          <Link className="logged-user" to='' id="menu-btn">{currentUserName}</Link>
+          {isProfileShow && (
+            <div className="dropdown-menu">
+              <Link to='' onClick={() => {
+                sessionStorage.clear();
+                window.location.pathname = '/login'
+              }}>Logout</Link>
+            </div>
+          )}
         </li>
-       
       </ul>
     </header>
   )
