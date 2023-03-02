@@ -127,6 +127,7 @@ const AddUser = () => {
             options={organizationOptions}
             isLoading={isOrgOptionloading}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
+            isDisabled={isEditUserBtnClicked}
           />
           {currentUserID !== '1' && (
             <Select

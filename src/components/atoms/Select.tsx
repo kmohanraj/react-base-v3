@@ -41,7 +41,7 @@ const Select: FC<SelectProps> = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState( value ? value : initialState);
+  const [selectedValue, setSelectedValue] = useState(value ? value : initialState);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectClass = cx('select_control',{ 'is-focused': isMenuOpen },{ 'is-disabled': isDisabled });
   const selectValueClass = cx('select__values',{ 'is-multi': isMulti },{ 'is-single': !isMulti });
@@ -60,6 +60,12 @@ const Select: FC<SelectProps> = ({
     setSearchValue(e.target.value);
     setIsMenuOpen(true);
   };
+
+  useEffect(() => {
+    if(value) {
+      setSelectedValue(value)
+    }
+  }, [value])
 
   useEffect(() => {
     const handler = (e: any) => {

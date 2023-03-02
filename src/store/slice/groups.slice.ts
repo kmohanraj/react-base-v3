@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 import { initialState } from 'store/initialStates/groups.inititalState';
 
 export const groupsSlice = createSlice({
@@ -6,29 +6,33 @@ export const groupsSlice = createSlice({
   initialState,
   reducers: {
     setIsAddGroupBtnClicked: (state, action) => {
-      state.isAddGroupBtnClicked = action.payload
+      state.isAddGroupBtnClicked = action.payload;
     },
     setIsEditGroupBtnClicked: (state, action) => {
-      state.isEditGroupBtnClicked = action.payload
+      state.isEditGroupBtnClicked = action.payload;
     },
     setIsManageCustomerBtnClicked: (state, action) => {
-      state.isManageCustomerBtnClicked = action.payload
+      state.isManageCustomerBtnClicked = action.payload;
     },
     setIsModalShow: (state, action) => {
-      state.isModalShow = action.payload
+      state.isModalShow = action.payload;
     },
     setIsCollectionDetail: (state, action) => {
-      state.isCollectionDetail = action.payload
+      state.isCollectionDetail = action.payload;
     },
     setGroup: (state, action) => {
-      state.group = action.payload
+      state.group = action.payload;
     },
     setSelectedGroup: (state, action) => {
-      state.selectedGroup = action.payload
+      state.selectedGroup = action.payload;
     },
     setGroupsData: (state, action) => {
-      state.groupsData = action.payload
-    }
+      state.groupsData = action.payload;
+    },
+    clearGroup: (state) => ({
+      ...state,
+      group: initialState.group
+    })
   }
 });
 
@@ -40,7 +44,8 @@ export const {
   setIsCollectionDetail,
   setGroup,
   setSelectedGroup,
-  setGroupsData
+  setGroupsData,
+  clearGroup
 } = groupsSlice.actions;
 
 export default groupsSlice.reducer;

@@ -14,6 +14,9 @@ import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'styles/date-picker.scss';
+import { AxiosResponse } from 'axios';
+import { clearGroup } from 'store/slice/groups.slice';
+import iziToast from 'izitoast';
 
 const durationOptions = [
   {
@@ -59,29 +62,21 @@ const AddGroup: FC = () => {
   const [endDate, setEndDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.end_date) : initialState.end_date);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("************type")
     const { name, value } = e.target;
     setGroupData({...groupData, [name]: value})
   };
 
   const handleOnSelect = (value: any, fieldName: string) => {
-    console.log("************select", fieldName, value)
     setGroupData({
       ...groupData, [fieldName]: value.id
     })
-    // if (fieldName === 'duration') {
-    //   setStartDate('')
-    //   setEndDate('')
-    // }
   };
 
   const handleOnSelectDate = (e: any, fieldName: string) => {
-    console.log('SSSSSSSS', groupData)
     const duration = durationOptions
       .filter((ele) => ele.id === groupData?.duration)[0]
       .label.split(' ')[0];
     setStartDate(e)
-    console.log('SSSSSSSS', '------------->>')
     if (fieldName === 'start_date' && duration) {
       const currentDate = new Date(e);
       const nextDate = currentDate.setMonth(
@@ -94,20 +89,41 @@ const AddGroup: FC = () => {
   };
 
   const handleOnSubmit = async () => {
-    const {start_date, end_date, ...filterData } = groupData
+    const { start_date, end_date, ...filterData } = groupData
     const data = {
       ...filterData,
       start_date: new Date(startDate),
       end_date: new Date(endDate)
     }
-    console.log('submit', data);
-    await createGroup(data);
+    isEditGroupBtnClicked ? updateGroup(data) : createGroup(data);
   };
 
   const createGroup = async (data: any) => {
     const response = await GroupService.create(data, Number(currentUserID));
-    if (response?.status === STATUS_CODE.STATUS_200) {
+    toastMessage(response)
+  };
+
+  const updateGroup = async (data: any) => {
+    const { id, ...filterData } = data;
+    const payload = { id: id, data: filterData };
+    const response = await GroupService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
+
+  const toastMessage = (response: AxiosResponse) => {
+    if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(GroupSlice.setIsAddGroupBtnClicked(false));
+      dispatch(clearGroup());
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+    if (response?.status === STATUS_CODE.STATUS_409) {
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
     }
   };
 

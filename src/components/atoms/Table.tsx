@@ -29,8 +29,6 @@ const Table: FC<TableType> = ({
   onChangeStatus
 }) => {
   const [selected, setSelected] = useState<number>();
-  // const [deleteItem, setDeleteItem] = useState<number>()
-  // const dispatch = useDispatch()
 
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
     setSelected(selectedId);
@@ -38,14 +36,7 @@ const Table: FC<TableType> = ({
   };
   const handleOnRemove = (data: any) => {
     onRemove(data);
-    // setDeleteItem(id)
-    // dispatch(setIsModalShow(true));
   };
-
-  // const handleOnCloseModal = () => {
-  //   console.log('SSSS---close-modal',)
-  //   dispatch(setIsModalShow(false));
-  // }
 
   const handleOnManageCustomer = (selectedRow: any) => {
     onManageCustomer && onManageCustomer(selectedRow)

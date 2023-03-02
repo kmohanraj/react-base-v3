@@ -1,5 +1,8 @@
 
 const customer = {
+  id: null,
+  organizations: {},
+  branches: {},
   customer_code: '',
   org_id: null,
   branch_id: null,

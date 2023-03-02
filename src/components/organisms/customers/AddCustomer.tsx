@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as CustomerSlice from 'store/slice/customers.slice';
@@ -11,6 +11,9 @@ import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations'
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import CONSTANTS from 'constants/constants';
 import * as customerService from 'service/customer.service';
+import { AxiosResponse } from 'axios';
+import { clearCustomer } from 'store/slice/customers.slice';
+import iziToast from 'izitoast';
 
 const genderOptions = [
   {
@@ -30,7 +33,7 @@ const idProofOptions = [
   },
   {
     id: 2,
-    label: 'Votter Id'
+    label: 'Voter Id'
   },
   {
     id: 3,
@@ -38,13 +41,15 @@ const idProofOptions = [
   }
 ]
 
+const { STATUS_CODE } = CONSTANTS;
+
 const AddCustomer = () => {
   const dispatch = useDispatch();
   const { customer, isEditCustomerBtnClicked } = useSelector((state: RootState) => state.customer)
-  const { organizationOptions } = useSelector((state: RootState) => state.organization)
   const { branchOptions } = useSelector((state: RootState) => state.branch)
   const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
   const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID));
+  const { organizationOptions } = useSelector((state: RootState) => state.organization)
   const [isBranchLoading] = useToGetBranches(Number(currentUserID));
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,14 +65,39 @@ const AddCustomer = () => {
     }))
   }
 
-  const handleOnSubmit = async () => {
-    console.log('submit', customer);
-    const response = await customerService.create(customer, Number(currentUserID))
-    if (response) {
-      dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false))
-    }
+  const handleOnSubmit = () => {
+    isEditCustomerBtnClicked ? updateBranch() : createCustomer()
   };
 
+  const createCustomer = async () => {
+    const { id, organizations, branches, ...data } = customer;
+    const response = await customerService.create(data, Number(currentUserID))
+    toastMessage(response);
+  }
+  const updateBranch = async () => {
+    const { id, organizations, branches, ...data } = customer;
+    const payload = { id: id, data: data };
+    const response = await customerService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
+
+  const toastMessage = (response: AxiosResponse) => {
+    if (response.status === STATUS_CODE.STATUS_200) {
+      dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false));
+      dispatch(clearCustomer());
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+    if (response?.status === STATUS_CODE.STATUS_409) {
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+  };
+  
   const handleCheckCondition = () => {
     dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false))
     dispatch(CustomerSlice.clearCustomer())
@@ -82,6 +112,9 @@ const AddCustomer = () => {
     }
   }
   
+  useEffect(() => {
+
+  }, [isOrgLoading, organizationOptions])
   return (
     <>
       <div className='form-section'>

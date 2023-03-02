@@ -1,4 +1,6 @@
 const branch = {
+  id: null,
+  organizations: {},
   branch_name: '',
   branch_code: '',
   org_id: null

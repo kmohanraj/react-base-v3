@@ -8,7 +8,10 @@ import Pagination from 'components/atoms/Pagination';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { RootState } from 'store';
-
+import { setIsModalShow } from 'store/slice/groups.slice';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import * as CustomerService from 'service/customer.service';
+import iziToast from 'izitoast';
 const columns = [
   { title: 'Customer Code', dataProperty: 'customer_code' },
   { title: 'Customer Name', dataProperty: 'customer_name' },
@@ -19,7 +22,7 @@ const columns = [
   { title: 'District', dataProperty: 'district' },
 ];
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const CustomerTable = () => {
   const dispatch = useDispatch();
@@ -27,7 +30,9 @@ const CustomerTable = () => {
   const [perPageSize, setPerPageSize] = useState(10);
   const { customersData } = useSelector((state: RootState) => state.customer)
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
-
+  const [title, setTitle] = useState<string>('')
+  const [actionMode, setActionMode] = useState<string>('')
+  const [customerId, setCustomerId] = useState<number>()
   const [isCustomersLoading] = useItToGetCustomers(Number(currentUserID))
 
 
@@ -38,11 +43,32 @@ const CustomerTable = () => {
   const handleOnEdit = (data: any) => {
     dispatch(CustomerSlice.setIsAddCustomerBtnClicked(true))
     dispatch(CustomerSlice.setCustomer(data))
+    dispatch(CustomerSlice.setCustomer(customersData.filter((ele: any) => ele.id === data.id)[0]))
     dispatch(CustomerSlice.setIsEditCustomerBtnClicked(true))
   };
-  const handleOnRemove = () => {
-    console.log('&&&');
+  const handleOnRemove = (data: any) => {
+    dispatch(setIsModalShow(true))
+    setCustomerId(data.id)
+    setTitle(data.customer_code)
+    setActionMode('Delete')
   };
+
+  const deleteCustomer = async () => {
+    const response = await CustomerService.remove(Number(customerId), Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(CustomerSlice.setCustomersData(customersData.filter((ele: any) => ele.id !== customerId)))
+      dispatch(setIsModalShow(false))
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+    } 
+  }
 
   useEffect(() => {
 
@@ -52,7 +78,7 @@ const CustomerTable = () => {
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <span className='top-panel-entity'>No Results</span>
+        <div className='top-panel-entity'>{customersData.length} {customersData.length > 1 ? 'Customers' : 'Customer'}</div>
         <div className='top-panel-buttons'>
           <Button
             type='ghost'
@@ -82,6 +108,11 @@ const CustomerTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
+       <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
+        dispatch(setIsModalShow(false))
+      }} onClose={() => {
+        dispatch(setIsModalShow(false))
+      }} onClick={deleteCustomer} />
     </>
   );
 };

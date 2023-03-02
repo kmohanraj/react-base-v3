@@ -8,6 +8,10 @@ import { useEffect, useState } from 'react';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import type { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
+import BranchService from 'service/branch.service';
+import iziToast from 'izitoast';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import { setIsModalShow } from 'store/slice/groups.slice';
 
 const columns = [
   { title: 'Branch Name', dataProperty: 'branch_name' },
@@ -15,13 +19,16 @@ const columns = [
   { title: 'Organization Name', dataProperty: 'organizations', selector: 'org_name' }
 ];
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const BranchTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
+  const [title, setTitle] = useState<string>('')
+  const [actionMode, setActionMode] = useState<string>('')
+  const [branchId, setBranchId] = useState<number>()
 
   const [loading] = useToGetBranches(Number(currentUserID));
   const { branchesData } = useSelector((state: RootState) => state.branch)
@@ -33,9 +40,29 @@ const BranchTable = () => {
     dispatch(BranchSlice.setBranch(branchesData.filter((ele: any) => ele.id === data.id)[0]))
   };
 
-  const handleOnRemove = () => {
-    console.log('remove-branch');
+  const handleOnRemove = async (data: any) => {
+    dispatch(setIsModalShow(true))
+    setBranchId(data.id)
+    setTitle(data.branch_name)
+    setActionMode('Delete')
   };
+
+  const deleteBranch = async () => {
+    const branch = await BranchService.remove(Number(branchId), Number(currentUserID))
+    if (branch?.status === STATUS_CODE.STATUS_200) {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: branch?.data?.info
+      })
+      dispatch(BranchSlice.setBranchesData(branchesData.filter((ele: any) => ele.id !== branchId)))
+      dispatch(setIsModalShow(false))
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: branch?.data?.info
+      })
+    }
+  }
 
   // const onPageChanged = (page: any) => {
   //   setCurrentPage(page)
@@ -43,7 +70,7 @@ const BranchTable = () => {
 
   const start = currentPage * perPageSize - perPageSize;
   const end = start + perPageSize;
-  const pageListData = branchesData.slice(start, end);
+  const pageListData = branchesData.slice(start, end) ?? [];
 
   useEffect(() => {
 
@@ -83,6 +110,11 @@ const BranchTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
+      <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
+        dispatch(setIsModalShow(false))
+      }} onClose={() => {
+        dispatch(setIsModalShow(false))
+      }} onClick={deleteBranch} />
     </>
   );
 };

@@ -9,9 +9,13 @@ import CONSTANTS from 'constants/constants';
 import useItToGetGroups from 'hooks/group/useItToGetGroups';
 import { RootState } from 'store';
 import ManageCustomer from './ManageCustomer';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import { setIsModalShow } from 'store/slice/groups.slice';
+import { remove } from 'service/group.service';
+import iziToast from 'izitoast';
 
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
@@ -30,6 +34,9 @@ const GroupTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
+  const [title, setTitle] = useState<string>('')
+  const [actionMode, setActionMode] = useState<string>('')
+  const [groupId, setGroupId] = useState<number>()
 
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
   const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID))
@@ -38,10 +45,9 @@ const GroupTable = () => {
 
   const start = currentPage * perPageSize - perPageSize
   const end = start + perPageSize;
-  const datas = groupsData.slice(start, end)
+  const groupList = groupsData.slice(start, end)
 
-  const hanldeOnEdit = (data: any) => {
-    console.log('edit', data);
+  const handleOnEdit = (data: any) => {
     dispatch(GroupSlice.setIsAddGroupBtnClicked(true))
     dispatch(GroupSlice.setIsEditGroupBtnClicked(true))
     dispatch(GroupSlice.setGroup(data))
@@ -49,11 +55,30 @@ const GroupTable = () => {
   };
 
   const handleOnRemove = (data: any) => {
-    console.log('remove -item', data);
+    dispatch(setIsModalShow(true))
+    setGroupId(data?.id)
+    setTitle(data?.group_code)
+    setActionMode('Delete')
   };
 
+  const deleteGroup = async () => {
+    const response = await remove(Number(groupId), Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(GroupSlice.setGroupsData(groupsData.filter((ele: any) => ele.id !== groupId)))
+      dispatch(setIsModalShow(false))
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+    } 
+  }
+  
   const handleOnManageCustomer = (data: any) => {
-    console.log('edit', data);
     dispatch(GroupSlice.setGroup(data))
     dispatch(GroupSlice.setIsManageCustomerBtnClicked(true))
   }
@@ -67,7 +92,8 @@ const GroupTable = () => {
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <span className='top-panel-entity'>No Results</span>
+        <div className='top-panel-entity'>{groupsData.length} {groupsData.length > 1 ? 'Groups' : 'Group'}</div>
+        {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>
           <Button
             type='ghost'
@@ -84,9 +110,9 @@ const GroupTable = () => {
       <Table
         tableName='group-table'
         columns={columns}
-        data={datas}
+        data={groupList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.ADD_GROUP]}
-        onEdit={hanldeOnEdit}
+        onEdit={handleOnEdit}
         onRemove={handleOnRemove}
         onManageCustomer={handleOnManageCustomer}
       />
@@ -98,6 +124,11 @@ const GroupTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
+       <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
+        dispatch(GroupSlice.setIsModalShow(false))
+      }} onClose={() => {
+        dispatch(setIsModalShow(false))
+      }} onClick={deleteGroup} />
     </>
   );
 };

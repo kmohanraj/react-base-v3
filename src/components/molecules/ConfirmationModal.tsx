@@ -15,7 +15,7 @@ const ConfirmationModal: FC<ConfirmationType> = ({ name, actionMode, onClose, on
   return (
     <>
       <Modal onClose={onClose}>
-        <h3>Are you sure you want to {actionMode.toLowerCase()} your <b>{name}</b>?</h3>
+        <h3>Are you sure you want to {actionMode.toLowerCase()} the <b>{name}</b>?</h3>
         <div className='modal-action'>
           <Button
             type='primary'

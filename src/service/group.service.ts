@@ -10,7 +10,19 @@ export const create = async (data: any, userId: number) => {
 
 export const update = async (data: any, userId: number) => {
   try {
-    return await axios.put(`/${userId}group/update`, data);
+    return await axios.put(`/${userId}/group/update`, data);
+  } catch (err: any) {
+    return err.response;
+  }
+};
+
+export const remove = async (groupId: number, userId: number) => {
+  try {
+    return await axios({
+      url: `/${userId}/group/delete`,
+      method: 'DELETE',
+      data: { id: groupId }
+    });
   } catch (err: any) {
     return err.response;
   }
