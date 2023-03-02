@@ -13,7 +13,7 @@ export default {
     USER_ID_KEY: 'currentUserId',
     NAME_KEY: 'currentUserName',
     AUTH_TOKEN_KEY: 'currentUserAuthToken',
-    FIRST_LOGIN_STATUS_KEY: 'isFirstLogin',
+    IS_FIRST_LOGIN: 'isFirstLogin',
     CURRENT_ORG_ID: 'currentOrgId',
     CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id'
   },

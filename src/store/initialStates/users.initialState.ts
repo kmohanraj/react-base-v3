@@ -11,7 +11,8 @@ const user = {
 
 const login = {
   email: '',
-  password: ''
+  password: '',
+  new_password: ''
 }
 
 const initialState = {

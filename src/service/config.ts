@@ -1,12 +1,15 @@
 import axios from "axios";
 import CONSTANTS from "constants/constants";
 
+
+let cancelToken: any;
 export default axios.create({
   baseURL: process.env.REACT_APP_ENV_SERVICE_URI,
   // headers: {
   //   authorization: sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.AUTH_TOKEN_KEY) as string
   // }
   withCredentials: true,
+  // cancelToken: cancelToken.token,
   headers: {
     authorization: sessionStorage.getItem(
       CONSTANTS.SESSION_STORAGE.AUTH_TOKEN_KEY

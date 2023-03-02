@@ -4,6 +4,7 @@
 .chit-text-field {
   display: inline-block;
   width: 100%;
+  padding-bottom: 15px;
 
   &__input-wrapper {
     position: relative;
@@ -24,8 +25,12 @@
       box-sizing: border-box;
 
       &.has-prefix {
-        text-indent: 50px;
-        padding-left: 36px;
+        // text-indent: 50px;
+        // padding-left: 36px;
+        padding-left: 50px;
+      }
+      &.has-suffix {
+        padding-right: 50px;
       }
 
       &:focus {
@@ -91,6 +96,16 @@
   & .prefix-icon {
     position: absolute;
     left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    object-fit: contain;
+  }
+
+  & .suffix-icon {
+    position: absolute;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     width: 18px;

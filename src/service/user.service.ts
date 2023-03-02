@@ -8,6 +8,13 @@ class UserService {
       return err.response
     }
   }
+  async resetPasswordFirstLogin(data: any, userId: number) {
+    try {
+      return await axios.post(`/user/${userId}/resetPasswordFirstLogin`, data)
+    } catch(err: any) {
+      return err.response;
+    }
+  }
   async create(data: any, userId: number) {
     try {
       return await axios.post(`/user/${userId}/register`, data)
