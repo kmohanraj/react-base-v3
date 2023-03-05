@@ -6,10 +6,13 @@ export const customersSlice = createSlice({
   initialState,
   reducers: {
     setIsAddCustomerBtnClicked: (state, action) => {
-      state.isAddCustomerBtnClicked = action.payload
+      state.isAddCustomer = action.payload
     },
     setIsEditCustomerBtnClicked: (state, action) => {
-      state.isEditCustomerBtnClicked = action.payload
+      state.isEditCustomer = action.payload
+    },
+    setIsDeleteCustomerBtnClicked: (state, action) => {
+      state.isDeleteCustomer = action.payload
     },
     setCustomer: (state, action) => {
       state.customer = action.payload
@@ -33,6 +36,7 @@ export const customersSlice = createSlice({
 export const {
   setIsAddCustomerBtnClicked,
   setIsEditCustomerBtnClicked,
+  setIsDeleteCustomerBtnClicked,
   setCustomer,
   setCustomersData,
   setCustomerOptions,

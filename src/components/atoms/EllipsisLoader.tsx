@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC } from 'react';
 import 'styles/ellipsis-loader.scss';
 
 export interface LoaderProps {
-  color?: string
+  color?: string;
 }
 
 const EllipsisLoader: FC<LoaderProps> = ({ color }) => {
@@ -13,6 +13,6 @@ const EllipsisLoader: FC<LoaderProps> = ({ color }) => {
       <div></div>
       <div></div>
     </div>
-  )
-}
+  );
+};
 export default EllipsisLoader;

@@ -41,7 +41,10 @@
     .customer-info {
       cursor: pointer;
     }
-
+    .actions {
+      display: grid;
+      row-gap: 5px;
+    }
     &:hover {
       transform: scale(1.025);
       transition: all 0.2s ease;
@@ -55,13 +58,15 @@
   .customer-position {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     padding: 0.4rem;
     width: 0.875rem;
     font-weight: 500;
     background-color: red;
     border-radius: 10% 30% 50% 70%;
     color: $light-grey;
+    opacity: 0.5;
+    z-index: -1;
     // backdrop-filter: blur(8px) brightness(80%);
 
     // position: absolute;

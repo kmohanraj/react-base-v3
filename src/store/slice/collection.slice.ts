@@ -5,8 +5,11 @@ export const collectionSlice = createSlice({
   name: 'collections',
   initialState,
   reducers: {
-    setIsEditCollectionBtnClicked: (state, action) => {
-      state.isEditCollectionBtnClicked = action.payload
+    setIsAddCollection: (state, action) => {
+      state.isAddCollection = action.payload
+    },
+    setIsEditCollection: (state, action) => {
+      state.isEditCollection = action.payload
     },
     setCollection: (state, action) => {
       state.collection = action.payload
@@ -22,7 +25,8 @@ export const collectionSlice = createSlice({
 });
 
 export const {
-  setIsEditCollectionBtnClicked,
+  setIsAddCollection,
+  setIsEditCollection,
   setCollection,
   setCollectionsData,
   clearCollection

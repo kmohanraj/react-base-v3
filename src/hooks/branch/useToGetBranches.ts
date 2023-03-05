@@ -15,15 +15,15 @@ const useToGetBranches = (userId: number): [boolean] => {
         //   id: ele.id,
         //   branch_name: ele.branch_name,
         //   branch_code: ele.branch_code,
-        //   organization_id: ele.organizations.org_name 
+        //   organization_id: ele.organizations.org_name
 
         // }))
         dispatch(setBranchesData(response?.info));
         const branchOption = response?.info.map((ele: any) => ({
           id: ele.id,
           label: ele.branch_name
-        }))
-        dispatch(setBranchOption(branchOption))
+        }));
+        dispatch(setBranchOption(branchOption));
         setLoading(false);
       })
       .catch((response) => {

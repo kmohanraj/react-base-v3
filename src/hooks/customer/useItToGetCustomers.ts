@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as customerService from 'service/customer.service';
-import { setCustomerOptions, setCustomersData } from 'store/slice/customers.slice';
+import {
+  setCustomerOptions,
+  setCustomersData
+} from 'store/slice/customers.slice';
 
 const useItToGetCustomers = (userId: number): [boolean] => {
   const [loading, setLoading] = useState(false);
@@ -22,12 +25,12 @@ const useItToGetCustomers = (userId: number): [boolean] => {
         const customerOptions = response?.info.map((ele: any) => ({
           id: ele.id,
           label: ele.customer_code
-        }))
-        dispatch(setCustomerOptions(customerOptions))
+        }));
+        dispatch(setCustomerOptions(customerOptions));
         setLoading(false);
       })
       .then((err: any) => {
-        console.log(err);
+        // console.log(err);
         setLoading(false);
       });
   }, []);

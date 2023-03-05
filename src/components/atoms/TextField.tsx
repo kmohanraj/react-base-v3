@@ -16,8 +16,8 @@ export interface TextFieldProps {
   suffixOnClick?: any;
   altName?: string;
   inputType?: string;
-  isSelect?: boolean
-  selectOptions?: any,
+  isSelect?: boolean;
+  selectOptions?: any;
   onSelect?: any;
   onBlur?: () => void;
   isDisabled?: boolean;
@@ -42,12 +42,12 @@ const TextField: FC<TextFieldProps> = ({
   onBlur,
   isDisabled
 }) => {
-  const [isShow, setIsShow] = useState(false)
+  const [isShow, setIsShow] = useState(false);
   const errorClass = cx('message', { error: error });
   const labelClass = cx({
     'has-value': value,
     error: error,
-    'has-prefix': preFixIcon,
+    'has-prefix': preFixIcon
   });
   const inputClass = cx(customClass, {
     error: error,
@@ -56,12 +56,12 @@ const TextField: FC<TextFieldProps> = ({
   });
 
   const handleOnBlur = () => {
-    setIsShow(false)
-  }
+    setIsShow(false);
+  };
 
   const handleOnFocus = () => {
-    setIsShow(!isShow)
-  }
+    setIsShow(!isShow);
+  };
   return (
     <span className={`${BRAND_CLASS}-text-field`}>
       <span className={`${BRAND_CLASS}-text-field__input-wrapper`}>
@@ -73,12 +73,12 @@ const TextField: FC<TextFieldProps> = ({
             role='presentation'
           />
         )}
-        { sufFixIcon && (
+        {sufFixIcon && (
           <img
             className='suffix-icon'
             src={sufFixIcon}
-            alt=""
-            role="presentation"
+            alt=''
+            role='presentation'
             onClick={suffixOnClick}
           />
         )}

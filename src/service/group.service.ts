@@ -28,6 +28,14 @@ export const remove = async (groupId: number, userId: number) => {
   }
 };
 
+export const findAllByGroupId = async (groupId: number, userId: number) => {
+  try {
+    return await axios(`/${userId}/group/${groupId}`);
+  } catch (err: any) {
+    return err.response;
+  }
+}
+
 export const getAll = async (userId: number) => {
   try {
     return (await axios.get(`/${userId}/group/getAll`)).data;

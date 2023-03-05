@@ -20,8 +20,9 @@ const customer = {
 }
 
 const initialState = {
-  isAddCustomerBtnClicked: false,
-  isEditCustomerBtnClicked: false,
+  isAddCustomer: false,
+  isEditCustomer: false,
+  isDeleteCustomer: false,
   customer: customer,
   customersData: [],
   customerOptions: [],

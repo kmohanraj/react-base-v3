@@ -13,6 +13,7 @@ import { clearBranch } from 'store/slice/branches.slice';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import iziToast from 'izitoast';
 import { AxiosResponse } from 'axios';
+import { ISelectOption } from 'types/components.types';
 
 const Select = React.lazy(() => import('components/atoms/Select'));
 
@@ -39,11 +40,11 @@ const AddBranch: FC = () => {
     );
   };
 
-  const handleOnSelect = (name: any) => {
+  const handleOnSelect = (data: ISelectOption) => {
     dispatch(
       BranchSlice.setBranch({
         ...branch,
-        org_id: name.id
+        org_id: data.id
       })
     );
   };
@@ -69,7 +70,7 @@ const AddBranch: FC = () => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(BranchSlice.setIsAddBranchBtnClicked(false));
       dispatch(clearBranch());
-      iziToast.info({
+      iziToast.success({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
@@ -88,15 +89,19 @@ const AddBranch: FC = () => {
     dispatch(BranchSlice.setIsEditBranchBtnClicked(false));
   };
 
-  const checkCurrentOption = (options: any, value: any) => {
+  const checkCurrentOption = (options: ISelectOption[], value: any) => {
     if (isEditBranchBtnClicked) {
       return options.filter((option: any) => option.id === value)[0];
     } else {
+      console.log('____', options);
+      if (options.length) {
+        console.log('____>>>>>>>', options[0].label);
+      }
       return options[0];
     }
   };
 
-  useEffect(() => {}, [isOrgOptionLoading, organizationOptions, branch]);
+  // useEffect(() => {}, [isOrgOptionLoading, branch]);
 
   return (
     <>

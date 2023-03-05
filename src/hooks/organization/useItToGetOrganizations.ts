@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import organizationService from 'service/organization.service';
-import { setIsOrgOptionLoading, setOrganizationOption, setOrganizationsData } from 'store/slice/organizations.slice';
+import {
+  setIsOrgOptionLoading,
+  setOrganizationOption,
+  setOrganizationsData
+} from 'store/slice/organizations.slice';
 
 const useItToGetOrganizations = (userId: number): [boolean] => {
   const [loading, setLoading] = useState(false);
@@ -13,20 +17,22 @@ const useItToGetOrganizations = (userId: number): [boolean] => {
       .getAll(userId)
       .then((response: any) => {
         dispatch(setOrganizationsData(response?.info));
-        const data = response?.info.filter((ele: any) => ele.is_active !== false)
+        const data = response?.info.filter(
+          (ele: any) => ele.is_active !== false
+        );
         const orgOptions = data.map((ele: any) => ({
           id: ele.id,
           label: ele.org_name
-        }))
-        dispatch(setOrganizationOption(orgOptions))
-        dispatch(setIsOrgOptionLoading(false))
+        }));
+        dispatch(setOrganizationOption(orgOptions));
+        dispatch(setIsOrgOptionLoading(false));
         setLoading(false);
       })
       .then((err: any) => {
         console.log(err);
         setLoading(false);
       });
-  }, []);
+  }, [dispatch, userId]);
   return [loading];
 };
 export default useItToGetOrganizations;

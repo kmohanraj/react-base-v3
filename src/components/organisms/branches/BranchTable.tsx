@@ -11,12 +11,15 @@ import CONSTANTS from 'constants/constants';
 import BranchService from 'service/branch.service';
 import iziToast from 'izitoast';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
-import { setIsModalShow } from 'store/slice/groups.slice';
 
 const columns = [
   { title: 'Branch Name', dataProperty: 'branch_name' },
   { title: 'Branch Code', dataProperty: 'branch_code' },
-  { title: 'Organization Name', dataProperty: 'organizations', selector: 'org_name' }
+  {
+    title: 'Organization Name',
+    dataProperty: 'organizations',
+    selector: 'org_name'
+  }
 ];
 
 const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
@@ -26,43 +29,54 @@ const BranchTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
-  const [title, setTitle] = useState<string>('')
-  const [actionMode, setActionMode] = useState<string>('')
-  const [branchId, setBranchId] = useState<number>()
-
+  const [title, setTitle] = useState<string>('');
+  const [actionMode, setActionMode] = useState<string>('');
+  const [branchId, setBranchId] = useState<number>();
   const [loading] = useToGetBranches(Number(currentUserID));
-  const { branchesData } = useSelector((state: RootState) => state.branch)
-
+  const { branchesData, isDeleteBranchBtnClicked } = useSelector(
+    (state: RootState) => state.branch
+  );
 
   const handleOnEdit = (data: any) => {
-    dispatch(BranchSlice.setIsEditBranchBtnClicked(true))
-    dispatch(BranchSlice.setIsAddBranchBtnClicked(true))
-    dispatch(BranchSlice.setBranch(branchesData.filter((ele: any) => ele.id === data.id)[0]))
+    dispatch(BranchSlice.setIsEditBranchBtnClicked(true));
+    dispatch(BranchSlice.setIsAddBranchBtnClicked(true));
+    dispatch(
+      BranchSlice.setBranch(
+        branchesData.filter((ele: any) => ele.id === data.id)[0]
+      )
+    );
   };
 
   const handleOnRemove = async (data: any) => {
-    dispatch(setIsModalShow(true))
-    setBranchId(data.id)
-    setTitle(data.branch_name)
-    setActionMode('Delete')
+    dispatch(BranchSlice.setIsDeleteBranchBtnClicked(true));
+    setBranchId(data.id);
+    setTitle(data.branch_name);
+    setActionMode('Delete');
   };
 
   const deleteBranch = async () => {
-    const branch = await BranchService.remove(Number(branchId), Number(currentUserID))
+    const branch = await BranchService.remove(
+      Number(branchId),
+      Number(currentUserID)
+    );
     if (branch?.status === STATUS_CODE.STATUS_200) {
-      iziToast.info({
+      iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: branch?.data?.info
-      })
-      dispatch(BranchSlice.setBranchesData(branchesData.filter((ele: any) => ele.id !== branchId)))
-      dispatch(setIsModalShow(false))
+      });
+      dispatch(
+        BranchSlice.setBranchesData(
+          branchesData.filter((ele: any) => ele.id !== branchId)
+        )
+      );
+      dispatch(BranchSlice.setIsDeleteBranchBtnClicked(false));
     } else {
       iziToast.info({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: branch?.data?.info
-      })
+      });
     }
-  }
+  };
 
   // const onPageChanged = (page: any) => {
   //   setCurrentPage(page)
@@ -72,14 +86,15 @@ const BranchTable = () => {
   const end = start + perPageSize;
   const pageListData = branchesData.slice(start, end) ?? [];
 
-  useEffect(() => {
-
-  }, [loading])
+  useEffect(() => {}, [loading]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <div className='top-panel-entity'>{branchesData.length} {branchesData.length > 1 ? 'Branches' : 'Branch'}</div>
+        <div className='top-panel-entity'>
+          {branchesData.length}{' '}
+          {branchesData.length > 1 ? 'Branches' : 'Branch'}
+        </div>
         <div className='top-panel-buttons'>
           <Button
             type='ghost'
@@ -110,11 +125,15 @@ const BranchTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
-      <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
-        dispatch(setIsModalShow(false))
-      }} onClose={() => {
-        dispatch(setIsModalShow(false))
-      }} onClick={deleteBranch} />
+      <ConfirmationModal
+        show={isDeleteBranchBtnClicked}
+        name={title}
+        actionMode={actionMode}
+        onClose={() => {
+          dispatch(BranchSlice.setIsDeleteBranchBtnClicked(false));
+        }}
+        onClick={deleteBranch}
+      />
     </>
   );
 };

@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const useItToCurrentOption = (options: any, value: any, isEdit: boolean) => {
-  const [current, setCurrent] = useState<any>()
+  const [current, setCurrent] = useState<any>();
 
   useEffect(() => {
     if (isEdit) {
-      setCurrent(options.filter((option: any) => option.id === value))
+      setCurrent(options.filter((option: any) => option.id === value));
     } else {
-      setCurrent(options[0])
+      setCurrent(options[0]);
     }
-  }, [current, isEdit, options, value])
-  return [current]
-}
+  }, [current, isEdit, options, value]);
+  return [current];
+};
 
 export default useItToCurrentOption;

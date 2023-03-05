@@ -14,6 +14,7 @@ import * as customerService from 'service/customer.service';
 import { AxiosResponse } from 'axios';
 import { clearCustomer } from 'store/slice/customers.slice';
 import iziToast from 'izitoast';
+import { ISelectOption } from 'types/components.types';
 
 const genderOptions = [
   {
@@ -24,7 +25,7 @@ const genderOptions = [
     id: 2,
     label: 'Female'
   }
-]
+];
 
 const idProofOptions = [
   {
@@ -39,45 +40,60 @@ const idProofOptions = [
     id: 3,
     label: 'Driving License'
   }
-]
+];
 
 const { STATUS_CODE } = CONSTANTS;
 
 const AddCustomer = () => {
   const dispatch = useDispatch();
-  const { customer, isEditCustomerBtnClicked } = useSelector((state: RootState) => state.customer)
-  const { branchOptions } = useSelector((state: RootState) => state.branch)
-  const currentUserID = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)
+  const { customer, isEditCustomer } = useSelector(
+    (state: RootState) => state.customer
+  );
+  const { branchOptions } = useSelector((state: RootState) => state.branch);
+  const currentUserID = sessionStorage.getItem(
+    CONSTANTS.SESSION_STORAGE.USER_ID_KEY
+  );
   const [isOrgLoading] = useItToGetOrganizations(Number(currentUserID));
-  const { organizationOptions } = useSelector((state: RootState) => state.organization)
+  const { organizationOptions } = useSelector(
+    (state: RootState) => state.organization
+  );
   const [isBranchLoading] = useToGetBranches(Number(currentUserID));
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value} = e.target;
-    dispatch(CustomerSlice.setCustomer({
-      ...customer, [name]: value
-    }))
-  }
+    const { name, value } = e.target;
+    dispatch(
+      CustomerSlice.setCustomer({
+        ...customer,
+        [name]: value
+      })
+    );
+  };
 
-  const handleOnSelect = (value: any, fieldName: string) => {
-    dispatch(CustomerSlice.setCustomer({
-      ...customer, [fieldName]: value.id
-    }))
-  }
+  const handleOnSelect = (value: ISelectOption, fieldName: string) => {
+    dispatch(
+      CustomerSlice.setCustomer({
+        ...customer,
+        [fieldName]: value.id
+      })
+    );
+  };
 
   const handleOnSubmit = () => {
-    isEditCustomerBtnClicked ? updateBranch() : createCustomer()
+    isEditCustomer ? updateBranch() : createCustomer();
   };
 
   const createCustomer = async () => {
     const { id, organizations, branches, ...data } = customer;
-    const response = await customerService.create(data, Number(currentUserID))
+    const response = await customerService.create(data, Number(currentUserID));
     toastMessage(response);
-  }
+  };
   const updateBranch = async () => {
     const { id, organizations, branches, ...data } = customer;
     const payload = { id: id, data: data };
-    const response = await customerService.update(payload, Number(currentUserID));
+    const response = await customerService.update(
+      payload,
+      Number(currentUserID)
+    );
     toastMessage(response);
   };
 
@@ -85,7 +101,7 @@ const AddCustomer = () => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false));
       dispatch(clearCustomer());
-      iziToast.info({
+      iziToast.success({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
@@ -97,34 +113,28 @@ const AddCustomer = () => {
       });
     }
   };
-  
+
   const handleCheckCondition = () => {
-    dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false))
-    dispatch(CustomerSlice.clearCustomer())
-    dispatch(CustomerSlice.setIsEditCustomerBtnClicked(false))
-  }
+    dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false));
+    dispatch(CustomerSlice.clearCustomer());
+    dispatch(CustomerSlice.setIsEditCustomerBtnClicked(false));
+  };
 
   const checkCurrentOption = (options: any, value: any) => {
-    if (isEditCustomerBtnClicked) {
-      return options.filter((option: any) => option.id === value)[0]
+    if (isEditCustomer) {
+      return options.filter((option: any) => option.id === value)[0];
     } else {
-      return options[0]
+      return options[0];
     }
-  }
-  
-  useEffect(() => {
+  };
 
-  }, [isOrgLoading, organizationOptions])
+  useEffect(() => {}, [isOrgLoading, organizationOptions]);
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
-          <img
-            src={backButton}
-            alt='Back'
-            onClick={handleCheckCondition}
-          />
-          <div>{isEditCustomerBtnClicked ? 'Update' : 'Create' }</div>
+          <img src={backButton} alt='Back' onClick={handleCheckCondition} />
+          <div>{isEditCustomer ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className='chit-form'>
           <Input
@@ -233,14 +243,10 @@ const AddCustomer = () => {
           />
         </div>
         <div className='form-submit'>
-          <Button
-            type='ghost'
-            label='Cancel'
-            onClick={handleCheckCondition}
-          />
+          <Button type='ghost' label='Cancel' onClick={handleCheckCondition} />
           <Button
             type='primary'
-            label={isEditCustomerBtnClicked ? 'Update' : 'Create' }
+            label={isEditCustomer ? 'Update' : 'Create'}
             onClick={handleOnSubmit}
           />
         </div>

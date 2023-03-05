@@ -10,12 +10,12 @@ import useItToGetGroups from 'hooks/group/useItToGetGroups';
 import { RootState } from 'store';
 import ManageCustomer from './ManageCustomer';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
-import { setIsModalShow } from 'store/slice/groups.slice';
 import { remove } from 'service/group.service';
 import iziToast from 'izitoast';
+import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 
-
-const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS, ROLE } =
+  CONSTANTS;
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
@@ -26,7 +26,7 @@ const columns = [
   { title: 'Active ', dataProperty: 'is_active' },
   { title: 'Is Started', dataProperty: 'is_started' },
   { title: 'Start Date', dataProperty: 'start_date' },
-  { title: 'End Date', dataProperty: 'end_date' },
+  { title: 'End Date', dataProperty: 'end_date' }
 ];
 
 const GroupTable = () => {
@@ -34,65 +34,83 @@ const GroupTable = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
-  const [title, setTitle] = useState<string>('')
-  const [actionMode, setActionMode] = useState<string>('')
-  const [groupId, setGroupId] = useState<number>()
+  const [title, setTitle] = useState<string>('');
+  const [actionMode, setActionMode] = useState<string>('');
+  const [groupId, setGroupId] = useState<number>();
 
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
-  const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID))
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
+  const currentUserRole = sessionStorage.getItem(SESSION_STORAGE.ROLE_KEY);
+  const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID));
 
-  const { groupsData, isManageCustomerBtnClicked } = useSelector((state: RootState) => state.group)
+  const { groupsData, isManageCustomer, isDeleteGroup } = useSelector(
+    (state: RootState) => state.group
+  );
 
-  const start = currentPage * perPageSize - perPageSize
+  const start = currentPage * perPageSize - perPageSize;
   const end = start + perPageSize;
-  const groupList = groupsData.slice(start, end)
+  const groupList = groupsData.slice(start, end);
 
   const handleOnEdit = (data: any) => {
-    dispatch(GroupSlice.setIsAddGroupBtnClicked(true))
-    dispatch(GroupSlice.setIsEditGroupBtnClicked(true))
-    dispatch(GroupSlice.setGroup(data))
-    dispatch(GroupSlice.setSelectedGroup(data))
+    console.log('DATA!!!!!!!!!', data);
+    // dispatch(GroupSlice.setIsAddGroup(true))
+    dispatch(GroupSlice.setIsEditGroup(true));
+    dispatch(GroupSlice.setGroup(data));
+    dispatch(GroupSlice.setSelectedGroup(data));
   };
 
   const handleOnRemove = (data: any) => {
-    dispatch(setIsModalShow(true))
-    setGroupId(data?.id)
-    setTitle(data?.group_code)
-    setActionMode('Delete')
+    dispatch(GroupSlice.setIsDeleteGroup(true));
+    setGroupId(data?.id);
+    setTitle(data?.group_code);
+    setActionMode('Delete');
   };
 
   const deleteGroup = async () => {
-    const response = await remove(Number(groupId), Number(currentUserID))
+    const response = await remove(Number(groupId), Number(currentUserID));
     if (response?.status === STATUS_CODE.STATUS_200) {
-      iziToast.info({
+      iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
-      })
-      dispatch(GroupSlice.setGroupsData(groupsData.filter((ele: any) => ele.id !== groupId)))
-      dispatch(setIsModalShow(false))
+      });
+      dispatch(
+        GroupSlice.setGroupsData(
+          groupsData.filter((ele: any) => ele.id !== groupId)
+        )
+      );
+      dispatch(GroupSlice.setIsDeleteGroup(false));
     } else {
       iziToast.info({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
-      })
-    } 
-  }
-  
+      });
+    }
+  };
+
   const handleOnManageCustomer = (data: any) => {
-    dispatch(GroupSlice.setGroup(data))
-    dispatch(GroupSlice.setIsManageCustomerBtnClicked(true))
-  }
+    dispatch(GroupSlice.setGroup(data));
+    dispatch(GroupSlice.setIsManageCustomer(true));
+  };
 
-  useEffect(() => {}, [isGroupsDataLoading])
+  const checkActionPrivilege = () => {
+    if (Number(currentUserRole) === ROLE.EMPLOYEE_ID) {
+      return [ACTION_BTN.ADD_GROUP];
+    } else {
+      return [ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.ADD_GROUP];
+    }
+  };
 
-  if (isManageCustomerBtnClicked) {
-    return <ManageCustomer />
+  useEffect(() => {}, [isGroupsDataLoading]);
+
+  if (isManageCustomer) {
+    return <ManageCustomer />;
   }
 
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <div className='top-panel-entity'>{groupsData.length} {groupsData.length > 1 ? 'Groups' : 'Group'}</div>
+        <div className='top-panel-entity'>
+          {groupsData.length} {groupsData.length > 1 ? 'Groups' : 'Group'}
+        </div>
         {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>
           <Button
@@ -103,7 +121,7 @@ const GroupTable = () => {
           <Button
             type='primary'
             label='Add Group'
-            onClick={() => dispatch(GroupSlice.setIsAddGroupBtnClicked(true))}
+            onClick={() => dispatch(GroupSlice.setIsAddGroup(true))}
           />
         </div>
       </TopPanel>
@@ -111,7 +129,7 @@ const GroupTable = () => {
         tableName='group-table'
         columns={columns}
         data={groupList}
-        action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.ADD_GROUP]}
+        action={checkActionPrivilege()}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
         onManageCustomer={handleOnManageCustomer}
@@ -124,11 +142,15 @@ const GroupTable = () => {
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
-       <ConfirmationModal name={title} actionMode={actionMode} onCancel={() => {
-        dispatch(GroupSlice.setIsModalShow(false))
-      }} onClose={() => {
-        dispatch(setIsModalShow(false))
-      }} onClick={deleteGroup} />
+      <ConfirmationModal
+        show={isDeleteGroup}
+        name={title}
+        actionMode={actionMode}
+        onClose={() => {
+          dispatch(GroupSlice.setIsDeleteGroup(false));
+        }}
+        onClick={deleteGroup}
+      />
     </>
   );
 };

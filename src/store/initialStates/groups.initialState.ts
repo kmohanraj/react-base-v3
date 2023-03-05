@@ -16,9 +16,10 @@ const clearDate = {
 }
 
 const initialState = {
-  isAddGroupBtnClicked: false,
-  isEditGroupBtnClicked: false,
-  isManageCustomerBtnClicked: false,
+  isAddGroup: false,
+  isEditGroup: false,
+  isManageCustomer: false,
+  isDeleteGroup: false,
   isCollectionDetail: false,
   isModalShow: false,
   group: group,
