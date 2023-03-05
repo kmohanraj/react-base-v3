@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as BranchSlice from 'store/slice/branches.slice';
@@ -100,8 +100,6 @@ const AddBranch: FC = () => {
       return options[0];
     }
   };
-
-  // useEffect(() => {}, [isOrgOptionLoading, branch]);
 
   return (
     <>

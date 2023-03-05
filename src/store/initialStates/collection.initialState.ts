@@ -7,6 +7,7 @@ const initialCollection = {
 const initialState = {
   isAddCollection: false,
   isEditCollection: false,
+  isDeleteCollection: false,
   collection: initialCollection,
   collectionsData: []
 }

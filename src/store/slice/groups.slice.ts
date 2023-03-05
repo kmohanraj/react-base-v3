@@ -17,9 +17,6 @@ export const groupsSlice = createSlice({
     setIsDeleteGroup: (state, action) => {
       state.isDeleteGroup = action.payload
     },
-    setIsModalShow: (state, action) => {
-      state.isModalShow = action.payload;
-    },
     setIsCollectionDetail: (state, action) => {
       state.isCollectionDetail = action.payload;
     },
@@ -44,7 +41,6 @@ export const {
   setIsEditGroup,
   setIsManageCustomer,
   setIsDeleteGroup,
-  setIsModalShow,
   setIsCollectionDetail,
   setGroup,
   setSelectedGroup,

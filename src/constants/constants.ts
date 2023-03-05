@@ -6,7 +6,7 @@ export default {
   ACTION_BTN: {
     EDIT: 'Edit',
     DELETE: 'Delete',
-    ADD_GROUP: 'AddGroup'
+    CREATE: 'Create'
   },
   SESSION_STORAGE: {
     ROLE_KEY: 'currentUserRole',

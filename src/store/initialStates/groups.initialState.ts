@@ -21,7 +21,6 @@ const initialState = {
   isManageCustomer: false,
   isDeleteGroup: false,
   isCollectionDetail: false,
-  isModalShow: false,
   group: group,
   selectedGroup: group,
   groupsData: [],

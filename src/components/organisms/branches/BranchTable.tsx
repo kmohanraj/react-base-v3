@@ -47,7 +47,7 @@ const BranchTable = () => {
     );
   };
 
-  const handleOnRemove = async (data: any) => {
+  const handleOnDelete = async (data: any) => {
     dispatch(BranchSlice.setIsDeleteBranchBtnClicked(true));
     setBranchId(data.id);
     setTitle(data.branch_name);
@@ -114,7 +114,7 @@ const BranchTable = () => {
         data={pageListData}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
-        onRemove={handleOnRemove}
+        onRemove={handleOnDelete}
       />
       <Pagination
         perPage={perPageSize}

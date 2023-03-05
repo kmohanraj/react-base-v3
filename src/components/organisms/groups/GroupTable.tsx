@@ -10,23 +10,22 @@ import useItToGetGroups from 'hooks/group/useItToGetGroups';
 import { RootState } from 'store';
 import ManageCustomer from './ManageCustomer';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
-import { remove } from 'service/group.service';
+import * as GroupService from 'service/group.service';
 import iziToast from 'izitoast';
-import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 
 const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS, ROLE } =
   CONSTANTS;
 
 const columns = [
   // { title: 'Group Name', dataProperty: 'group_name'},
-  { title: 'Group Code', dataProperty: 'group_code' },
+  { title: 'Group Code', dataProperty: 'group_code', },
   { title: 'Chit Amount', dataProperty: 'amount' },
   { title: 'Customers', dataProperty: 'total_members' },
   { title: 'Duration', dataProperty: 'duration' },
   { title: 'Active ', dataProperty: 'is_active' },
-  { title: 'Is Started', dataProperty: 'is_started' },
-  { title: 'Start Date', dataProperty: 'start_date' },
-  { title: 'End Date', dataProperty: 'end_date' }
+  { title: 'Is Started', dataProperty: 'is_started', isDate: true },
+  { title: 'Start Date', dataProperty: 'start_date', isDate: true },
+  { title: 'End Date', dataProperty: 'end_date', isDate: true }
 ];
 
 const GroupTable = () => {
@@ -51,8 +50,6 @@ const GroupTable = () => {
   const groupList = groupsData.slice(start, end);
 
   const handleOnEdit = (data: any) => {
-    console.log('DATA!!!!!!!!!', data);
-    // dispatch(GroupSlice.setIsAddGroup(true))
     dispatch(GroupSlice.setIsEditGroup(true));
     dispatch(GroupSlice.setGroup(data));
     dispatch(GroupSlice.setSelectedGroup(data));
@@ -66,7 +63,7 @@ const GroupTable = () => {
   };
 
   const deleteGroup = async () => {
-    const response = await remove(Number(groupId), Number(currentUserID));
+    const response = await GroupService.remove(Number(groupId), Number(currentUserID));
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
@@ -93,9 +90,9 @@ const GroupTable = () => {
 
   const checkActionPrivilege = () => {
     if (Number(currentUserRole) === ROLE.EMPLOYEE_ID) {
-      return [ACTION_BTN.ADD_GROUP];
+      return [ACTION_BTN.CREATE];
     } else {
-      return [ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.ADD_GROUP];
+      return [ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.CREATE];
     }
   };
 

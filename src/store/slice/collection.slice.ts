@@ -11,6 +11,9 @@ export const collectionSlice = createSlice({
     setIsEditCollection: (state, action) => {
       state.isEditCollection = action.payload
     },
+    setIsDeleteCollection: (state, action) => {
+      state.isDeleteCollection = action.payload
+    },
     setCollection: (state, action) => {
       state.collection = action.payload
     },
@@ -27,6 +30,7 @@ export const collectionSlice = createSlice({
 export const {
   setIsAddCollection,
   setIsEditCollection,
+  setIsDeleteCollection,
   setCollection,
   setCollectionsData,
   clearCollection

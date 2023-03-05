@@ -8,7 +8,7 @@ import Pagination from 'components/atoms/Pagination';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { RootState } from 'store';
-import { setIsModalShow } from 'store/slice/groups.slice';
+// import { setIsModalShow } from 'store/slice/groups.slice';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as CustomerService from 'service/customer.service';
 import iziToast from 'izitoast';

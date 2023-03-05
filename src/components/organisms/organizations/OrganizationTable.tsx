@@ -3,7 +3,7 @@ import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as OrgSlice from 'store/slice/organizations.slice';
-import { setIsModalShow } from 'store/slice/groups.slice';
+// import { setIsModalShow } from 'store/slice/groups.slice';
 import Pagination from 'components/atoms/Pagination';
 import { useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
@@ -42,7 +42,7 @@ const OrganizationTable = () => {
   };
 
   const handleOnRemove = (data: any) => {
-    dispatch(setIsModalShow(true));
+    // dispatch(setIsModalShow(true));
     setTitle(data.org_name);
     setActionMode('Delete');
     console.log('remove -item', data.id);
@@ -51,7 +51,7 @@ const OrganizationTable = () => {
     if (column === 'is_active') {
       setActionMode(selectedItem.is_active ? 'In Active' : 'Active');
       setTitle(selectedItem.org_name);
-      dispatch(setIsModalShow(true));
+      // dispatch(setIsModalShow(true));
     }
   };
 
@@ -102,7 +102,7 @@ const OrganizationTable = () => {
         name={title}
         actionMode={actionMode}
         onClose={() => {
-          dispatch(setIsModalShow(false));
+          // dispatch(setIsModalShow(false));
         }}
         onClick={() => {}}
       />

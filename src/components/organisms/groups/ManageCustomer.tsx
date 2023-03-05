@@ -14,6 +14,7 @@ import TopPanel from 'components/molecules/TopPanel';
 import useItToRupees from 'hooks/common/useItToRupees';
 import Collection from '../collections/Collection';
 import CollectionDetails from '../collections/CollectionDetails';
+import CollectionDetailsTable from '../collections/CollectionDetailsTable';
 import { addMoney, backButton, deleteIcon, edit } from 'constants/icons';
 import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 import CONSTANTS from 'constants/constants';
@@ -142,7 +143,7 @@ const ManageCustomer = () => {
   };
 
   if (isCollectionDetail) {
-    return <CollectionDetails />;
+    return <CollectionDetailsTable />;
   }
   console.log('(((((', manageCustomers);
   return (

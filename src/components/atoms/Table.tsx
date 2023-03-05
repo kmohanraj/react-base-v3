@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import 'styles/table.scss';
 import * as Icons from 'constants/icons';
 import ErrorPage from 'components/atoms/ErrorPage';
+import moment from 'moment';
 
 type TableType = {
   tableName: string;
@@ -9,6 +10,8 @@ type TableType = {
     title: string;
     dataProperty: any;
     selector?: any;
+    isDate?: any;
+    isTime?: any;
   }[];
   data: any[];
   action?: string[];
@@ -46,15 +49,17 @@ const Table: FC<TableType> = ({
     return <ErrorPage />;
   }
 
-  const manageData = (filterColumn: any, selector: string) => {
-    if (typeof filterColumn === 'string') {
-      return filterColumn ?? '-';
+  const manageData = (filterColumn: any, selector: string, isDate: boolean, isTime: boolean) => {
+    if(isDate) {
+      return moment(filterColumn).utcOffset(330).format( isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY')
+    } else if (typeof filterColumn === 'string') {
+      return filterColumn ?? '';
     } else if (filterColumn !== null && typeof filterColumn === 'object') {
       return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
       return filterColumn === true ? 'Active' : 'In-Active';
     } else {
-      return '-';
+      return '';
     }
   };
 
@@ -86,7 +91,7 @@ const Table: FC<TableType> = ({
                       <span className='edit-col edit' onClick={() => handleOnSelectRow()}><img src={editIcon} alt="" /></span>
                       <span className='edit-col delete' onClick={() => handleOnRemoveRow()}><img src={deleteIcon} alt="" /></span>
                     </span> */}
-                      {manageData(d[col.dataProperty], col.selector)}
+                      {manageData(d[col.dataProperty], col.selector, col.isDate, col.isTime)}
                       {/* {d[col.dataProperty]} */}
                     </>
                   </td>
@@ -106,7 +111,7 @@ const Table: FC<TableType> = ({
                           <img src={Icons.deleteIcon} alt='Delete' />
                         </span>
                       )}
-                      {ac === 'AddGroup' && (
+                      {ac === 'Create' && (
                         <span onClick={() => handleOnManageCustomer(d)}>
                           <img src={Icons.addGroup} alt='Manage Customer' />
                         </span>
