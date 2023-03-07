@@ -43,10 +43,7 @@ const CustomerTable = () => {
   const [actionMode, setActionMode] = useState<string>('');
   const [customerId, setCustomerId] = useState<number>();
   const [isCustomersLoading] = useItToGetCustomers(Number(currentUserID));
-
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const customers = customersData.slice(start, end);
+  const [pageList, setPageList] = useState([])
 
   const handleOnEdit = (data: any) => {
     dispatch(CustomerSlice.setIsAddCustomerBtnClicked(true));
@@ -83,7 +80,7 @@ const CustomerTable = () => {
       dispatch(CustomerSlice.setIsDeleteCustomerBtnClicked(false));
     } else {
       iziToast.info({
-        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        title: TOAST_DEFAULTS.INFO_TITLE,
         message: response?.data?.info
       });
     }
@@ -97,14 +94,22 @@ const CustomerTable = () => {
     }
   };
 
-  useEffect(() => {}, [isCustomersLoading]);
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(customersData?.length ? customersData.slice(Number(start), end) : []);
+  }
+
+  useEffect(() => {
+    pagination()
+  }, [isCustomersLoading, pageList]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {customersData.length}{' '}
-          {customersData.length > 1 ? 'Customers' : 'Customer'}
+          {customersData?.length}{' '}
+          {customersData?.length > 1 ? 'Customers' : 'Customer'}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -124,14 +129,14 @@ const CustomerTable = () => {
       <Table
         tableName='customer-table'
         columns={columns}
-        data={customers}
+        data={pageList}
         action={checkActionPrivilege()}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={customersData.length}
+        totalPageRecords={customersData?.length}
         currentPage={currentPage}
         maxVisibleButton={3}
         setCurrentPage={setCurrentPage}

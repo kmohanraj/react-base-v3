@@ -57,7 +57,7 @@ const Table: FC<TableType> = ({
     } else if (filterColumn !== null && typeof filterColumn === 'object') {
       return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
-      return filterColumn === true ? 'Active' : 'In-Active';
+      return filterColumn === true ? <span className='active'>Active</span> : <span className='in-active'>In-Active</span>;
     } else {
       return '';
     }

@@ -27,8 +27,8 @@ const useToGetBranches = (userId: number): [boolean] => {
         setLoading(false);
       })
       .catch((response) => {
-        console.log(response?.info);
         setLoading(false);
+        return response;
       });
   }, []);
   return [loading];

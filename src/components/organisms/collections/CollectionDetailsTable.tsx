@@ -34,6 +34,7 @@ const CollectionDetailsTable = () => {
   const [title, setTitle] = useState<string>('')
   const [actionMode, setActionMode] = useState<string>('')
   const [collectionId, setCollectionId] = useState<number>()
+  const [pageList, setPageList] = useState([])
   const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
     (state: RootState) => state.collection
   );
@@ -106,11 +107,15 @@ const CollectionDetailsTable = () => {
     }, 0);
   };
 
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const pageListData = collectionsData.slice(start, end) ?? [];
-  console.log("SSSSSSS--pageListData", pageListData)
-  useEffect(() => {}, [loading]);
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : []);
+  }
+
+  useEffect(() => {
+    pagination()
+  }, [loading, pageList]);
 
   return (
     <>
@@ -138,14 +143,14 @@ const CollectionDetailsTable = () => {
       <Table
         tableName='collection-details-table'
         columns={columns}
-        data={pageListData}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnDelete}
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={collectionsData.length}
+        totalPageRecords={collectionsData?.length}
         currentPage={currentPage}
         // onPageChanged={(page: any) => onPageChanged(page) }
         maxVisibleButton={3}

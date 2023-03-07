@@ -7,8 +7,9 @@ import {
   setOrganizationsData
 } from 'store/slice/organizations.slice';
 
-const useItToGetOrganizations = (userId: number): [boolean] => {
+const useItToGetOrganizations = (userId: number): [boolean, (status: boolean) =>  void] => {
   const [loading, setLoading] = useState(false);
+  const [triggerRefresh, setIsTriggerRefresh] = useState<boolean>(false)
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,12 +28,17 @@ const useItToGetOrganizations = (userId: number): [boolean] => {
         dispatch(setOrganizationOption(orgOptions));
         dispatch(setIsOrgOptionLoading(false));
         setLoading(false);
+        setIsTriggerRefresh(false)
       })
       .then((err: any) => {
         console.log(err);
         setLoading(false);
+        setIsTriggerRefresh(false)
       });
-  }, [dispatch, userId]);
-  return [loading];
+  }, [dispatch, userId, triggerRefresh]);
+
+  const handleRefreshUserTable = (status: boolean) =>  setIsTriggerRefresh(status)
+
+  return [loading, handleRefreshUserTable];
 };
 export default useItToGetOrganizations;

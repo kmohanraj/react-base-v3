@@ -18,8 +18,10 @@ const login = {
 const initialState = {
   user: user,
   login: login,
-  isAddUserBtnClicked: false,
-  isEditUserBtnClicked: false,
+  isAddUser: false,
+  isEditUser: false,
+  isDeleteUser: false,
+  isUserActive: false,
   usersData: []
 }
 

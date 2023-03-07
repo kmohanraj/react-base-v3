@@ -33,6 +33,7 @@ const BranchTable = () => {
   const [actionMode, setActionMode] = useState<string>('');
   const [branchId, setBranchId] = useState<number>();
   const [loading] = useToGetBranches(Number(currentUserID));
+  const [pageList, setPageList] = useState([])
   const { branchesData, isDeleteBranchBtnClicked } = useSelector(
     (state: RootState) => state.branch
   );
@@ -82,18 +83,21 @@ const BranchTable = () => {
   //   setCurrentPage(page)
   // }
 
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const pageListData = branchesData.slice(start, end) ?? [];
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(branchesData?.length ? branchesData.slice(Number(start), end) : []);
+  }
 
-  useEffect(() => {}, [loading]);
+  useEffect(() => {
+    pagination()
+  }, [loading]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {branchesData.length}{' '}
-          {branchesData.length > 1 ? 'Branches' : 'Branch'}
+          {branchesData?.length > 1 ? 'Branches' : 'Branch'}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -111,14 +115,14 @@ const BranchTable = () => {
       <Table
         tableName='branch-table'
         columns={columns}
-        data={pageListData}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnDelete}
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={branchesData.length}
+        totalPageRecords={branchesData?.length}
         currentPage={currentPage}
         // onPageChanged={(page: any) => onPageChanged(page) }
         maxVisibleButton={3}

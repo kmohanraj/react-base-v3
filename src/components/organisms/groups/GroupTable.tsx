@@ -36,18 +36,14 @@ const GroupTable = () => {
   const [title, setTitle] = useState<string>('');
   const [actionMode, setActionMode] = useState<string>('');
   const [groupId, setGroupId] = useState<number>();
-
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
   const currentUserRole = sessionStorage.getItem(SESSION_STORAGE.ROLE_KEY);
   const [isGroupsDataLoading] = useItToGetGroups(Number(currentUserID));
+  const [pageList, setPageList] = useState([])
 
   const { groupsData, isManageCustomer, isDeleteGroup } = useSelector(
     (state: RootState) => state.group
   );
-
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const groupList = groupsData.slice(start, end);
 
   const handleOnEdit = (data: any) => {
     dispatch(GroupSlice.setIsEditGroup(true));
@@ -95,8 +91,16 @@ const GroupTable = () => {
       return [ACTION_BTN.EDIT, ACTION_BTN.DELETE, ACTION_BTN.CREATE];
     }
   };
+  
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(groupsData?.length ? groupsData.slice(Number(start), end) : []);
+  }
 
-  useEffect(() => {}, [isGroupsDataLoading]);
+  useEffect(() => {
+    pagination()
+  }, [isGroupsDataLoading, pageList]);
 
   if (isManageCustomer) {
     return <ManageCustomer />;
@@ -106,7 +110,7 @@ const GroupTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {groupsData.length} {groupsData.length > 1 ? 'Groups' : 'Group'}
+          { groupsData?.length > 1 ? 'Groups' : 'Group'}
         </div>
         {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>
@@ -125,7 +129,7 @@ const GroupTable = () => {
       <Table
         tableName='group-table'
         columns={columns}
-        data={groupList}
+        data={pageList}
         action={checkActionPrivilege()}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
@@ -133,7 +137,7 @@ const GroupTable = () => {
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={groupsData.length}
+        totalPageRecords={groupsData?.length}
         currentPage={currentPage}
         maxVisibleButton={3}
         setCurrentPage={setCurrentPage}

@@ -3,13 +3,14 @@ import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as OrgSlice from 'store/slice/organizations.slice';
-// import { setIsModalShow } from 'store/slice/groups.slice';
 import Pagination from 'components/atoms/Pagination';
 import { useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import organizationService from 'service/organization.service';
+import iziToast from 'izitoast';
 
 const columns = [
   { title: 'Organization Name', dataProperty: 'org_name' },
@@ -20,7 +21,7 @@ const columns = [
   { title: 'Status', dataProperty: 'is_active' }
 ];
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const OrganizationTable = () => {
   const dispatch = useDispatch();
@@ -29,9 +30,12 @@ const OrganizationTable = () => {
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
   const [title, setTitle] = useState<string>('');
   const [actionMode, setActionMode] = useState<string>('');
+  const [currentOrgId, setCurrentOrgId] = useState<number>()
+  const [status, setStatus] = useState<boolean>(false)
+  const [pageList, setPageList] = useState([])
 
-  const [loading] = useItToGetOrganizations(Number(currentUserID));
-  const { organizationsData } = useSelector(
+  const [loading, handleRefreshOrgTable] = useItToGetOrganizations(Number(currentUserID));
+  const { organizationsData, isDeleteOrg, isStatus } = useSelector(
     (state: RootState) => state.organization
   );
 
@@ -42,31 +46,76 @@ const OrganizationTable = () => {
   };
 
   const handleOnRemove = (data: any) => {
-    // dispatch(setIsModalShow(true));
+    setCurrentOrgId(data?.id)
+    dispatch(OrgSlice.setIsDeleteOrg(true))
     setTitle(data.org_name);
     setActionMode('Delete');
-    console.log('remove -item', data.id);
   };
+
+  const deleteOrg = async () => {
+    const response = await organizationService.remove(Number(currentOrgId), Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+      dispatch(
+        OrgSlice.setOrganizationsData(
+          organizationsData.filter((ele: any) => ele.id !== currentOrgId)
+        )
+      );
+      dispatch(OrgSlice.setIsDeleteOrg(false));
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+  }
+
   const handleOnChangeStatus = (column: string, selectedItem: any) => {
     if (column === 'is_active') {
+      dispatch(OrgSlice.setIsStatus(true))
+      setCurrentOrgId(selectedItem?.id)
+      setStatus(selectedItem.is_active ? false : true)
       setActionMode(selectedItem.is_active ? 'In Active' : 'Active');
       setTitle(selectedItem.org_name);
-      // dispatch(setIsModalShow(true));
     }
   };
 
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const pageListData = organizationsData.slice(start, end) ?? [];
+  const handleOnStatus = async () => {
+    const response = await organizationService.status(Number(currentOrgId), status, Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(OrgSlice.setIsStatus(false))
+      handleRefreshOrgTable(true)
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.INFO_TITLE,
+        message: response?.data?.info
+      })
+    }
+  }
 
-  useEffect(() => {}, [loading]);
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(organizationsData?.length ? organizationsData.slice(Number(start), end) : []);
+  }
+
+  useEffect(() => {
+    pagination()
+  },[loading]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {organizationsData.length}{' '}
-          {organizationsData.length > 1 ? 'Organizations' : 'Organization'}
+          {organizationsData?.length}{' '}
+          {organizationsData?.length > 1 ? 'Organizations' : 'Organization'}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -84,7 +133,7 @@ const OrganizationTable = () => {
       <Table
         tableName='organization-table'
         columns={columns}
-        data={pageListData}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
@@ -92,19 +141,21 @@ const OrganizationTable = () => {
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={organizationsData.length}
+        totalPageRecords={organizationsData?.length}
         currentPage={currentPage}
         maxVisibleButton={3}
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
       />
       <ConfirmationModal
+        show={isDeleteOrg || isStatus}
         name={title}
         actionMode={actionMode}
         onClose={() => {
-          // dispatch(setIsModalShow(false));
+          dispatch(OrgSlice.setIsDeleteOrg(false));
+          dispatch(OrgSlice.setIsStatus(false))
         }}
-        onClick={() => {}}
+        onClick={isDeleteOrg ? deleteOrg : handleOnStatus}
       />
     </>
   );

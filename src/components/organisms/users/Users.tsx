@@ -5,11 +5,11 @@ import type { RootState } from 'store';
 import AddUser from './AddUser';
 
 const Users: FC = () => {
-  const { isAddUserBtnClicked } = useSelector((state: RootState) => state.user);
+  const { isAddUser } = useSelector((state: RootState) => state.user);
 
   return (
     <>
-      <Suspense>{!isAddUserBtnClicked ? <UserTable /> : <AddUser />}</Suspense>
+      <Suspense>{!isAddUser ? <UserTable /> : <AddUser />}</Suspense>
     </>
   );
 };

@@ -8,6 +8,9 @@ import Pagination from 'components/atoms/Pagination';
 import type { RootState } from 'store';
 import useItToGetAllUsers from 'hooks/user/useItToGetAllUsers';
 import CONSTANTS from 'constants/constants';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import userService from 'service/user.service';
+import iziToast from 'izitoast';
 
 const columns = [
   { title: 'Name', dataProperty: 'name' },
@@ -19,34 +22,98 @@ const columns = [
     dataProperty: 'organizations',
     selector: 'org_name'
   },
-  { title: 'Branch Name', dataProperty: 'branches', selector: 'branch_name' }
+  { title: 'Branch Name', dataProperty: 'branches', selector: 'branch_name' },
+  { title: 'Status', dataProperty: 'is_active'}
 ];
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const UserTable = () => {
-  const { usersData } = useSelector((state: RootState) => state.user);
+  const { usersData, isUserActive, isDeleteUser } = useSelector((state: RootState) => state.user);
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
-  const [isUsersLoading] = useItToGetAllUsers(Number(currentUserID));
+  const [isUsersLoading, handleRefreshUserTable] = useItToGetAllUsers(Number(currentUserID));
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
+  const [selectedUserId, setSelectedUserId] = useState<number>()
+  const [actionMode, setActionMode] = useState<string>('')
+  const [title, setTitle] = useState<string>('')
+  const [status, setStatus] = useState<boolean>(false)
+  const [userId, setUserId] = useState<number>()
+  const [pageStart, setPageStart] = useState<number>()
+  const [pageEnd, setPageEnd] = useState<number>()
+  const [pageList, setPageList] = useState([])
+
 
   const handleOnEdit = (data: any) => {
-    dispatch(UserSlice.setIsAddUserBtnClicked(true));
+    dispatch(UserSlice.setIsAddUser(true));
     dispatch(UserSlice.setUser(data));
-    dispatch(UserSlice.setIsEditUserBtnClicked(true));
+    dispatch(UserSlice.setIsEditUser(true));
   };
 
   const handleOnRemove = (data: any) => {
-    console.log('remove -item', data);
+    setUserId(data?.id)
+    dispatch(UserSlice.setIsDelete(true))
+    setActionMode('Delete')
   };
 
-  useEffect(() => {}, [isUsersLoading]);
+  const deleteUser = async () => {
+    const response = await userService.remove(Number(userId), Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+      dispatch(
+        UserSlice.setUsersData(
+          usersData.filter((ele: any) => ele.id !== userId)
+        )
+      );
+      dispatch(UserSlice.setIsDelete(false));
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+  }
 
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const usersList = usersData.slice(start, end);
+  const handleOnChangeStatus = (column: string, selectedItem: any) => {
+    if (column === 'is_active') {
+      dispatch(UserSlice.setIsUserActive(true))
+      setSelectedUserId(selectedItem?.id)
+      setActionMode(selectedItem?.is_active ? 'In Active' : 'Active');
+      setTitle(selectedItem?.email)
+      setStatus(selectedItem.is_active ? false : true)
+    }
+  }
+
+  const handleOnStatus = async () => {
+    const response = await userService.status(Number(selectedUserId), status, Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      })
+      dispatch(UserSlice.setIsUserActive(false))
+      handleRefreshUserTable(true)
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.INFO_TITLE,
+        message: response?.data?.info
+      })
+    }
+  }
+  
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(usersData?.length ? usersData.slice(Number(start), end) : []);
+  }
+
+  useEffect(() => {
+    pagination()
+  }, [isUsersLoading])
 
   return (
     <>
@@ -64,17 +131,18 @@ const UserTable = () => {
           <Button
             type='primary'
             label='Add User'
-            onClick={() => dispatch(UserSlice.setIsAddUserBtnClicked(true))}
+            onClick={() => dispatch(UserSlice.setIsAddUser(true))}
           />
         </div>
       </TopPanel>
       <Table
         tableName='user-table'
         columns={columns}
-        data={usersList}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnRemove}
+        onChangeStatus={handleOnChangeStatus}
       />
       <Pagination
         perPage={perPageSize}
@@ -83,6 +151,16 @@ const UserTable = () => {
         maxVisibleButton={3}
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
+      />
+      <ConfirmationModal
+        show={isUserActive || isDeleteUser}
+        name={title}
+        actionMode={actionMode}
+        onClose={() =>{
+          dispatch(UserSlice.setIsUserActive(false))
+          dispatch(UserSlice.setIsDelete(false))
+        }}
+        onClick={isDeleteUser ? deleteUser : handleOnStatus }
       />
     </>
   );

@@ -65,11 +65,16 @@ const Login: FC = () => {
       setIsFirst(response.data?.info.isFirstLogin ? true : false);
     }
 
-    if (response?.status !== STATUS_CODE.STATUS_200) {
-      iziToast.info({
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.INFO_TITLE,
+        message: response?.data?.info
+      })
     }
   };
 

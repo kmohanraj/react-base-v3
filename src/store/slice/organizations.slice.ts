@@ -11,6 +11,12 @@ export const organizationSlice = createSlice({
     setIsEditOrgBtnClicked: (state, action) => {
       state.isEditOrgBtnClicked = action.payload
     },
+    setIsDeleteOrg: (state, action) => {
+      state.isDeleteOrg = action.payload
+    },
+    setIsStatus: (state, action) => {
+      state.isStatus = action.payload
+    },
     setOrganization: (state, action) => {
       state.organization = action.payload
     },
@@ -35,6 +41,8 @@ export const organizationSlice = createSlice({
 export const {
   setIsAddOrgBtnClicked,
   setIsEditOrgBtnClicked,
+  setIsDeleteOrg,
+  setIsStatus,
   setOrganization,
   setOrganizationsData,
   // setOrgSelectedRow,

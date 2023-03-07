@@ -2,7 +2,7 @@ import axios from "axios";
 import CONSTANTS from "constants/constants";
 
 
-let cancelToken: any;
+
 export default axios.create({
   baseURL: process.env.REACT_APP_ENV_SERVICE_URI,
   // headers: {
