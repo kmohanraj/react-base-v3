@@ -35,7 +35,7 @@ const AddBranch: FC = () => {
     dispatch(
       BranchSlice.setBranch({
         ...branch,
-        [name]: value
+        [name]: name === 'branch_code' ? value.replace(/[^0-9A-Z]/g, '') : value
       })
     );
   };
@@ -123,6 +123,7 @@ const AddBranch: FC = () => {
             onChange={handleOnChange}
             placeholder='Enter Branch Code'
             required
+            message='Ex, ABCD0001'
           />
           <Select
             inputId='org_id'

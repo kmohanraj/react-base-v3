@@ -113,7 +113,7 @@ const UserTable = () => {
 
   useEffect(() => {
     pagination()
-  }, [isUsersLoading])
+  }, [isUsersLoading, currentPage])
 
   return (
     <>

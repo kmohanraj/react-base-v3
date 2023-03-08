@@ -12,6 +12,7 @@ import { RootState } from 'store';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as CustomerService from 'service/customer.service';
 import iziToast from 'izitoast';
+import { genderOptions } from 'constants/options';
 
 const columns = [
   { title: 'Customer Code', dataProperty: 'customer_code' },
@@ -22,7 +23,7 @@ const columns = [
     selector: 'org_name'
   },
   { title: 'Branch Name', dataProperty: 'branches', selector: 'branch_name' },
-  { title: 'Gender', dataProperty: 'gender' },
+  { title: 'Gender', dataProperty: 'gender', options: genderOptions },
   { title: 'Locality', dataProperty: 'locality' },
   { title: 'District', dataProperty: 'district' }
 ];
@@ -102,7 +103,7 @@ const CustomerTable = () => {
 
   useEffect(() => {
     pagination()
-  }, [isCustomersLoading, pageList]);
+  }, [isCustomersLoading, currentPage]);
 
   return (
     <>

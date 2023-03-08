@@ -12,20 +12,20 @@ import ManageCustomer from './ManageCustomer';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as GroupService from 'service/group.service';
 import iziToast from 'izitoast';
+import { durationOptions } from 'constants/options';
 
 const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS, ROLE } =
   CONSTANTS;
 
 const columns = [
-  // { title: 'Group Name', dataProperty: 'group_name'},
   { title: 'Group Code', dataProperty: 'group_code', },
   { title: 'Chit Amount', dataProperty: 'amount' },
   { title: 'Customers', dataProperty: 'total_members' },
-  { title: 'Duration', dataProperty: 'duration' },
-  { title: 'Active ', dataProperty: 'is_active' },
+  { title: 'Duration', dataProperty: 'duration', options: durationOptions },
   { title: 'Is Started', dataProperty: 'is_started', isDate: true },
   { title: 'Start Date', dataProperty: 'start_date', isDate: true },
-  { title: 'End Date', dataProperty: 'end_date', isDate: true }
+  { title: 'End Date', dataProperty: 'end_date', isDate: true },
+  { title: 'Active ', dataProperty: 'is_active' },
 ];
 
 const GroupTable = () => {
@@ -100,7 +100,7 @@ const GroupTable = () => {
 
   useEffect(() => {
     pagination()
-  }, [isGroupsDataLoading, pageList]);
+  }, [isGroupsDataLoading, currentPage]);
 
   if (isManageCustomer) {
     return <ManageCustomer />;

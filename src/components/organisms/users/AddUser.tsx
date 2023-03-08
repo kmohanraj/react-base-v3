@@ -41,10 +41,18 @@ const AddUser = () => {
     dispatch(
       UserSlice.setUser({
         ...user,
-        [name]: value
+        [name]: checkInputType(name, value)
       })
     );
   };
+
+  const checkInputType = (name: string, value: string) => {
+    if (name === 'phone') {
+      return value.replace(/[^0-9]/g, '').substring(0,10)
+    } else {
+      return value
+    }
+  }
 
   const handleOnSelect = (value: any, name: string) => {
     dispatch(

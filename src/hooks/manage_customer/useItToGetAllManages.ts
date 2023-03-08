@@ -3,8 +3,12 @@ import * as ManageService from 'service/manage_customer.service';
 import * as ManageCustomerSlice from 'store/slice/manage_customer.slice';
 import { useDispatch } from 'react-redux';
 
-const useItToGetAllManages = (groupId: number, userId: number) => {
+const useItToGetAllManages = (
+  groupId: number,
+  userId: number
+): [boolean, (status: boolean) => void] => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [triggerRefresh, setTriggerRefresh] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,13 +27,17 @@ const useItToGetAllManages = (groupId: number, userId: number) => {
           taken_position: ele.taken_position
         }));
         dispatch(ManageCustomerSlice.setManageCustomers(result));
+        setTriggerRefresh(false);
+        setLoading(false);
       })
       .catch((err: any) => {
         console.log(err);
         setLoading(false);
+        setTriggerRefresh(false);
       });
-  }, []);
-  return [loading];
+  }, [dispatch, groupId, triggerRefresh, userId]);
+  const handleRefreshManage = (status: boolean) => setTriggerRefresh(status);
+  return [loading, handleRefreshManage];
 };
 
 export default useItToGetAllManages;

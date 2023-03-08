@@ -13,15 +13,16 @@ import CustomerMapping from './CustomerMapping';
 import TopPanel from 'components/molecules/TopPanel';
 import useItToRupees from 'hooks/common/useItToRupees';
 import Collection from '../collections/Collection';
-import CollectionDetails from '../collections/CollectionDetails';
+// import CollectionDetails from '../collections/CollectionDetails';
 import CollectionDetailsTable from '../collections/CollectionDetailsTable';
 import { addMoney, backButton, deleteIcon, edit } from 'constants/icons';
-import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 import CONSTANTS from 'constants/constants';
 import * as ManageSlice from 'store/slice/manage_customer.slice';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as ManageCustomerService from 'service/manage_customer.service';
 import iziToast from 'izitoast';
+import { collectionTypeOptions } from 'constants/options';
+import { ISelectOption } from 'types/components.types';
 
 const { STATUS_CODE, TOAST_DEFAULTS, ROLE } = CONSTANTS;
 const ManageCustomer = () => {
@@ -43,10 +44,6 @@ const ManageCustomer = () => {
   } = useSelector((state: RootState) => state.manage_customer);
   const { isAddCollection } = useSelector(
     (state: RootState) => state.collection
-  );
-  const [loading] = useItToGetAllManages(
-    Number(currentUserID),
-    Number(group.id)
   );
   const [title, setTitle] = useState<string>('');
   const [actionMode, setActionMode] = useState<string>('');
@@ -81,6 +78,7 @@ const ManageCustomer = () => {
 
   const handleOnBackBtn = () => {
     dispatch(GroupSlice.setIsManageCustomer(false));
+    dispatch(GroupSlice.clearGroup())
   };
 
   const handleOnCloseModal = () => {
@@ -145,7 +143,7 @@ const ManageCustomer = () => {
   if (isCollectionDetail) {
     return <CollectionDetailsTable />;
   }
-  console.log('(((((', manageCustomers);
+
   return (
     <>
       <TopPanel panelType='breadcrumb'>
@@ -203,10 +201,7 @@ const ManageCustomer = () => {
                 Code: <span>{manage.customer_code}</span>
               </div>
               <div>
-                Last Month: <span>{manage?.last_month}</span>
-              </div>
-              <div>
-                Current Month: <span>{manage?.current_month}</span>
+                Type: <span>{collectionTypeOptions && collectionTypeOptions.filter((opt: ISelectOption) => opt.id === manage.collection_type_id)[0].label}</span>
               </div>
             </div>
             <div className='actions'>
