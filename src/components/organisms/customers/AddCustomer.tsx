@@ -15,32 +15,8 @@ import { AxiosResponse } from 'axios';
 import { clearCustomer } from 'store/slice/customers.slice';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
+import { genderOptions, idProofOptions } from 'constants/options';
 
-const genderOptions = [
-  {
-    id: 1,
-    label: 'Male'
-  },
-  {
-    id: 2,
-    label: 'Female'
-  }
-];
-
-const idProofOptions = [
-  {
-    id: 1,
-    label: 'Aadhar Card'
-  },
-  {
-    id: 2,
-    label: 'Voter Id'
-  },
-  {
-    id: 3,
-    label: 'Driving License'
-  }
-];
 
 const { STATUS_CODE } = CONSTANTS;
 
@@ -64,10 +40,24 @@ const AddCustomer = () => {
     dispatch(
       CustomerSlice.setCustomer({
         ...customer,
-        [name]: value
+        [name]: checkInputType(name, value)
       })
     );
   };
+
+  const checkInputType = (name: string, value: string) => {
+    if(name === 'customer_code') {
+      return value.replace(/[^0-9A-Z]/g, '')
+    } else if (name === 'phone' || name === 'alter_phone' || name === 'nominee_phone') {
+      return value.replace(/[^0-9]{1,10}/g, '').substring(0,10)
+    } else if (name === 'pincode') {
+      return value.replace(/[^0-9]/g, '').substring(0,6)
+    } else if (name === 'age') {
+      return value.replace(/[^0-9]/g, '').substring(0,2)
+    } else {
+      return value
+    }
+  }
 
   const handleOnSelect = (value: ISelectOption, fieldName: string) => {
     dispatch(
@@ -143,6 +133,7 @@ const AddCustomer = () => {
             onChange={handleOnChange}
             placeholder='Enter Customer code'
             required
+            message='Ex, ABCD0001'
           />
           <Select
             inputId='org_id'

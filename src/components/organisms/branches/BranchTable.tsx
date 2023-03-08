@@ -91,7 +91,7 @@ const BranchTable = () => {
 
   useEffect(() => {
     pagination()
-  }, [loading]);
+  }, [loading, currentPage]);
 
   return (
     <>

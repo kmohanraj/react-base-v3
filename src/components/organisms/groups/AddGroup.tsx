@@ -18,17 +18,7 @@ import { AxiosResponse } from 'axios';
 import { clearGroup } from 'store/slice/groups.slice';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
-
-const durationOptions = [
-  {
-    id: 1,
-    label: '10 Months'
-  },
-  {
-    id: 2,
-    label: '20 Months'
-  }
-];
+import { durationOptions } from 'constants/options';
 
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 
@@ -69,8 +59,18 @@ const AddGroup: FC = () => {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setGroupData({ ...groupData, [name]: value });
+    setGroupData({ ...groupData, [name]: checkInputType(name, value) });
   };
+
+  const checkInputType = (name: string, value: string) => {
+    if(name === 'group_code') {
+      return value.replace(/[^0-9A-Z]/g, '')
+    } else if (name === 'amount' || name === 'total_members' || name === 'duration') {
+      return value.replace(/[^0-9]{1,10}/g, '')
+    } else  {
+      return value
+    }
+  }
 
   const handleOnSelect = (value: ISelectOption, fieldName: string) => {
     setGroupData({
@@ -163,6 +163,7 @@ const AddGroup: FC = () => {
             onChange={handleOnChange}
             placeholder='Enter Group Code'
             required
+            message='Ex, AB0123'
           />
           <Input
             inputId='amount'

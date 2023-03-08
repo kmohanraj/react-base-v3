@@ -115,7 +115,7 @@ const CollectionDetailsTable = () => {
 
   useEffect(() => {
     pagination()
-  }, [loading, pageList]);
+  }, [loading, currentPage]);
 
   return (
     <>

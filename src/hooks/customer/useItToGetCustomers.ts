@@ -33,7 +33,7 @@ const useItToGetCustomers = (userId: number): [boolean] => {
         // console.log(err);
         setLoading(false);
       });
-  }, []);
+  }, [dispatch, userId]);
   return [loading];
 };
 export default useItToGetCustomers;

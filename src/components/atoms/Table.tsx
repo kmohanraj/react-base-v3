@@ -12,6 +12,7 @@ type TableType = {
     selector?: any;
     isDate?: any;
     isTime?: any;
+    options?: {}
   }[];
   data: any[];
   action?: string[];
@@ -49,11 +50,13 @@ const Table: FC<TableType> = ({
     return <ErrorPage />;
   }
 
-  const manageData = (filterColumn: any, selector: string, isDate: boolean, isTime: boolean) => {
+  const manageData = (filterColumn: any, selector: string, isDate: boolean, isTime: boolean, options: any) => {
     if(isDate) {
       return moment(filterColumn).utcOffset(330).format( isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY')
     } else if (typeof filterColumn === 'string') {
       return filterColumn ?? '';
+    } else if (typeof filterColumn === 'number') {
+      return options && options.filter((ele: any) => ele.id === filterColumn)[0].label
     } else if (filterColumn !== null && typeof filterColumn === 'object') {
       return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
@@ -91,7 +94,7 @@ const Table: FC<TableType> = ({
                       <span className='edit-col edit' onClick={() => handleOnSelectRow()}><img src={editIcon} alt="" /></span>
                       <span className='edit-col delete' onClick={() => handleOnRemoveRow()}><img src={deleteIcon} alt="" /></span>
                     </span> */}
-                      {manageData(d[col.dataProperty], col.selector, col.isDate, col.isTime)}
+                      {manageData(d[col.dataProperty], col.selector, col.isDate, col.isTime, col.options)}
                       {/* {d[col.dataProperty]} */}
                     </>
                   </td>

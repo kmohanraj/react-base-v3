@@ -13,21 +13,9 @@ import moment from 'moment';
 import { AxiosResponse } from 'axios';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
+import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
+import { collectionTypeOptions } from 'constants/options'
 
-const collectionTypeOptions = [
-  {
-    id: 1,
-    label: 'Daily'
-  },
-  {
-    id: 2,
-    label: 'Monthly'
-  },
-  {
-    id: 3,
-    label: 'Weekly'
-  }
-];
 
 type CustomerMappingProps = {
   currentGroupId: number | null;
@@ -44,6 +32,9 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
     (state: RootState) => state.manage_customer
   );
 
+  const { group } = useSelector((state: RootState) => state.group);
+  const [loading, handleRefreshManage] = useItToGetAllManages(Number(currentUserID), Number(group?.id))
+
   const handleOnSelect = (value: ISelectOption, fieldName: string) => {
     dispatch(
       ManageCustomerSlice.setManageCustomer({
@@ -58,13 +49,23 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
     dispatch(
       ManageCustomerSlice.setManageCustomer({
         ...manageCustomer,
-        [name]: value
+        [name]: checkInputType(name, value)
       })
     );
   };
 
+  const checkInputType = (name: string, value: string) => {
+    if (name === 'taken_amount') {
+      return value.replace(/[^0-9]/g, '')
+    } else if (name === 'taken_position') {
+      return value.replace(/[^0-9]/g, '').substring(0,2)
+    } else {
+      return value
+    }
+  }
+
   const handleOnSubmit = () => {
-    const { group_id, taken_amount, taken_position, ...filterData } =
+    const { group_id, ...filterData } =
       manageCustomer;
     const payload = {
       ...filterData,
@@ -74,15 +75,15 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
     if (isEditManageCustomer) {
       updateManageCustomer(payload);
     } else {
-      // delete payload.id
       const { id, customer_name, customer_code, ...filterData } = payload;
       createManageCustomer(filterData);
     }
   };
 
   const createManageCustomer = async (createData: any) => {
+    const {taken_position, taken_amount, ...payload} = createData;
     const response = await ManageCustomerService.create(
-      createData,
+      payload,
       Number(currentUserID)
     );
     toastMessage(response);
@@ -122,6 +123,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
+      handleRefreshManage(true)
     }
     if (response?.status === STATUS_CODE.STATUS_409) {
       iziToast.info({
@@ -183,7 +185,6 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           <>
             <Input
               inputId='taken_amount'
-              inputType='number'
               value={manageCustomer.taken_amount}
               onChange={handleOnChange}
               placeholder='Withdraw amount'
@@ -199,7 +200,6 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
             />
             <Input
               inputId='taken_position'
-              inputType='number'
               value={manageCustomer.taken_position}
               onChange={handleOnChange}
               placeholder='Withdraw Position'

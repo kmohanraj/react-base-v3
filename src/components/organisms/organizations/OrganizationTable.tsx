@@ -108,7 +108,7 @@ const OrganizationTable = () => {
 
   useEffect(() => {
     pagination()
-  },[loading]);
+  },[loading, currentPage]);
 
   return (
     <>
