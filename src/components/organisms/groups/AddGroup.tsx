@@ -14,23 +14,27 @@ import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'styles/date-picker.scss';
+import { AxiosResponse } from 'axios';
+import { clearGroup } from 'store/slice/groups.slice';
+import iziToast from 'izitoast';
+import { ISelectOption } from 'types/components.types';
 
 const durationOptions = [
   {
     id: 1,
-    label: '10 Months',
+    label: '10 Months'
   },
   {
     id: 2,
-    label: '20 Months',
-  },
+    label: '20 Months'
+  }
 ];
 
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 
-const AddGroup: FC = () => { 
+const AddGroup: FC = () => {
   const dispatch = useDispatch();
-  const { group, isEditGroupBtnClicked } = useSelector((state: RootState) => state.group);
+  const { group, isEditGroup } = useSelector((state: RootState) => state.group);
   const { organizationOptions } = useSelector(
     (state: RootState) => state.organization
   );
@@ -48,92 +52,109 @@ const AddGroup: FC = () => {
     branch_id: null,
     start_date: null,
     end_date: null
-  }
-  const dateFormat: any = { ...group }
-  dateFormat.start_date = new Date(group.start_date)
-  dateFormat.end_date = new Date(group.end_date)
+  };
+  const dateFormat: any = { ...group };
+  dateFormat.start_date = new Date(group.start_date);
+  dateFormat.end_date = new Date(group.end_date);
 
-  const [groupData, setGroupData] = useState(isEditGroupBtnClicked ? dateFormat : initialState)
-  
-  const [startDate, setStartDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.start_date) : initialState.start_date)
-  const [endDate, setEndDate] = useState<any>(isEditGroupBtnClicked ? new Date(group.end_date) : initialState.end_date);
+  const [groupData, setGroupData] = useState(
+    isEditGroup ? dateFormat : initialState
+  );
+  const [startDate, setStartDate] = useState<any>(
+    isEditGroup ? new Date(group.start_date) : initialState.start_date
+  );
+  const [endDate, setEndDate] = useState<any>(
+    isEditGroup ? new Date(group.end_date) : initialState.end_date
+  );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("************type")
     const { name, value } = e.target;
-    setGroupData({...groupData, [name]: value})
+    setGroupData({ ...groupData, [name]: value });
   };
 
-  const handleOnSelect = (value: any, fieldName: string) => {
-    console.log("************select", fieldName, value)
+  const handleOnSelect = (value: ISelectOption, fieldName: string) => {
     setGroupData({
-      ...groupData, [fieldName]: value.id
-    })
-    // if (fieldName === 'duration') {
-    //   setStartDate('')
-    //   setEndDate('')
-    // }
+      ...groupData,
+      [fieldName]: value.id
+    });
   };
 
   const handleOnSelectDate = (e: any, fieldName: string) => {
-    console.log('SSSSSSSS', groupData)
     const duration = durationOptions
       .filter((ele) => ele.id === groupData?.duration)[0]
       .label.split(' ')[0];
-    setStartDate(e)
-    console.log('SSSSSSSS', '------------->>')
+    setStartDate(e);
     if (fieldName === 'start_date' && duration) {
       const currentDate = new Date(e);
       const nextDate = currentDate.setMonth(
         currentDate.getMonth() + Number(duration)
       );
       const finalDate = new Date(nextDate);
-      const resultDate: any = new Date(finalDate.setDate(finalDate.getDate() - 1))
+      const resultDate: any = new Date(
+        finalDate.setDate(finalDate.getDate() - 1)
+      );
       setEndDate(new Date(resultDate));
     }
   };
 
   const handleOnSubmit = async () => {
-    const {start_date, end_date, ...filterData } = groupData
+    const { start_date, end_date, ...filterData } = groupData;
     const data = {
       ...filterData,
       start_date: new Date(startDate),
       end_date: new Date(endDate)
-    }
-    console.log('submit', data);
-    await createGroup(data);
+    };
+    isEditGroup ? updateGroup(data) : createGroup(data);
   };
 
   const createGroup = async (data: any) => {
     const response = await GroupService.create(data, Number(currentUserID));
-    if (response?.status === STATUS_CODE.STATUS_200) {
-      dispatch(GroupSlice.setIsAddGroupBtnClicked(false));
+    toastMessage(response);
+  };
+
+  const updateGroup = async (data: any) => {
+    const { id, ...filterData } = data;
+    const payload = { id: id, data: filterData };
+    const response = await GroupService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
+
+  const toastMessage = (response: AxiosResponse) => {
+    if (response.status === STATUS_CODE.STATUS_200) {
+      dispatch(GroupSlice.setIsAddGroup(false));
+      dispatch(clearGroup());
+      iziToast.success({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+    if (response?.status === STATUS_CODE.STATUS_409) {
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
     }
   };
 
   const handleOnCheckCondition = () => {
-    dispatch(GroupSlice.setIsAddGroupBtnClicked(false))
-    dispatch(GroupSlice.setIsEditGroupBtnClicked(false))
-  }
+    dispatch(GroupSlice.setIsAddGroup(false));
+    dispatch(GroupSlice.setIsEditGroup(false));
+  };
 
   const checkCurrentOption = (options: any, value: number) => {
-    if (isEditGroupBtnClicked) {
-      return options.filter((option: any) => option.id === value)[0]
+    if (isEditGroup) {
+      return options.filter((option: any) => option.id === value)[0];
     } else {
-      return options[0]
+      return options[0];
     }
-  }
+  };
 
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
-          <img
-            src={backButton}
-            alt='Back'
-            onClick={handleOnCheckCondition}
-          />
-          <div>{isEditGroupBtnClicked ? 'Update' : 'Create'}</div>
+          <img src={backButton} alt='Back' onClick={handleOnCheckCondition} />
+          <div>{isEditGroup ? 'Update' : 'Create'}</div>
         </TopPanel>
         <div className='chit-form'>
           <Input
@@ -243,7 +264,7 @@ const AddGroup: FC = () => {
           />
           <Button
             type='primary'
-            label={isEditGroupBtnClicked ? 'Update' : 'Create'}
+            label={isEditGroup ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
           />
         </div>

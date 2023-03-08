@@ -16,9 +16,21 @@ export const update = async (data: any, userId: number) => {
   }
 }
 
-export const getAll = async (userId: number, manage_id: number) => {
+export const remove = async (collectionId: number, userId: number) => {
   try {
-    return (await axios.get(`/${userId}/collection/${manage_id}/getAll`)).data
+    return await axios({
+      url: `/${userId}/collection/delete`,
+      method: 'DELETE',
+      data: { id: collectionId }
+    });
+  } catch (err: any) {
+    return err.response;
+  }
+};
+
+export const getAll = async (userId: number, manageCustomerId: number) => {
+  try {
+    return (await axios.get(`/${userId}/collection/${manageCustomerId}/getAll`)).data
   } catch (err: any) {
     return err.response;
   }

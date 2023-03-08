@@ -7,28 +7,31 @@ type ConfirmationType = {
   name: string;
   actionMode: string;
   onClose: () => void;
-  onCancel: () => void;
-  onClick: () => void
+  onClick: () => void;
+  show?: boolean;
 };
 
-const ConfirmationModal: FC<ConfirmationType> = ({ name, actionMode, onClose, onCancel, onClick }) => {
+const ConfirmationModal: FC<ConfirmationType> = ({
+  name,
+  actionMode,
+  onClose,
+  onClick,
+  show
+}) => {
   return (
     <>
-      <Modal onClose={onClose}>
-        <h3>Are you sure you want to {actionMode.toLowerCase()} your <b>{name}</b>?</h3>
-        <div className='modal-action'>
-          <Button
-            type='primary'
-            label={actionMode}
-            onClick={onClick}
-          />
-          <Button
-            type='ghost'
-            label='Cancel'
-            onClick={onCancel}
-          />
-        </div>
-      </Modal>
+      {show && (
+        <Modal show={show} onClose={onClose}>
+          <h3>
+            Are you sure you want to {actionMode.toLowerCase()} the{' '}
+            <b>{name}</b>?
+          </h3>
+          <div className='modal-action'>
+            <Button type='primary' label={actionMode} onClick={onClick} />
+            <Button type='ghost' label='Cancel' onClick={onClose} />
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

@@ -22,7 +22,7 @@ const useItToGetGroups = (userId: number): [boolean] => {
         setLoading(false);
       })
       .then((err: any) => {
-        console.log(err);
+        // console.log(err);
         setLoading(false);
       });
   }, []);

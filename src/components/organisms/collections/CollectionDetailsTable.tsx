@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import * as Icons from 'constants/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,11 +13,29 @@ import Collection from './Collection';
 import { RootState } from 'store';
 import useToGetCollections from 'hooks/collection/useToGetCollections';
 import CONSTANTS from 'constants/constants';
-import moment from 'moment';
+import Table from 'components/atoms/Table';
+import Pagination from 'components/atoms/Pagination';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import * as CollectionService from 'service/collection.service';
+import iziToast from 'izitoast';
 
-const CollectionDetails = () => {
+const columns = [
+  { title: 'Collection Amount', dataProperty: 'collection_amount' },
+  { title: 'Description', dataProperty: 'description' },
+  { title: 'Collection Date', dataProperty: 'updated_at', isDate: true, isTime: true },
+  { title: 'Created By', dataProperty: 'created_by' },
+  { title: 'Updated By', dataProperty: 'updated_by' },
+]
+const { ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+const CollectionDetailsTable = () => {
   const dispatch = useDispatch();
-  const { collectionsData, isEditCollection, isAddCollection } = useSelector(
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPageSize, setPerPageSize] = useState(10);
+  const [title, setTitle] = useState<string>('')
+  const [actionMode, setActionMode] = useState<string>('')
+  const [collectionId, setCollectionId] = useState<number>()
+  const [pageList, setPageList] = useState([])
+  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
     (state: RootState) => state.collection
   );
   const { selected_manage } = useSelector(
@@ -54,14 +72,50 @@ const CollectionDetails = () => {
     dispatch(CollectionSlice.setIsEditCollection(true));
     dispatch(CollectionSlice.setCollection(collection));
   };
+  
+  const handleOnDelete = (data: any) => {
+    setCollectionId(data?.id)
+    dispatch(CollectionSlice.setIsDeleteCollection(true))
+    setActionMode('Delete')
+    setTitle(data?.collection_amount)
+  }
 
+  const deleteCollection = async () => {
+    console.log("delete-collection")
+    const response = await CollectionService.remove(Number(collectionId), Number(currentUserID))
+    if (response?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+      dispatch(
+        CollectionSlice.setCollectionsData(
+          collectionsData.filter((ele: any) => ele.id !== collectionId)
+        )
+      );
+      dispatch(CollectionSlice.setIsDeleteCollection(false));
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+  }
   const totalCollection = () => {
     return collectionsData.reduce((acc: any, ele: any) => {
       return acc + Number(ele.collection_amount);
     }, 0);
   };
 
-  useEffect(() => {}, [loading]);
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : []);
+  }
+
+  useEffect(() => {
+    pagination()
+  }, [loading, pageList]);
 
   return (
     <>
@@ -86,7 +140,33 @@ const CollectionDetails = () => {
           />
         </div>
       </TopPanel>
-      <section className='collection-details'>
+      <Table
+        tableName='collection-details-table'
+        columns={columns}
+        data={pageList}
+        action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
+        onEdit={handleOnEdit}
+        onRemove={handleOnDelete}
+      />
+      <Pagination
+        perPage={perPageSize}
+        totalPageRecords={collectionsData?.length}
+        currentPage={currentPage}
+        // onPageChanged={(page: any) => onPageChanged(page) }
+        maxVisibleButton={3}
+        setCurrentPage={setCurrentPage}
+        setPerPageSize={setPerPageSize}
+      />
+      <ConfirmationModal
+        show={isDeleteCollection}
+        name={title}
+        actionMode={actionMode}
+        onClose={() => {
+          dispatch(CollectionSlice.setIsDeleteCollection(false));
+        }}
+        onClick={deleteCollection}
+      />
+      {/* <section className='collection-details'>
         {collectionsData.map((collection: any, index: any) => (
           <section className='collection-details__item' key={index}>
             <div>
@@ -112,7 +192,7 @@ const CollectionDetails = () => {
             </div>
           </section>
         ))}
-      </section>
+      </section> */}
       <Modal
         show={isAddCollection || isEditCollection}
         onClose={handleOnCloseModal}
@@ -123,4 +203,4 @@ const CollectionDetails = () => {
   );
 };
 
-export default CollectionDetails;
+export default CollectionDetailsTable;

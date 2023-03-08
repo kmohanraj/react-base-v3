@@ -5,11 +5,17 @@ export const usersSlice = createSlice({
   name: 'users',
   initialState,
   reducers: {
-    setIsAddUserBtnClicked: (state, action) => {
-      state.isAddUserBtnClicked = action.payload
+    setIsAddUser: (state, action) => {
+      state.isAddUser = action.payload
     },
-    setIsEditUserBtnClicked: (state, action) => {
-      state.isEditUserBtnClicked = action.payload
+    setIsEditUser: (state, action) => {
+      state.isEditUser = action.payload
+    },
+    setIsDelete: (state, action) => {
+      state.isDeleteUser = action.payload
+    },
+    setIsUserActive: (state, action) => {
+      state.isUserActive = action.payload
     },
     setUser: (state, action) => {
       state.user = action.payload
@@ -28,8 +34,10 @@ export const usersSlice = createSlice({
 });
 
 export const {
-  setIsAddUserBtnClicked,
-  setIsEditUserBtnClicked,
+  setIsAddUser,
+  setIsEditUser,
+  setIsDelete,
+  setIsUserActive,
   setUser,
   setLogin,
   setUsersData,

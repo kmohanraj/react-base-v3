@@ -16,19 +16,25 @@ const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const AddOrganization: FC = () => {
   const dispatch = useDispatch();
-  const { organization, isEditOrgBtnClicked } = useSelector((state: RootState) => state.organization);
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
+  const { organization, isEditOrgBtnClicked } = useSelector(
+    (state: RootState) => state.organization
+  );
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
   const [updateChanges, setUpdateChanges] = useState({} as OrganizationType);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    dispatch(OrgSlice.setOrganization({
-      ...organization, [name]: value
-    }))
+    const { name, value } = e.target;
+    dispatch(
+      OrgSlice.setOrganization({
+        ...organization,
+        [name]: value
+      })
+    );
     setUpdateChanges((prevState: OrganizationType) => ({
-      ...prevState, [name]: value
-    }))
-  }
+      ...prevState,
+      [name]: value
+    }));
+  };
 
   const handleOnSubmit = async () => {
     const { id, ...filterData } = organization;
@@ -36,43 +42,47 @@ const AddOrganization: FC = () => {
       const data = {
         id: id,
         data: filterData
-      }
+      };
       if (Object.keys(updateChanges).length) {
-        updateOrganization(data)
+        updateOrganization(data);
       } else {
-        dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
-        dispatch(OrgSlice.clearOrganization())
+        dispatch(OrgSlice.setIsAddOrgBtnClicked(false));
+        dispatch(OrgSlice.clearOrganization());
       }
     } else {
-      console.log("filterData", filterData, organization)
       createOrganization(filterData);
     }
   };
 
   const createOrganization = async (filterData: any) => {
-    const response = await organizationService.create(filterData, Number(currentUserID))
+    const response = await organizationService.create(
+      filterData,
+      Number(currentUserID)
+    );
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
-      })
-      dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
-      dispatch(OrgSlice.clearOrganization())
+      });
+      dispatch(OrgSlice.setIsAddOrgBtnClicked(false));
+      dispatch(OrgSlice.clearOrganization());
     }
-  }
+  };
 
-  const updateOrganization = async (data: any) => {  
-    const response = await organizationService.update(data, Number(currentUserID))
-    console.log('response', response)
-    if(response?.status === STATUS_CODE.STATUS_200) {
+  const updateOrganization = async (data: any) => {
+    const response = await organizationService.update(
+      data,
+      Number(currentUserID)
+    );
+    if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
-      })
-      dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
-      dispatch(OrgSlice.clearOrganization())
+      });
+      dispatch(OrgSlice.setIsAddOrgBtnClicked(false));
+      dispatch(OrgSlice.clearOrganization());
     }
-  }
+  };
 
   return (
     <>
@@ -82,9 +92,9 @@ const AddOrganization: FC = () => {
             src={backButton}
             alt='Back'
             onClick={() => {
-              dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
-              dispatch(OrgSlice.setIsEditOrgBtnClicked(false))
-              dispatch(OrgSlice.clearOrganization())
+              dispatch(OrgSlice.setIsAddOrgBtnClicked(false));
+              dispatch(OrgSlice.setIsEditOrgBtnClicked(false));
+              dispatch(OrgSlice.clearOrganization());
             }}
           />
           <div>{isEditOrgBtnClicked ? 'Update' : 'Create'}</div>
@@ -150,9 +160,9 @@ const AddOrganization: FC = () => {
             type='ghost'
             label='Cancel'
             onClick={() => {
-              dispatch(OrgSlice.setIsAddOrgBtnClicked(false))
-              dispatch(OrgSlice.setIsEditOrgBtnClicked(false))
-              dispatch(OrgSlice.clearOrganization())
+              dispatch(OrgSlice.setIsAddOrgBtnClicked(false));
+              dispatch(OrgSlice.setIsEditOrgBtnClicked(false));
+              dispatch(OrgSlice.clearOrganization());
             }}
           />
           <Button

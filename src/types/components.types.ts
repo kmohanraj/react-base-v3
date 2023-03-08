@@ -8,6 +8,7 @@ export interface IErrorProps {
 export type ModalType = {
   children: React.ReactNode;
   onClose: () => void;
+  show: boolean;
 };
 
 export type OrganizationType = {
@@ -22,5 +23,11 @@ export type OrganizationType = {
 };
 
 export type CollectionProps = {
-  title?: string
+  title?: string;
+  onClose?: () => void;
+}
+
+export interface ISelectOption {
+  id: number;
+  label: string
 }

@@ -1,15 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { branch, initialState } from 'store/initialStates/branchs.initialState';
+import {
+  branch,
+  initialState
+} from 'store/initialStates/branches.initialState';
 
 export const branchSlice = createSlice({
-  name: 'branchs',
+  name: 'branches',
   initialState,
   reducers: {
     setIsAddBranchBtnClicked: (state, action) => {
       state.isAddBranchBtnClicked = action.payload;
     },
     setIsEditBranchBtnClicked: (state, action) => {
-      state.isEditBranchBtnClicked = action.payload
+      state.isEditBranchBtnClicked = action.payload;
+    },
+    setIsDeleteBranchBtnClicked: (state, action) => {
+      state.isDeleteBranchBtnClicked = action.payload;
     },
     setBranch: (state, action) => {
       state.branch = action.payload;
@@ -22,18 +28,19 @@ export const branchSlice = createSlice({
     },
     clearBranch: (state) => ({
       ...state,
-      branch: branch,
-    }),
-  },
+      branch: branch
+    })
+  }
 });
 
 export const {
   setIsAddBranchBtnClicked,
   setIsEditBranchBtnClicked,
+  setIsDeleteBranchBtnClicked,
   setBranch,
   setBranchesData,
   setBranchOption,
-  clearBranch,
+  clearBranch
 } = branchSlice.actions;
 
 export default branchSlice.reducer;

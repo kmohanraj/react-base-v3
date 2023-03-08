@@ -8,51 +8,97 @@ import { useEffect, useState } from 'react';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import type { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
+import BranchService from 'service/branch.service';
+import iziToast from 'izitoast';
+import ConfirmationModal from 'components/molecules/ConfirmationModal';
 
 const columns = [
   { title: 'Branch Name', dataProperty: 'branch_name' },
   { title: 'Branch Code', dataProperty: 'branch_code' },
-  { title: 'Organization Name', dataProperty: 'organizations', selector: 'org_name' }
+  {
+    title: 'Organization Name',
+    dataProperty: 'organizations',
+    selector: 'org_name'
+  }
 ];
 
-const { SESSION_STORAGE, ACTION_BTN } = CONSTANTS;
+const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const BranchTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
-
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
+  const [title, setTitle] = useState<string>('');
+  const [actionMode, setActionMode] = useState<string>('');
+  const [branchId, setBranchId] = useState<number>();
   const [loading] = useToGetBranches(Number(currentUserID));
-  const { branchesData } = useSelector((state: RootState) => state.branch)
-
+  const [pageList, setPageList] = useState([])
+  const { branchesData, isDeleteBranchBtnClicked } = useSelector(
+    (state: RootState) => state.branch
+  );
 
   const handleOnEdit = (data: any) => {
-    dispatch(BranchSlice.setIsEditBranchBtnClicked(true))
-    dispatch(BranchSlice.setIsAddBranchBtnClicked(true))
-    dispatch(BranchSlice.setBranch(branchesData.filter((ele: any) => ele.id === data.id)[0]))
+    dispatch(BranchSlice.setIsEditBranchBtnClicked(true));
+    dispatch(BranchSlice.setIsAddBranchBtnClicked(true));
+    dispatch(
+      BranchSlice.setBranch(
+        branchesData.filter((ele: any) => ele.id === data.id)[0]
+      )
+    );
   };
 
-  const handleOnRemove = () => {
-    console.log('remove-branch');
+  const handleOnDelete = async (data: any) => {
+    dispatch(BranchSlice.setIsDeleteBranchBtnClicked(true));
+    setBranchId(data.id);
+    setTitle(data.branch_name);
+    setActionMode('Delete');
+  };
+
+  const deleteBranch = async () => {
+    const branch = await BranchService.remove(
+      Number(branchId),
+      Number(currentUserID)
+    );
+    if (branch?.status === STATUS_CODE.STATUS_200) {
+      iziToast.success({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: branch?.data?.info
+      });
+      dispatch(
+        BranchSlice.setBranchesData(
+          branchesData.filter((ele: any) => ele.id !== branchId)
+        )
+      );
+      dispatch(BranchSlice.setIsDeleteBranchBtnClicked(false));
+    } else {
+      iziToast.info({
+        title: TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: branch?.data?.info
+      });
+    }
   };
 
   // const onPageChanged = (page: any) => {
   //   setCurrentPage(page)
   // }
 
-  const start = currentPage * perPageSize - perPageSize;
-  const end = start + perPageSize;
-  const pageListData = branchesData.slice(start, end);
+  const pagination = () => {
+    const start = currentPage * perPageSize - perPageSize;
+    const end = Number(start) + perPageSize;
+    setPageList(branchesData?.length ? branchesData.slice(Number(start), end) : []);
+  }
 
   useEffect(() => {
-
-  }, [loading])
+    pagination()
+  }, [loading]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
-        <div className='top-panel-entity'>{branchesData.length} {branchesData.length > 1 ? 'Branches' : 'Branch'}</div>
+        <div className='top-panel-entity'>
+          {branchesData?.length > 1 ? 'Branches' : 'Branch'}
+        </div>
         <div className='top-panel-buttons'>
           <Button
             type='ghost'
@@ -69,19 +115,28 @@ const BranchTable = () => {
       <Table
         tableName='branch-table'
         columns={columns}
-        data={pageListData}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
-        onRemove={handleOnRemove}
+        onRemove={handleOnDelete}
       />
       <Pagination
         perPage={perPageSize}
-        totalPageRecords={branchesData.length}
+        totalPageRecords={branchesData?.length}
         currentPage={currentPage}
         // onPageChanged={(page: any) => onPageChanged(page) }
         maxVisibleButton={3}
         setCurrentPage={setCurrentPage}
         setPerPageSize={setPerPageSize}
+      />
+      <ConfirmationModal
+        show={isDeleteBranchBtnClicked}
+        name={title}
+        actionMode={actionMode}
+        onClose={() => {
+          dispatch(BranchSlice.setIsDeleteBranchBtnClicked(false));
+        }}
+        onClick={deleteBranch}
       />
     </>
   );

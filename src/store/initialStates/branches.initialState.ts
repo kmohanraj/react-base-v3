@@ -1,4 +1,6 @@
 const branch = {
+  id: null,
+  organizations: {},
   branch_name: '',
   branch_code: '',
   org_id: null
@@ -12,6 +14,7 @@ const branchOption = {
 const initialState = {
   isAddBranchBtnClicked: false,
   isEditBranchBtnClicked: false,
+  isDeleteBranchBtnClicked: false,
   branch: branch,
   branchesData: [],
   branchOptions: []

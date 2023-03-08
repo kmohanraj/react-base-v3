@@ -43,8 +43,14 @@
   border-spacing: 0;
   user-select: none;
 
-
-  
+  .active {
+    color: colors.$green-light;
+    font-weight: bold;
+  }
+  .in-active {
+    color: colors.$danger;
+    font-weight: bold;
+  }
   .action-head {
     align-items: center;
     justify-content: center;

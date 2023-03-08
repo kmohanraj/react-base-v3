@@ -1,20 +1,24 @@
-
-const manage_customer = {
+const manageCustomer = {
   id: null,
   group_id: null,
   customer_id: null,
+  customer_name: '',
+  customer_code: '',
   org_id: null,
   collection_type_id: null,
-}
+  taken_amount: '',
+  taken_at: null,
+  taken_position: ''
+};
 
 const initialState = {
-  // isAddGroupBtnClicked: false,
-  // isEditGroupBtnClicked: false,
-  // isManageCustomerBtnClicked: false,
+  isAddManageCustomer: false,
+  isEditManageCustomer: false,
+  isDeleteManageCustomer: false,
   // isCollectionDetail: false,
-  manage_customer: manage_customer,
-  selected_manage: manage_customer,
-  manage_customers: []
-}
+  manageCustomer: manageCustomer,
+  selected_manage: manageCustomer,
+  manageCustomers: []
+};
 
-export { initialState }
+export { initialState };

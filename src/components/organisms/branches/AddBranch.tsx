@@ -1,6 +1,6 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
-import { backButton } from 'constants/icons'
+import { backButton } from 'constants/icons';
 import * as BranchSlice from 'store/slice/branches.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
@@ -11,67 +11,101 @@ import CONSTANTS from 'constants/constants';
 import BranchService from 'service/branch.service';
 import { clearBranch } from 'store/slice/branches.slice';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
+import iziToast from 'izitoast';
+import { AxiosResponse } from 'axios';
+import { ISelectOption } from 'types/components.types';
 
-const Select = React.lazy(() =>  import('components/atoms/Select'));
+const Select = React.lazy(() => import('components/atoms/Select'));
 
 const { STATUS_CODE, SESSION_STORAGE } = CONSTANTS;
 
 const AddBranch: FC = () => {
   const dispatch = useDispatch();
-  const { branch, isEditBranchBtnClicked } = useSelector((state: RootState) => state.branch)
-  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY)
-  const [isOrgOptionLoading] = useItToGetOrganizations(Number(currentUserID))
-  const { organizationOptions } = useSelector((state: RootState) => state.organization)
+  const { branch, isEditBranchBtnClicked } = useSelector(
+    (state: RootState) => state.branch
+  );
+  const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
+  const [isOrgOptionLoading] = useItToGetOrganizations(Number(currentUserID));
+  const { organizationOptions } = useSelector(
+    (state: RootState) => state.organization
+  );
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    dispatch(BranchSlice.setBranch({
-      ...branch, [name]: value
-    }))
-  }
+    const { name, value } = e.target;
+    dispatch(
+      BranchSlice.setBranch({
+        ...branch,
+        [name]: value
+      })
+    );
+  };
 
-  const handleOnSelect = (name: any) => {
-    dispatch(BranchSlice.setBranch({
-      ...branch, org_id: name.id
-    }))
-  }
+  const handleOnSelect = (data: ISelectOption) => {
+    dispatch(
+      BranchSlice.setBranch({
+        ...branch,
+        org_id: data.id
+      })
+    );
+  };
 
   const handleOnSubmit = async () => {
-    // const payload = {...branch, org_id: Number(branch.org_id)}
-    const response = await BranchService.create(branch, Number(currentUserID))
-    if (response?.status === STATUS_CODE.STATUS_200) {
+    isEditBranchBtnClicked ? updateBranch() : createBranch();
+  };
+
+  const createBranch = async () => {
+    const { id, organizations, ...data } = branch;
+    const response = await BranchService.create(data, Number(currentUserID));
+    toastMessage(response);
+  };
+
+  const updateBranch = async () => {
+    const { id, organizations, ...data } = branch;
+    const payload = { id: id, data: data };
+    const response = await BranchService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
+
+  const toastMessage = (response: AxiosResponse) => {
+    if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(BranchSlice.setIsAddBranchBtnClicked(false));
       dispatch(clearBranch());
+      iziToast.success({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
+    }
+    if (response?.status === STATUS_CODE.STATUS_409) {
+      iziToast.info({
+        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        message: response?.data?.info
+      });
     }
   };
 
   const handleCheckCondition = () => {
-    dispatch(BranchSlice.setIsAddBranchBtnClicked(false))
-    dispatch(clearBranch())
-    dispatch(BranchSlice.setIsEditBranchBtnClicked(false))
-  }
+    dispatch(BranchSlice.setIsAddBranchBtnClicked(false));
+    dispatch(clearBranch());
+    dispatch(BranchSlice.setIsEditBranchBtnClicked(false));
+  };
 
-  const checkCurrentOption = (options: any, value: any) => {
+  const checkCurrentOption = (options: ISelectOption[], value: any) => {
     if (isEditBranchBtnClicked) {
-      return options.filter((option: any) => option.id === value)[0]
+      return options.filter((option: any) => option.id === value)[0];
     } else {
-      return options[0]
+      console.log('____', options);
+      if (options.length) {
+        console.log('____>>>>>>>', options[0].label);
+      }
+      return options[0];
     }
-  }
-
-  useEffect(() => {
-    
-  }, [isOrgOptionLoading, organizationOptions, branch])
+  };
 
   return (
     <>
       <div className='form-section'>
         <TopPanel panelType='breadcrumb'>
-          <img
-            src={backButton}
-            alt='Back'
-            onClick={handleCheckCondition}
-          />
+          <img src={backButton} alt='Back' onClick={handleCheckCondition} />
           <div>{isEditBranchBtnClicked ? 'Update' : 'Create'}</div>
         </TopPanel>
 
@@ -98,18 +132,17 @@ const AddBranch: FC = () => {
             options={organizationOptions}
             isLoading={isOrgOptionLoading}
             onSelect={handleOnSelect}
+            isDisabled={isEditBranchBtnClicked}
           />
         </div>
         <div className='form-submit'>
-          <Button
-            type='ghost'
-            label='Cancel'
-            onClick={handleCheckCondition}
-          />
+          <Button type='ghost' label='Cancel' onClick={handleCheckCondition} />
           <Button
             type='primary'
             label={isEditBranchBtnClicked ? 'Update' : 'Create'}
-            disabled={!branch.branch_name || !branch.branch_code || !branch.org_id}
+            disabled={
+              !branch.branch_name || !branch.branch_code || !branch.org_id
+            }
             onClick={handleOnSubmit}
           />
         </div>

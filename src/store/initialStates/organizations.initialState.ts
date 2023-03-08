@@ -10,15 +10,13 @@ const organization = {
   org_address: ''
 }
 
-const orgOption = {
-  id: null,
-  label: ''
-}
 const isOptionLoading = true;
 
 const initialState = {
   isAddOrgBtnClicked: false,
   isEditOrgBtnClicked: false,
+  isDeleteOrg: false,
+  isStatus: false,
   organization: organization,
   organizationsData: [],
   // orgSelectedRow: {},

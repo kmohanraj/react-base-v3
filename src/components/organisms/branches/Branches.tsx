@@ -2,7 +2,7 @@ import { FC, lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import AddBranch from './AddBranch';
-const BranchTable = lazy(() => import('./BranchTable'))
+const BranchTable = lazy(() => import('./BranchTable'));
 
 const Branches: FC = () => {
   const { isAddBranchBtnClicked } = useSelector(

@@ -1,5 +1,8 @@
 
 const customer = {
+  id: null,
+  organizations: {},
+  branches: {},
   customer_code: '',
   org_id: null,
   branch_id: null,
@@ -17,8 +20,9 @@ const customer = {
 }
 
 const initialState = {
-  isAddCustomerBtnClicked: false,
-  isEditCustomerBtnClicked: false,
+  isAddCustomer: false,
+  isEditCustomer: false,
+  isDeleteCustomer: false,
   customer: customer,
   customersData: [],
   customerOptions: [],

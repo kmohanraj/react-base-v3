@@ -34,23 +34,33 @@ const Select: FC<SelectProps> = ({
   isSearchable,
   isDisabled,
   isLoading,
-  isClearable,
+  isClearable
 }) => {
   const initialState = isMulti ? ([] as any) : ({} as any);
   const [searchValue, setSearchValue] = useState('');
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState( value ? value : initialState);
+  const [selectedValue, setSelectedValue] = useState(
+    value ? value : initialState
+  );
   const inputRef = useRef<HTMLInputElement>(null);
-  const selectClass = cx('select_control',{ 'is-focused': isMenuOpen },{ 'is-disabled': isDisabled });
-  const selectValueClass = cx('select__values',{ 'is-multi': isMulti },{ 'is-single': !isMulti });
+  const selectClass = cx(
+    'select_control',
+    { 'is-focused': isMenuOpen },
+    { 'is-disabled': isDisabled }
+  );
+  const selectValueClass = cx(
+    'select__values',
+    { 'is-multi': isMulti },
+    { 'is-single': !isMulti }
+  );
   const hasValueClass = cx(
     {
       'is-focus':
         isMenuOpen &&
         searchValue.length === 0 &&
-        Object.keys(selectedValue).length === 0,
+        Object.keys(selectedValue).length === 0
     },
     { 'has-value': Object.keys(selectedValue).length || searchValue }
   );
@@ -60,6 +70,12 @@ const Select: FC<SelectProps> = ({
     setSearchValue(e.target.value);
     setIsMenuOpen(true);
   };
+
+  useEffect(() => {
+    if (value) {
+      setSelectedValue(value);
+    }
+  }, [value]);
 
   useEffect(() => {
     const handler = (e: any) => {
@@ -210,17 +226,18 @@ const Select: FC<SelectProps> = ({
                 <EllipsisLoader color='dark' />
               </span>
             )}
-            {(isClearable && (selectedValue.length > 0 ||
-              Object.keys(selectedValue).length > 0)) && (
-              <img
-                src={Icons.close}
-                alt=''
-                className='clear-all'
-                onClick={() =>
-                  !isDisabled && setSelectedValue(isMulti ? [] : '')
-                }
-              />
-            )}
+            {isClearable &&
+              (selectedValue.length > 0 ||
+                Object.keys(selectedValue).length > 0) && (
+                <img
+                  src={Icons.close}
+                  alt=''
+                  className='clear-all'
+                  onClick={() =>
+                    !isDisabled && setSelectedValue(isMulti ? [] : '')
+                  }
+                />
+              )}
             <img
               className={suffixIConClass}
               src={Icons.arrowDown}

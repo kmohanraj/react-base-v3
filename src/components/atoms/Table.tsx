@@ -2,13 +2,16 @@ import React, { FC, useState } from 'react';
 import 'styles/table.scss';
 import * as Icons from 'constants/icons';
 import ErrorPage from 'components/atoms/ErrorPage';
+import moment from 'moment';
 
 type TableType = {
   tableName: string;
   columns: {
     title: string;
-    dataProperty: any
-    selector?: any
+    dataProperty: any;
+    selector?: any;
+    isDate?: any;
+    isTime?: any;
   }[];
   data: any[];
   action?: string[];
@@ -29,8 +32,6 @@ const Table: FC<TableType> = ({
   onChangeStatus
 }) => {
   const [selected, setSelected] = useState<number>();
-  // const [deleteItem, setDeleteItem] = useState<number>()
-  // const dispatch = useDispatch()
 
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
     setSelected(selectedId);
@@ -38,34 +39,29 @@ const Table: FC<TableType> = ({
   };
   const handleOnRemove = (data: any) => {
     onRemove(data);
-    // setDeleteItem(id)
-    // dispatch(setIsModalShow(true));
   };
 
-  // const handleOnCloseModal = () => {
-  //   console.log('SSSS---close-modal',)
-  //   dispatch(setIsModalShow(false));
-  // }
-
   const handleOnManageCustomer = (selectedRow: any) => {
-    onManageCustomer && onManageCustomer(selectedRow)
-  }
+    onManageCustomer && onManageCustomer(selectedRow);
+  };
 
   if (data.length === 0) {
-    return <ErrorPage />
+    return <ErrorPage />;
   }
 
-  const manageData = (filterColumn: any, selector: string) => {
-    if (typeof filterColumn === 'string') {
-      return filterColumn ?? '-'
+  const manageData = (filterColumn: any, selector: string, isDate: boolean, isTime: boolean) => {
+    if(isDate) {
+      return moment(filterColumn).utcOffset(330).format( isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY')
+    } else if (typeof filterColumn === 'string') {
+      return filterColumn ?? '';
     } else if (filterColumn !== null && typeof filterColumn === 'object') {
-      return filterColumn[selector]
+      return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
-      return filterColumn  === true ? 'Active' : 'In-Active'
+      return filterColumn === true ? <span className='active'>Active</span> : <span className='in-active'>In-Active</span>;
     } else {
-      return '-'
+      return '';
     }
-  }
+  };
 
   return (
     <>
@@ -84,16 +80,19 @@ const Table: FC<TableType> = ({
             <tr key={j}>
               {columns.map((col, k) => (
                 <>
-                  <td key={k} onClick={() => 
-                    onChangeStatus && onChangeStatus(col.dataProperty, d)
-                  }>
+                  <td
+                    key={k}
+                    onClick={() =>
+                      onChangeStatus && onChangeStatus(col.dataProperty, d)
+                    }
+                  >
                     <>
-                    {/* <span className='action-btn'>
+                      {/* <span className='action-btn'>
                       <span className='edit-col edit' onClick={() => handleOnSelectRow()}><img src={editIcon} alt="" /></span>
                       <span className='edit-col delete' onClick={() => handleOnRemoveRow()}><img src={deleteIcon} alt="" /></span>
                     </span> */}
-                    { manageData(d[col.dataProperty], col.selector)}
-                    {/* {d[col.dataProperty]} */}
+                      {manageData(d[col.dataProperty], col.selector, col.isDate, col.isTime)}
+                      {/* {d[col.dataProperty]} */}
                     </>
                   </td>
                 </>
@@ -104,17 +103,17 @@ const Table: FC<TableType> = ({
                     <>
                       {ac === 'Edit' && (
                         <span onClick={() => handleOnEdit(d, j)}>
-                        <img src={Icons.edit} alt='Edit' />
-                      </span>
+                          <img src={Icons.edit} alt='Edit' />
+                        </span>
                       )}
                       {ac === 'Delete' && (
                         <span onClick={() => handleOnRemove(d)}>
                           <img src={Icons.deleteIcon} alt='Delete' />
                         </span>
                       )}
-                      {ac === 'AddGroup' && (
+                      {ac === 'Create' && (
                         <span onClick={() => handleOnManageCustomer(d)}>
-                          <img src={Icons.addGroup} alt='Add Customer' />
+                          <img src={Icons.addGroup} alt='Manage Customer' />
                         </span>
                       )}
                     </>
@@ -125,22 +124,6 @@ const Table: FC<TableType> = ({
           ))}
         </tbody>
       </table>
-      {/* <Modal onClose={handleOnCloseModal}>
-        <h1>Delete {deleteItem}</h1>
-        <p>Are you sure you want to delete your {deleteItem}?</p>
-        <div className='form-submit'>
-          <Button
-            type='ghost'
-            label='Cancel'
-            onClick={() => {} }
-          />
-          <Button
-            type='primary'
-            label='Delete'
-            onClick={() => {}}
-          />
-        </div>
-      </Modal> */}
     </>
   );
 };
