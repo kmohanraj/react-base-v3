@@ -72,6 +72,7 @@
   clear: both;
   max-height: 0;
   transition: max-height .2s ease-out;
+  visibility: hidden;
 }
 
 /* menu icon */
@@ -114,6 +115,7 @@
 .menu.show {
   max-height: fit-content;
   display: block;
+  visibility: visible;
 }
 .menu-icon.show .navicon {
   background: transparent;
@@ -142,6 +144,7 @@
       clear: none;
       float: right;
       max-height: none;
+      visibility: visible;
 
       .profile {
         position: relative;

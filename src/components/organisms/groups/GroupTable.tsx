@@ -110,7 +110,7 @@ const GroupTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          { groupsData?.length > 1 ? 'Groups' : 'Group'}
+          { groupsData?.length > 1 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
         </div>
         {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>

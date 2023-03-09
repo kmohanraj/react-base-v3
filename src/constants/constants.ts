@@ -15,7 +15,8 @@ export default {
     AUTH_TOKEN_KEY: 'currentUserAuthToken',
     IS_FIRST_LOGIN: 'isFirstLogin',
     CURRENT_ORG_ID: 'currentOrgId',
-    CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id'
+    CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id',
+    LOGO: 'org_logo'
   },
   STATUS_CODE: {
     STATUS_200: 200,

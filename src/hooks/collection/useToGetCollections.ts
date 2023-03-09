@@ -7,7 +7,7 @@ const useToGetCollections = (
   userId: number,
   manageCustomerId: number
 ): [boolean, (status: boolean) => void] => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [triggerRefresh, setTriggerRefresh] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -17,16 +17,16 @@ const useToGetCollections = (
       .then((response: any) => {
         dispatch(CollectionSlice.setCollectionsData(response?.info));
         setTriggerRefresh(false);
+        setLoading(false);
       })
       .catch((err) => {
         console.log('err', err?.info);
         setLoading(false);
         setTriggerRefresh(false);
       });
-  }, [dispatch, manageCustomerId, triggerRefresh, userId]);
+  }, [dispatch, manageCustomerId, userId, triggerRefresh]);
 
-  const handleRefreshCollection = (status: boolean) =>
-    setTriggerRefresh(status);
+  const handleRefreshCollection = (status: boolean) => setTriggerRefresh(status);
 
   return [loading, handleRefreshCollection];
 };

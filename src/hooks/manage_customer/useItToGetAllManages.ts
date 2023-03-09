@@ -36,7 +36,9 @@ const useItToGetAllManages = (
         setTriggerRefresh(false);
       });
   }, [dispatch, groupId, triggerRefresh, userId]);
+
   const handleRefreshManage = (status: boolean) => setTriggerRefresh(status);
+  
   return [loading, handleRefreshManage];
 };
 

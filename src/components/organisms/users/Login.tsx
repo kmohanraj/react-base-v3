@@ -58,6 +58,10 @@ const Login: FC = () => {
         SESSION_STORAGE.CURRENT_ORG_ID,
         response?.data?.info?.org_id
       );
+      sessionStorage.setItem(
+        SESSION_STORAGE.LOGO,
+        response?.data?.info?.org_logo
+      );
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       response.data?.info.isFirstLogin
         ? null

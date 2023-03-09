@@ -19,7 +19,7 @@ const { STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 const Collection: FC<CollectionProps> = ({ title, onClose }) => {
   const dispatch = useDispatch();
   const currentUserID = sessionStorage.getItem(USER_ID_KEY);
-  const [loading, handleRefreshCollection] = useToGetCollections(
+  const [isCollectionLoading, handleRefreshCollection] = useToGetCollections(
     Number(currentUserID),
     Number(sessionStorage.getItem(CURRENT_MANAGE_CUSTOMER_ID))
   );
@@ -43,11 +43,11 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'collection_amount') {
-      return value.replace(/[^0-9]/g, '')
+      return value.replace(/[^0-9]/g, '');
     } else {
-      return value
+      return value;
     }
-  }
+  };
 
   const handleOnSubmit = async () => {
     const data = {
@@ -89,8 +89,8 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
-      handleOnCloseModal();
       handleRefreshCollection(true)
+      handleOnCloseModal();
     } else {
       iziToast.error({
         title: TOAST_DEFAULTS.INFO_TITLE,
@@ -104,8 +104,6 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
     dispatch(CollectionSlice.setIsAddCollection(false));
     dispatch(CollectionSlice.setIsEditCollection(false));
   };
-
-  useEffect(() => {}, [loading, collection]);
 
   return (
     <>
@@ -122,7 +120,7 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
             required
             value={collection.collection_amount}
             onChange={handleOnChange}
-            message="Ex, 1000"
+            message='Ex, 1000'
           />
           <Input
             inputId='description'

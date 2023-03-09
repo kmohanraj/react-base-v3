@@ -95,8 +95,7 @@ const AddCustomer = () => {
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
-    }
-    if (response?.status === STATUS_CODE.STATUS_409) {
+    } else {
       iziToast.info({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info

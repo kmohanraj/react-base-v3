@@ -27,6 +27,7 @@ const columns = [
   { title: 'Updated By', dataProperty: 'updated_by' },
 ]
 const { ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+
 const CollectionDetailsTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,17 +35,10 @@ const CollectionDetailsTable = () => {
   const [title, setTitle] = useState<string>('')
   const [actionMode, setActionMode] = useState<string>('')
   const [collectionId, setCollectionId] = useState<number>()
-  const [pageList, setPageList] = useState([])
-  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
-    (state: RootState) => state.collection
-  );
-  const { selected_manage } = useSelector(
-    (state: RootState) => state.manage_customer
-  );
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
-  const [loading] = useToGetCollections(
+  const [isCollectionLoading] = useToGetCollections(
     Number(currentUserID),
     Number(
       sessionStorage.getItem(
@@ -52,6 +46,12 @@ const CollectionDetailsTable = () => {
       )
     )
   );
+  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
+    (state: RootState) => state.collection
+  );
+
+  // const [pageList, setPageList] = useState([])
+
 
   const handleOnCheckCondition = () => {
     dispatch(GroupSlice.setIsCollectionDetail(false));
@@ -81,7 +81,6 @@ const CollectionDetailsTable = () => {
   }
 
   const deleteCollection = async () => {
-    console.log("delete-collection")
     const response = await CollectionService.remove(Number(collectionId), Number(currentUserID))
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
@@ -107,15 +106,15 @@ const CollectionDetailsTable = () => {
     }, 0);
   };
 
-  const pagination = () => {
+  // const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : []);
-  }
+    const pageLists =  collectionsData?.length ? collectionsData.slice(Number(start), end) : []
+  // }
 
   useEffect(() => {
-    pagination()
-  }, [loading, currentPage]);
+    // pagination()
+  }, [isCollectionLoading, currentPage]);
 
   return (
     <>
@@ -143,7 +142,7 @@ const CollectionDetailsTable = () => {
       <Table
         tableName='collection-details-table'
         columns={columns}
-        data={pageList}
+        data={pageLists}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnDelete}

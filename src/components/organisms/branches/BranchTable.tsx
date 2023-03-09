@@ -97,7 +97,7 @@ const BranchTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {branchesData?.length > 1 ? 'Branches' : 'Branch'}
+          {branchesData?.length > 1 ? `${branchesData?.length} Branches` : `${branchesData?.length} Branch`}
         </div>
         <div className='top-panel-buttons'>
           <Button

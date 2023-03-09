@@ -44,6 +44,9 @@ const Header = () => {
   const currentUserRole = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.ROLE_KEY
   );
+  const orgLogo = sessionStorage.getItem(
+    CONSTANTS.SESSION_STORAGE.LOGO
+  );
   const isMenuOpenClass = cx({ show: isToggle });
   const [isProfileShow, setIsProfileShow] = useState(false);
 
@@ -75,7 +78,7 @@ const Header = () => {
   return (
     <header className='header'>
       <Link to='/' className='logo'>
-        {'{}'}
+        { orgLogo ?? '{}'}
       </Link>
       <input
         className={`menu-btn ${isMenuOpenClass}`}

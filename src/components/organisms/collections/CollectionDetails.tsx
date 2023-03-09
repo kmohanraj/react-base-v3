@@ -20,9 +20,7 @@ const CollectionDetails = () => {
   const { collectionsData, isEditCollection, isAddCollection } = useSelector(
     (state: RootState) => state.collection
   );
-  const { selected_manage } = useSelector(
-    (state: RootState) => state.manage_customer
-  );
+
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
@@ -61,7 +59,6 @@ const CollectionDetails = () => {
     }, 0);
   };
 
-  useEffect(() => {}, [loading]);
 
   return (
     <>
@@ -76,7 +73,7 @@ const CollectionDetails = () => {
 
       <TopPanel panelType='top-panel'>
         <span className='top-panel-entity'>
-          Total Collection Amounts {useItToRupees(totalCollection())}
+          Total Collection Amounts { useItToRupees(totalCollection())}
         </span>
         <div className='top-panel-buttons'>
           <Button
