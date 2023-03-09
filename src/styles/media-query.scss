@@ -1,0 +1,29 @@
+
+@media (max-width: 767px) { 
+  .header a {
+    padding: 15.5px 10px;
+  }
+  .top-panel {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .container {
+    height: calc(100vh - 183px);
+  }
+}
+//   }
+//   @if $point == tablet {
+//     @media (max-width: 1022px) { @content; }
+//   }
+//   @if $point == small-desktop {
+//       @media (max-width: 1219px) { @content; }
+//   }
+//   @if $point == desktop {
+//       @media (max-width: 1440px) { @content; }
+//   }
+//   @if $point == desktop-lg {
+//     @media (min-width: 1441px) { @content; }
+// }
+// }

@@ -11,13 +11,15 @@
   .logo {
     display: block;
     font-size: 2em;
-    padding: 2px 20px;
+    // padding: 2px 20px;
+    padding: 16px 20px;
     float: left;
     color: #fff;
   }
   a {
     display: block;
-    padding: 16.5px 10px;
+    // padding: 16.5px 10px;
+    padding: 27.5px 10px;
     text-decoration: none;
     color: #fff;
   }
@@ -73,13 +75,14 @@
   max-height: 0;
   transition: max-height .2s ease-out;
   visibility: hidden;
+  // padding: 11px;
 }
 
 /* menu icon */
 .menu-icon {
   cursor: pointer;
   float: right;
-  padding: 28px 20px;
+  padding: 39px 20px;
   position: relative;
   user-select: none;
 }
