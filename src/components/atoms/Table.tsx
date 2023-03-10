@@ -32,10 +32,10 @@ const Table: FC<TableType> = ({
   onManageCustomer,
   onChangeStatus
 }) => {
-  const [selected, setSelected] = useState<number>();
+  // const [selected, setSelected] = useState<number>();
 
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
-    setSelected(selectedId);
+    // setSelected(selectedId);
     onEdit(selectedRow);
   };
   const handleOnRemove = (data: any) => {
@@ -67,8 +67,8 @@ const Table: FC<TableType> = ({
   };
 
   return (
-    <>
-      <table className={`table ${tableName}`}>
+    <div className='table-wrapper'>
+      <table className={`table ${tableName}`} style={{overflowX: 'auto'}}>
         <thead>
           <tr>
             {columns.map((col, i) => (
@@ -127,7 +127,7 @@ const Table: FC<TableType> = ({
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
 

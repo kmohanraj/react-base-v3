@@ -92,13 +92,8 @@ const AddBranch: FC = () => {
   const checkCurrentOption = (options: ISelectOption[], value: any) => {
     if (isEditBranchBtnClicked) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      console.log('____', options);
-      if (options.length) {
-        console.log('____>>>>>>>', options[0].label);
-      }
-      return options[0];
     }
+    return options;
   };
 
   return (

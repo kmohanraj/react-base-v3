@@ -15,10 +15,9 @@ const initialState = {
   isAddManageCustomer: false,
   isEditManageCustomer: false,
   isDeleteManageCustomer: false,
-  // isCollectionDetail: false,
   manageCustomer: manageCustomer,
   selected_manage: manageCustomer,
   manageCustomers: []
 };
 
-export { initialState };
+export { initialState, manageCustomer };

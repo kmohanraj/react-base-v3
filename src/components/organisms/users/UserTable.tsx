@@ -40,8 +40,6 @@ const UserTable = () => {
   const [title, setTitle] = useState<string>('')
   const [status, setStatus] = useState<boolean>(false)
   const [userId, setUserId] = useState<number>()
-  const [pageStart, setPageStart] = useState<number>()
-  const [pageEnd, setPageEnd] = useState<number>()
   const [pageList, setPageList] = useState([])
 
 
@@ -79,7 +77,7 @@ const UserTable = () => {
   }
 
   const handleOnChangeStatus = (column: string, selectedItem: any) => {
-    if (column === 'is_active') {
+    if (selectedItem?.id !== Number(currentUserID) && column === 'is_active') {
       dispatch(UserSlice.setIsUserActive(true))
       setSelectedUserId(selectedItem?.id)
       setActionMode(selectedItem?.is_active ? 'In Active' : 'Active');

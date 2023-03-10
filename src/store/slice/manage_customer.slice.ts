@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { initialState } from 'store/initialStates/manage_customer.initialState';
+import { initialState, manageCustomer } from 'store/initialStates/manage_customer.initialState';
 
 export const manageCustomerSlice = createSlice({
   name: 'manageCustomer',
@@ -25,7 +25,7 @@ export const manageCustomerSlice = createSlice({
     },
     clearManageCustomer: (state) => ({
       ...state,
-      manage_customer: initialState.manageCustomer
+      manageCustomer: manageCustomer
     })
   }
 });

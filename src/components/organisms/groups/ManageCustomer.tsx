@@ -56,7 +56,7 @@ const ManageCustomer = () => {
     },
     {
       title: 'Chit Amount:',
-      value: useItToRupees(group.amount)
+      value: <span className='chit-amount'>{useItToRupees(group.amount)}</span>
     },
     {
       title: 'Total Customers:',
@@ -132,6 +132,10 @@ const ManageCustomer = () => {
     }
   };
 
+  const checkCollectionType = (manage: any) => {
+    return collectionTypeOptions && collectionTypeOptions.filter((opt: ISelectOption) => opt.id === manage?.collection_type_id)[0].label
+  }
+
   const checkPrivilege = () => {
     if (Number(currentUserRole) === ROLE.EMPLOYEE_ID) {
       return false;
@@ -195,18 +199,18 @@ const ManageCustomer = () => {
               }}
             >
               <div>
-                Name: <span>{manage.customer_name}</span>
+                Name: <span>{manage?.customer_name}</span>
               </div>
               <div>
-                Code: <span>{manage.customer_code}</span>
+                Code: <span>{manage?.customer_code}</span>
               </div>
               <div>
-                Type: <span>{collectionTypeOptions && collectionTypeOptions.filter((opt: ISelectOption) => opt.id === manage.collection_type_id)[0].label}</span>
+                { manage?.taken_amount && (<span>Withdraw: <span><span className='withdraw-amount'>{ manage?.taken_amount }</span>{' '}({checkCollectionType(manage).charAt(0)})</span></span>)} {!manage?.taken_amount && (<>Type: <span>{checkCollectionType(manage)}</span></>)}
               </div>
             </div>
             <div className='actions'>
-              {manage.taken_position && (
-                <div className='customer-position'>{manage.taken_position}</div>
+              {manage?.taken_position && (
+                <div className='customer-position'>{manage?.taken_position}</div>
               )}
               <button
                 className='add-collection-btn'
@@ -218,7 +222,7 @@ const ManageCustomer = () => {
                 className='add-collection-btn'
                 onClick={() => {
                   dispatch(
-                    CustomerSlice.setCurrentCustomerCode(manage.customer_code)
+                    CustomerSlice.setCurrentCustomerCode(manage?.customer_code)
                   );
                   handleOnAddCollection();
                 }}

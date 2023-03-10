@@ -47,6 +47,7 @@ const GroupTable = () => {
 
   const handleOnEdit = (data: any) => {
     dispatch(GroupSlice.setIsEditGroup(true));
+    dispatch(GroupSlice.setIsAddGroup(true))
     dispatch(GroupSlice.setGroup(data));
     dispatch(GroupSlice.setSelectedGroup(data));
   };

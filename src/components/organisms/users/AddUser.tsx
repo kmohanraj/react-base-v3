@@ -113,9 +113,8 @@ const AddUser = () => {
   const checkCurrentOption = (options: any, value: any) => {
     if (isEditUser) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
   };
 
   return (

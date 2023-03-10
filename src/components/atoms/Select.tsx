@@ -41,9 +41,7 @@ const Select: FC<SelectProps> = ({
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(
-    value ? value : initialState
-  );
+  const [selectedValue, setSelectedValue] = useState(initialState);
   const inputRef = useRef<HTMLInputElement>(null);
   const selectClass = cx(
     'select_control',
@@ -62,7 +60,12 @@ const Select: FC<SelectProps> = ({
         searchValue.length === 0 &&
         Object.keys(selectedValue).length === 0
     },
-    { 'has-value': Object.keys(selectedValue).length || searchValue }
+    {
+      'has-value':
+        Array.isArray(selectedValue) !== true ||
+        searchValue.length > 0 ||
+        isMenuOpen
+    }
   );
   const suffixIConClass = cx('suffix-icon', { 'is-open': isMenuOpen });
 
@@ -93,7 +96,10 @@ const Select: FC<SelectProps> = ({
   const handleOnKeyDown = (e: any) => {
     const keyCode = e.keyCode;
     if (searchValue.length < 1 && keyCode === 8 && !isMulti) {
-      setSelectedValue('');
+      if (Object.keys(selectedValue).length > 0) {
+        setSelectedValue(initialState);
+      }
+      setSearchValue('');
     }
   };
 
@@ -250,8 +256,7 @@ const Select: FC<SelectProps> = ({
       {isMenuOpen && (
         <div className='select__menu'>
           <div className='select__menu-list'>
-            {filterOptions().length === selectedValue.length ||
-            filterOptions().length === 0 ? (
+            {selectedValue.length === 0 || filterOptions().length === 0 ? (
               <div className='no-options'>No Options</div>
             ) : (
               filterOptions()?.map((option: any, index: number) =>

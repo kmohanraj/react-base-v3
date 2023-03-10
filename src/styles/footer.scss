@@ -7,7 +7,9 @@ footer {
   right: 0;
   background: colors.$light-grey;
   .footer-content {
-    padding: 10px 40px;
+    background-color: colors.$charcoal-grey;
+    color: colors.$medium-grey;
+    padding: 20px 40px;
     p {
       font-size: 0.6rem;
     }

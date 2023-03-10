@@ -1,6 +1,25 @@
 @import "./colors";
 @import "./fonts";
 
+
+@mixin breakpoint($point) {
+  @if $point == mobile {
+    @media (max-width: 767px) { @content; }
+  }
+  @if $point == tablet {
+    @media (max-width: 1022px) { @content; }
+  }
+  @if $point == small-desktop {
+      @media (max-width: 1219px) { @content; }
+  }
+  @if $point == desktop {
+      @media (max-width: 1440px) { @content; }
+  }
+  @if $point == desktop-lg {
+    @media (min-width: 1441px) { @content; }
+}
+}
+
 @mixin input-field {
   width: inherit;
   height: 60px;

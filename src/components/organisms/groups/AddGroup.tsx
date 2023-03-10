@@ -144,9 +144,8 @@ const AddGroup: FC = () => {
   const checkCurrentOption = (options: any, value: number) => {
     if (isEditGroup) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
   };
 
   return (
@@ -224,6 +223,7 @@ const AddGroup: FC = () => {
             dateFormat='dd/MM/yyyy'
             className='chit-start-date-field chit-date'
             disabled={!groupData.duration}
+            autoComplete="off"
           />
           <DatePicker
             name='end_date'

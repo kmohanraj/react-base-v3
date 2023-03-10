@@ -129,7 +129,7 @@ const CollectionDetailsTable = () => {
 
       <TopPanel panelType='top-panel'>
         <span className='top-panel-entity'>
-          Total Collection Amounts {useItToRupees(totalCollection())}
+          <span>Total Collection Amounts  <span className='collection-amount'> {useItToRupees(totalCollection())}</span></span>
         </span>
         <div className='top-panel-buttons'>
           <Button

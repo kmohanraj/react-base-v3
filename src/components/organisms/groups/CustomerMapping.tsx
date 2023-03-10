@@ -124,10 +124,9 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
         message: response?.data?.info
       });
       handleRefreshManage(true)
-    }
-    if (response?.status === STATUS_CODE.STATUS_409) {
+    } else {
       iziToast.info({
-        title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
+        title: CONSTANTS.TOAST_DEFAULTS.INFO_TITLE,
         message: response?.data?.info
       });
     }
@@ -141,10 +140,17 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
   const checkCurrentOption = (options: any, value: any) => {
     if (isEditManageCustomer) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
   };
+
+  const checkRequiredFiled = () => {
+    if (isEditManageCustomer) {
+      return !manageCustomer.customer_id || !manageCustomer.collection_type_id || !manageCustomer.taken_position || !manageCustomer.taken_amount
+    } else {
+      return !manageCustomer.customer_id || !manageCustomer.collection_type_id
+    }
+  }
 
   useEffect(() => {}, [isEditManageCustomer, isCustomerLoading]);
 
@@ -169,6 +175,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           onSelect={(value: any) => handleOnSelect(value, 'customer_id')}
           options={customerOptions}
           isLoading={isCustomerLoading}
+          isDisabled={isEditManageCustomer}
         />
         <Select
           inputId='collection_type_id'
@@ -180,6 +187,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           )}
           onSelect={(value: any) => handleOnSelect(value, 'collection_type_id')}
           options={collectionTypeOptions}
+          isDisabled={isEditManageCustomer}
         />
         {isEditManageCustomer && (
           <>
@@ -214,9 +222,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           type='primary'
           label={isEditManageCustomer ? 'Update' : 'Create'}
           onClick={handleOnSubmit}
-          disabled={
-            !manageCustomer.customer_id || !manageCustomer.collection_type_id
-          }
+          disabled={checkRequiredFiled()}
         />
       </div>
     </div>

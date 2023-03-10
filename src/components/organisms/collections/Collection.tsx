@@ -140,6 +140,7 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
           <Button type='ghost' label='Cancel' onClick={handleOnCloseModal} />
           <Button
             type='primary'
+            disabled={!collection.collection_amount}
             label={isEditCollection ? 'Update' : 'Create'}
             onClick={handleOnSubmit}
           />

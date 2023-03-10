@@ -14,6 +14,10 @@
     display: grid;
     align-items: center;
     font-family: fonts.$font-bold;
+
+    .collection-amount {
+      color: colors.$green-light;
+    }
   }
   .top-panel-buttons {
     display: flex;
@@ -31,5 +35,24 @@
   div {
     font-size: 18px;
     font-family: fonts.$font-medium;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .top-panel {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    .top-panel-buttons {
+      display: block;
+      width: 100%;
+
+      .chit-btn {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+    }
   }
 }
