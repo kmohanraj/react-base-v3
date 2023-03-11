@@ -78,7 +78,7 @@ const ManageCustomer = () => {
 
   const handleOnBackBtn = () => {
     dispatch(GroupSlice.setIsManageCustomer(false));
-    dispatch(GroupSlice.clearGroup())
+    dispatch(GroupSlice.clearGroup());
   };
 
   const handleOnCloseModal = () => {
@@ -133,8 +133,13 @@ const ManageCustomer = () => {
   };
 
   const checkCollectionType = (manage: any) => {
-    return collectionTypeOptions && collectionTypeOptions.filter((opt: ISelectOption) => opt.id === manage?.collection_type_id)[0].label
-  }
+    return (
+      collectionTypeOptions &&
+      collectionTypeOptions.filter(
+        (opt: ISelectOption) => opt.id === manage?.collection_type_id
+      )[0].label
+    );
+  };
 
   const checkPrivilege = () => {
     if (Number(currentUserRole) === ROLE.EMPLOYEE_ID) {
@@ -191,10 +196,7 @@ const ManageCustomer = () => {
               className='customer-info'
               onClick={() => {
                 handleOnCollectionDetails(manage.customer_code);
-                sessionStorage.setItem(
-                  CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID,
-                  manage.id
-                );
+                dispatch(ManageCustomerSlice.setCurrentManageCustomerId(manage?.id))
                 dispatch(ManageSlice.setSelectedManage(manage));
               }}
             >
@@ -205,12 +207,29 @@ const ManageCustomer = () => {
                 Code: <span>{manage?.customer_code}</span>
               </div>
               <div>
-                { manage?.taken_amount && (<span>Withdraw: <span><span className='withdraw-amount'>{ manage?.taken_amount }</span>{' '}({checkCollectionType(manage).charAt(0)})</span></span>)} {!manage?.taken_amount && (<>Type: <span>{checkCollectionType(manage)}</span></>)}
+                {manage?.taken_amount && (
+                  <span>
+                    Withdraw:{' '}
+                    <span>
+                      <span className='withdraw-amount'>
+                        {manage?.taken_amount}
+                      </span>{' '}
+                      ({checkCollectionType(manage).charAt(0)})
+                    </span>
+                  </span>
+                )}{' '}
+                {!manage?.taken_amount && (
+                  <>
+                    Type: <span>{checkCollectionType(manage)}</span>
+                  </>
+                )}
               </div>
             </div>
             <div className='actions'>
               {manage?.taken_position && (
-                <div className='customer-position'>{manage?.taken_position}</div>
+                <div className='customer-position'>
+                  {manage?.taken_position}
+                </div>
               )}
               <button
                 className='add-collection-btn'
@@ -224,6 +243,7 @@ const ManageCustomer = () => {
                   dispatch(
                     CustomerSlice.setCurrentCustomerCode(manage?.customer_code)
                   );
+                  dispatch(ManageCustomerSlice.setCurrentManageCustomerId(manage?.id))
                   handleOnAddCollection();
                 }}
               >
@@ -242,7 +262,7 @@ const ManageCustomer = () => {
       <Modal
         show={isEditManageCustomer || isAddManageCustomer}
         onClose={handleOnCloseModal}
-        className="edit-modal"
+        className={isEditManageCustomer ? 'edit-modal' : ''}
       >
         <CustomerMapping currentGroupId={group.id} />
       </Modal>

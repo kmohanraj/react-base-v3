@@ -32,26 +32,22 @@ const CollectionDetailsTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
+  const [pageList, setPageList] = useState([])
   const [title, setTitle] = useState<string>('')
   const [actionMode, setActionMode] = useState<string>('')
   const [collectionId, setCollectionId] = useState<number>()
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
+  const {currentManageCustomerId} = useSelector((state: RootState) => state.manage_customer)
+
   const [isCollectionLoading] = useToGetCollections(
     Number(currentUserID),
-    Number(
-      sessionStorage.getItem(
-        CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID
-      )
-    )
+    Number(currentManageCustomerId)
   );
   const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
     (state: RootState) => state.collection
   );
-
-  // const [pageList, setPageList] = useState([])
-
 
   const handleOnCheckCondition = () => {
     dispatch(GroupSlice.setIsCollectionDetail(false));
@@ -92,6 +88,7 @@ const CollectionDetailsTable = () => {
           collectionsData.filter((ele: any) => ele.id !== collectionId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== collectionId))
       dispatch(CollectionSlice.setIsDeleteCollection(false));
     } else {
       iziToast.info({
@@ -106,14 +103,14 @@ const CollectionDetailsTable = () => {
     }, 0);
   };
 
-  // const pagination = () => {
+  const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    const pageLists =  collectionsData?.length ? collectionsData.slice(Number(start), end) : []
-  // }
+    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : [])
+  }
 
   useEffect(() => {
-    // pagination()
+    pagination()
   }, [isCollectionLoading, currentPage]);
 
   return (
@@ -142,7 +139,7 @@ const CollectionDetailsTable = () => {
       <Table
         tableName='collection-details-table'
         columns={columns}
-        data={pageLists}
+        data={pageList}
         action={[ACTION_BTN.EDIT, ACTION_BTN.DELETE]}
         onEdit={handleOnEdit}
         onRemove={handleOnDelete}

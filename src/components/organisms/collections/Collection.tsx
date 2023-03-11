@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import Input from 'components/atoms/TextField';
 import TopPanel from 'components/molecules/TopPanel';
 import Button from 'components/atoms/Button';
@@ -12,16 +12,16 @@ import { CollectionProps } from 'types/components.types';
 import iziToast from 'izitoast';
 import { AxiosResponse } from 'axios';
 
-const { USER_ID_KEY, CURRENT_MANAGE_CUSTOMER_ID, CURRENT_ORG_ID } =
+const { USER_ID_KEY, CURRENT_ORG_ID } =
   CONSTANTS.SESSION_STORAGE;
 const { STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const Collection: FC<CollectionProps> = ({ title, onClose }) => {
   const dispatch = useDispatch();
-  const currentUserID = sessionStorage.getItem(USER_ID_KEY);
+  const { currentManageCustomerId } = useSelector((state: RootState) => state.manage_customer)
   const [isCollectionLoading, handleRefreshCollection] = useToGetCollections(
-    Number(currentUserID),
-    Number(sessionStorage.getItem(CURRENT_MANAGE_CUSTOMER_ID))
+    Number(sessionStorage.getItem(USER_ID_KEY)),
+    Number(currentManageCustomerId)
   );
   const { currentCustomerCode } = useSelector(
     (state: RootState) => state.customer
@@ -43,7 +43,7 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'collection_amount') {
-      return value.replace(/[^0-9]/g, '');
+      return value.replace(/[^0-9]/g, '').substring(0,8);
     } else {
       return value;
     }
@@ -54,9 +54,7 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
       ...collection,
       group_id: group?.id,
       user_id: Number(sessionStorage.getItem(USER_ID_KEY)),
-      manage_customer_id: Number(
-        sessionStorage.getItem(CURRENT_MANAGE_CUSTOMER_ID)
-      ),
+      manage_customer_id: Number(currentManageCustomerId),
       org_id: Number(sessionStorage.getItem(CURRENT_ORG_ID))
     };
     isEditCollection ? updateCollection(data) : createCollection(data);

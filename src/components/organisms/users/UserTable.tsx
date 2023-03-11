@@ -68,6 +68,7 @@ const UserTable = () => {
           usersData.filter((ele: any) => ele.id !== userId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== userId))
       dispatch(UserSlice.setIsDelete(false));
     } else {
       iziToast.info({

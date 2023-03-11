@@ -17,6 +17,7 @@ const initialState = {
   isDeleteManageCustomer: false,
   manageCustomer: manageCustomer,
   selected_manage: manageCustomer,
+  currentManageCustomerId: null,
   manageCustomers: []
 };
 

@@ -23,6 +23,9 @@ export const manageCustomerSlice = createSlice({
     setIsDeleteManageCustomer: (state, action) => {
       state.isDeleteManageCustomer = action.payload;
     },
+    setCurrentManageCustomerId: (state, action) => {
+      state.currentManageCustomerId = action.payload
+    },
     clearManageCustomer: (state) => ({
       ...state,
       manageCustomer: manageCustomer
@@ -37,6 +40,7 @@ export const {
   setIsAddManageCustomer,
   setIsEditManageCustomer,
   setIsDeleteManageCustomer,
+  setCurrentManageCustomerId,
   clearManageCustomer
 } = manageCustomerSlice.actions;
 

@@ -56,7 +56,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'taken_amount') {
-      return value.replace(/[^0-9]/g, '')
+      return value.replace(/[^0-9]/g, '').substring(0,8)
     } else if (name === 'taken_position') {
       return value.replace(/[^0-9]/g, '').substring(0,2)
     } else {

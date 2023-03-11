@@ -16,7 +16,7 @@ import { AxiosResponse } from 'axios';
 import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
 
-const { STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+const { STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN, ROLE} = CONSTANTS;
 
 const AddUser = () => {
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
@@ -33,6 +33,8 @@ const AddUser = () => {
   );
   const { roleOptions } = useSelector((state: RootState) => state.roles);
   const { branchOptions } = useSelector((state: RootState) => state.branch);
+  const [emailErr, setEmailErr] = useState<string>('')
+  const [passwordErr, setPasswordErr] = useState<string>('')
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -47,10 +49,32 @@ const AddUser = () => {
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
       return value.replace(/[^0-9]/g, '').substring(0, 10);
+    } else if(name === 'email') {
+      return emailValidation(value)
+    } else if(name === 'password') {
+      return passwordValidation(value)
     } else {
       return value;
     }
   };
+
+  const emailValidation = (value: string) => {
+    setEmailErr('')
+    if(value.length > 0 && !EMAIL_PATTERN.test(value)) {
+      setEmailErr(ERROR.USER.EMAIL_VALIDATION)
+      return value;
+    }
+    return value;
+  }
+
+  const passwordValidation = (value: string) => {
+    setPasswordErr('')
+    if(value.length > 0 && !PASSWORD_PATTERN.test(value)) {
+      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION)
+      return value;
+    }
+    return value;
+  }
 
   const handleOnSelect = (value: any, name: string) => {
     dispatch(
@@ -129,6 +153,13 @@ const AddUser = () => {
     }))
   }
 
+  const checkCurrentUser = () => {
+    if (Number(currentUserID) === ROLE.SUPER_ID) {
+      return true;
+    }
+    return user.branch_id !== null;
+  }
+
   return (
     <>
       <div className='form-section'>
@@ -150,6 +181,7 @@ const AddUser = () => {
             onChange={handleOnChange}
             placeholder='Enter Email'
             required
+            error={emailErr}
           />
           {/* <Input
             inputId='confirm_email'
@@ -164,8 +196,7 @@ const AddUser = () => {
             onChange={handleOnChange}
             placeholder='Enter Password'
             required
-            message='Ex, Password@123'
-            error=''
+            error={passwordErr}
             inputType={isPasswordShow ? 'text' : 'password'}
             sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
             suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
@@ -225,7 +256,9 @@ const AddUser = () => {
               !user.phone ||
               !user.role_id ||
               !user.org_id ||
-              !user.branch_id
+              !checkCurrentUser() ||
+              emailErr || 
+              passwordErr
             }
           />
         </div>

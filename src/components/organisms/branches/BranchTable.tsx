@@ -70,6 +70,7 @@ const BranchTable = () => {
           branchesData.filter((ele: any) => ele.id !== branchId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== branchId))
       dispatch(BranchSlice.setIsDeleteBranchBtnClicked(false));
     } else {
       iziToast.info({

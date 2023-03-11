@@ -71,6 +71,7 @@ const GroupTable = () => {
           groupsData.filter((ele: any) => ele.id !== groupId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== groupId))
       dispatch(GroupSlice.setIsDeleteGroup(false));
     } else {
       iziToast.info({

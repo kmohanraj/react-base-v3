@@ -64,6 +64,7 @@ const OrganizationTable = () => {
           organizationsData.filter((ele: any) => ele.id !== currentOrgId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== currentOrgId))
       dispatch(OrgSlice.setIsDeleteOrg(false));
     } else {
       iziToast.info({
