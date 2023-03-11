@@ -20,7 +20,6 @@ const useToGetCollections = (
         setLoading(false);
       })
       .catch((err) => {
-        console.log('err', err?.info);
         setLoading(false);
         setTriggerRefresh(false);
       });

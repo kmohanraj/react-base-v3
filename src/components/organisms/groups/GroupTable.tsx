@@ -22,7 +22,7 @@ const columns = [
   { title: 'Chit Amount', dataProperty: 'amount' },
   { title: 'Customers', dataProperty: 'total_members' },
   { title: 'Duration', dataProperty: 'duration', options: durationOptions },
-  { title: 'Is Started', dataProperty: 'is_started', isDate: true },
+  // { title: 'Is Started', dataProperty: 'is_started', isDate: true },
   { title: 'Start Date', dataProperty: 'start_date', isDate: true },
   { title: 'End Date', dataProperty: 'end_date', isDate: true },
   { title: 'Active ', dataProperty: 'is_active' },

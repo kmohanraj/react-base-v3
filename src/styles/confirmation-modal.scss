@@ -1,8 +1,16 @@
+@use './global-mixin' as g;
+
 .modal-action {
-  margin: 40px;
+  margin: 2.5rem;
   display: flex;
   justify-content: space-evenly;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 1.25rem;
+
+  @include g.breakpoint(mobile) {
+    .chit-btn {
+      width: 100%;
+    }
+  }
 }

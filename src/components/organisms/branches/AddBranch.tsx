@@ -96,6 +96,12 @@ const AddBranch: FC = () => {
     return options;
   };
 
+  const handleOneClear = (field: any) => {
+    dispatch(BranchSlice.setBranch({
+      ...branch, [field]: null
+    }))
+  }
+
   return (
     <>
       <div className='form-section'>
@@ -129,6 +135,7 @@ const AddBranch: FC = () => {
             isLoading={isOrgOptionLoading}
             onSelect={handleOnSelect}
             isDisabled={isEditBranchBtnClicked}
+            onClear={handleOneClear}
           />
         </div>
         <div className='form-submit'>

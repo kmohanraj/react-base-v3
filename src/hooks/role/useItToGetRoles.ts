@@ -22,7 +22,6 @@ const useItToGetRoles = (userId: number): [boolean] => {
       })
       .catch((response: any) => {
         setLoading(false);
-        console.log('response', response.info);
       });
   }, []);
   return [loading];

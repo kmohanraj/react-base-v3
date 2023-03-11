@@ -19,11 +19,9 @@ import * as Icon from 'constants/icons';
 const { STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const AddUser = () => {
-  const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false)
+  const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { user, isEditUser } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, isEditUser } = useSelector((state: RootState) => state.user);
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
@@ -48,11 +46,11 @@ const AddUser = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
-      return value.replace(/[^0-9]/g, '').substring(0,10)
+      return value.replace(/[^0-9]/g, '').substring(0, 10);
     } else {
-      return value
+      return value;
     }
-  }
+  };
 
   const handleOnSelect = (value: any, name: string) => {
     dispatch(
@@ -68,8 +66,8 @@ const AddUser = () => {
     if (Number(currentUserID) !== CONSTANTS.ROLE.SUPER_ID) {
       filterData.branch_id = branch_id;
     }
-   
-    isEditUser ?  updateUser(filterData) : registerUser(filterData)
+
+    isEditUser ? updateUser(filterData) : registerUser(filterData);
   };
 
   const registerUser = async (filterData: any) => {
@@ -77,19 +75,27 @@ const AddUser = () => {
       filterData,
       Number(currentUserID)
     );
-    toastMessage(response)
-  }
+    toastMessage(response);
+  };
 
   const updateUser = async (filterData: any) => {
-    const { id, roles, organizations, branches,is_active, access_token, ...filter} = filterData;
-    const payload = { id: id, data: filter }
-    const response = await UserService.update(payload, Number(currentUserID))
-    toastMessage(response)
-  }
+    const {
+      id,
+      roles,
+      organizations,
+      branches,
+      is_active,
+      access_token,
+      ...filter
+    } = filterData;
+    const payload = { id: id, data: filter };
+    const response = await UserService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
   const toastMessage = (response: AxiosResponse) => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(UserSlice.setIsAddUser(false));
-      dispatch(UserSlice.setIsEditUser(false))
+      dispatch(UserSlice.setIsEditUser(false));
       dispatch(UserSlice.clearUser());
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
@@ -116,6 +122,12 @@ const AddUser = () => {
     }
     return options;
   };
+
+  const handleOneClear = (field: any) => {
+    dispatch(UserSlice.setUser({
+      ...user, [field]: null
+    }))
+  }
 
   return (
     <>
@@ -155,8 +167,8 @@ const AddUser = () => {
             message='Ex, Password@123'
             error=''
             inputType={isPasswordShow ? 'text' : 'password'}
-            sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword } 
-            suffixOnClick={() =>  setIsPasswordShow(!isPasswordShow)}
+            sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
+            suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
           />
           <Input
             inputId='phone'
@@ -173,9 +185,8 @@ const AddUser = () => {
             options={roleOptions}
             isLoading={isRoleOptionLoading}
             onSelect={(value) => handleOnSelect(value, 'role_id')}
-            isDisabled={
-              isEditUser && user.role_id === CONSTANTS.ROLE.ORG_ID
-            }
+            isDisabled={isEditUser && user.role_id === CONSTANTS.ROLE.ORG_ID}
+            onClear={handleOneClear}
           />
           <Select
             inputId='org_id'
@@ -186,6 +197,7 @@ const AddUser = () => {
             isLoading={isOrgOptionLoading}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
             isDisabled={isEditUser}
+            onClear={handleOneClear}
           />
           {currentUserID !== '1' && (
             <Select
@@ -196,6 +208,7 @@ const AddUser = () => {
               options={branchOptions}
               isLoading={isBranchOptionLoading}
               onSelect={(value) => handleOnSelect(value, 'branch_id')}
+              onClear={handleOneClear}
             />
           )}
         </div>
@@ -205,6 +218,15 @@ const AddUser = () => {
             type='primary'
             label={isEditUser ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
+            disabled={
+              !user.name ||
+              !user.email ||
+              !user.password ||
+              !user.phone ||
+              !user.role_id ||
+              !user.org_id ||
+              !user.branch_id
+            }
           />
         </div>
       </div>

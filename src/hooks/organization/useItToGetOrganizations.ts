@@ -31,7 +31,6 @@ const useItToGetOrganizations = (userId: number): [boolean, (status: boolean) =>
         setIsTriggerRefresh(false)
       })
       .then((err: any) => {
-        console.log(err);
         setLoading(false);
         setIsTriggerRefresh(false)
       });

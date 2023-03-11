@@ -30,7 +30,6 @@ const useItToGetCustomers = (userId: number): [boolean] => {
         setLoading(false);
       })
       .then((err: any) => {
-        // console.log(err);
         setLoading(false);
       });
   }, [dispatch, userId]);

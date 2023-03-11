@@ -6,7 +6,7 @@
     @include input-field();
     cursor: pointer;
     outline: none;
-    background: white url(../../src/assets/images/calendar.svg) no-repeat scroll 98% 18px;
+    background: white url(../../src/assets/images/calendar.svg) no-repeat scroll 98% 1.125rem;
   }
 }
 
@@ -17,11 +17,11 @@
 }
 
 .react-datepicker {
-  border: 1px solid colors.$charcoal-grey;
+  border: 0.0625rem solid colors.$charcoal-grey;
 }
 
 .react-datepicker-popper[data-placement^=top] .react-datepicker__triangle::before, .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::before, .react-datepicker-popper[data-placement^=top] .react-datepicker__triangle::after, .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
-  left: -15px;
+  left: -0.9375rem;
 }
 
 .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::before, .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {

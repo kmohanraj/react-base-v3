@@ -3,10 +3,10 @@
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
+  gap: 1.25rem;
 
   .card {
-    border: 1px solid red;
+    border: 0.0625rem solid red;
   }
 }

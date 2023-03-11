@@ -15,9 +15,9 @@
 .table tr:hover .edit-col {
   display: block;
   right: 0;
-  border-radius: 5px;
-  padding: 0px 10px;
-  font-size: 10px;
+  border-radius: 0.3125rem;
+  padding: 0rem 10px;
+  font-size: 0.625rem;
 }
 
 .table-wrapper {
@@ -26,7 +26,7 @@
   .table {
     font-family: fonts.$font-regular;
     color: colors.$stone-grey;
-    border: 1px solid colors.$cool-grey;
+    border: 0.0625rem solid colors.$cool-grey;
     width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
@@ -59,9 +59,9 @@
     th,
     td {
       text-align-last: left;
-      padding-left: 10px;
-      border: 1px solid colors.$cool-grey;
-      height: 35px;
+      padding-left: 0.625rem;
+      border: 0.0625rem solid colors.$cool-grey;
+      height: 2.1875rem;
       color: colors.$stone-grey;
       line-height: 1.71;
     }
@@ -69,13 +69,13 @@
     td {
       position: relative;
       color: colors.$carbon;
-      letter-spacing: -0.55px;
+      letter-spacing: -0.0344rem;
       font-family: fonts.$font-regular;
     }
 
     th {
       font-family: fonts.$font-bold;
-      letter-spacing: -0.48px;
+      letter-spacing: -0.03rem;
     }
     th,
     tr {
@@ -108,7 +108,7 @@
       text-align: center;
       text-align-last: auto;
       span {
-        padding: 6px;
+        padding: 0.375rem;
         display: inline-block;
         vertical-align: middle;
         img {

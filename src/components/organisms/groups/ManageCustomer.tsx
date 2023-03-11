@@ -242,6 +242,7 @@ const ManageCustomer = () => {
       <Modal
         show={isEditManageCustomer || isAddManageCustomer}
         onClose={handleOnCloseModal}
+        className="edit-modal"
       >
         <CustomerMapping currentGroupId={group.id} />
       </Modal>

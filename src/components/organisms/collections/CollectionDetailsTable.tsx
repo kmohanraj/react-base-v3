@@ -165,33 +165,6 @@ const CollectionDetailsTable = () => {
         }}
         onClick={deleteCollection}
       />
-      {/* <section className='collection-details'>
-        {collectionsData.map((collection: any, index: any) => (
-          <section className='collection-details__item' key={index}>
-            <div>
-              <div>
-                Amount: <span>{collection.collection_amount}</span>
-              </div>
-              <div>
-                Date:{' '}
-                <span>
-                  {moment(collection.collection_date).format(
-                    'DD/MM/YYYY, h:mm a'
-                  )}
-                </span>
-              </div>
-            </div>
-            <div>
-              <button
-                className='collection-details__btn'
-                onClick={() => handleOnEdit(collection)}
-              >
-                <img src={Icons.edit} alt='Edit' />
-              </button>
-            </div>
-          </section>
-        ))}
-      </section> */}
       <Modal
         show={isAddCollection || isEditCollection}
         onClose={handleOnCloseModal}

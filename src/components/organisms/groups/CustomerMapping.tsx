@@ -152,6 +152,12 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
     }
   }
 
+  const handleOneClear = (field: any) => {
+    dispatch(ManageCustomerSlice.setManageCustomer({
+      ...manageCustomer, [field]: null
+    }))
+  }
+
   useEffect(() => {}, [isEditManageCustomer, isCustomerLoading]);
 
   return (
@@ -176,6 +182,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           options={customerOptions}
           isLoading={isCustomerLoading}
           isDisabled={isEditManageCustomer}
+          onClear={handleOneClear}
         />
         <Select
           inputId='collection_type_id'
@@ -188,6 +195,7 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
           onSelect={(value: any) => handleOnSelect(value, 'collection_type_id')}
           options={collectionTypeOptions}
           isDisabled={isEditManageCustomer}
+          onClear={handleOneClear}
         />
         {isEditManageCustomer && (
           <>

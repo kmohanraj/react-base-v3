@@ -52,6 +52,7 @@ const UserTable = () => {
   const handleOnRemove = (data: any) => {
     setUserId(data?.id)
     dispatch(UserSlice.setIsDelete(true))
+    setTitle(data?.email)
     setActionMode('Delete')
   };
 

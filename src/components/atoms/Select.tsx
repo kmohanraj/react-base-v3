@@ -21,6 +21,7 @@ type SelectProps = {
   isDisabled?: boolean;
   isLoading?: boolean;
   isClearable?: boolean;
+  onClear?: (field: any) => void;
 };
 
 const Select: FC<SelectProps> = ({
@@ -34,9 +35,10 @@ const Select: FC<SelectProps> = ({
   isSearchable,
   isDisabled,
   isLoading,
-  isClearable
+  isClearable,
+  onClear
 }) => {
-  const initialState = isMulti ? ([] as any) : ({} as any);
+  const initialState = isMulti ? ([] as any) : ({ id: null, label: '' } as any);
   const [searchValue, setSearchValue] = useState('');
   const selectRef = useRef<HTMLDivElement>(null);
   const removeRef = useRef<HTMLDivElement>(null);
@@ -62,7 +64,8 @@ const Select: FC<SelectProps> = ({
     },
     {
       'has-value':
-        Array.isArray(selectedValue) !== true ||
+        (Array.isArray(selectedValue) !== true && selectedValue?.id !== null) ||
+        searchValue.length !== 0 ||
         searchValue.length > 0 ||
         isMenuOpen
     }
@@ -98,6 +101,7 @@ const Select: FC<SelectProps> = ({
     if (searchValue.length < 1 && keyCode === 8 && !isMulti) {
       if (Object.keys(selectedValue).length > 0) {
         setSelectedValue(initialState);
+        onClear?.(inputId);
       }
       setSearchValue('');
     }
