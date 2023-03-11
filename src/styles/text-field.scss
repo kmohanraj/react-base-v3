@@ -4,42 +4,45 @@
 .chit-text-field {
   display: inline-block;
   width: 100%;
-  padding-bottom: 15px;
+  // padding-bottom: 0.9375rem;
+  // padding-bottom: 2.9375rem;
 
   &__input-wrapper {
     position: relative;
     display: inline-block;
-    letter-spacing: -0.7px;
+    letter-spacing: -0.0437rem;
     width: inherit;
 
     input {
       width: inherit;
-      height: 60px;
-      border: 1px solid $dark-grey;
-      border-radius: 4px;
-      font-size: 18px;
+      height: 3.75rem;
+      // border: 0.0625rem solid $medium-grey;
+      border: 0.0625rem solid #d9dee3;
+      border-radius: 0.25rem;
+      font-size: 1.125rem;
       color: $slate-grey;
       font-family: $font-regular;
-      // text-indent: 15px;
-      padding: 15px 15px 0 15px;
+      // text-indent: 0.9375rem;
+      padding: 0.9375rem 15px 0 15px;
       box-sizing: border-box;
 
       &.has-prefix {
-        // text-indent: 50px;
-        // padding-left: 36px;
-        padding-left: 50px;
+        // text-indent: 3.125rem;
+        // padding-left: 2.25rem;
+        padding-left: 3.125rem;
       }
       &.has-suffix {
-        padding-right: 50px;
+        padding-right: 3.125rem;
       }
 
       &:focus {
         outline: none;
+        border: 0.0625rem solid $charcoal-grey;
         &+label {
-          top: 5px;
+          top: 0.3125rem;
           transform: none;
           font-size: 0.75rem;
-          letter-spacing: -0.35px;
+          letter-spacing: -0.0219rem;
         }
       }
 
@@ -50,27 +53,27 @@
 
     label {
       position: absolute;
-      left: 15px;
+      left: 0.9375rem;
       top: 50%;
       transform: translateY(-50%);
       font-family: $font-regular;
-      color: $dark-grey;
+      color: $medium-grey;
       font-size: 1.125rem;
       transition: all 0.2s ease-out;
       cursor: inherit;
-      letter-spacing: -0.7px;
+      letter-spacing: -0.0437rem;
 
       &.has-value {
-        top: 5px;
+        top: 0.3125rem;
         transform: none !important;
         -webkit-transform: none !important;
-        letter-spacing: -0.35px;
+        letter-spacing: -0.0219rem;
         transform: scale(0.66);
         font-size: 0.75rem;
       }
 
       &.has-prefix {
-        left: 50px;
+        left: 3.125rem;
       }
 
       &.error {
@@ -80,12 +83,12 @@
   }
 
   & .message {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: $dark-grey;
     font-family: $font-regular;
     display: block;
-    margin-top: 5px;
-    letter-spacing: -.65px;
+    margin-top: 0.3125rem;
+    letter-spacing: -0.0406rem;
 
     &.error {
       color: $danger;
@@ -95,21 +98,21 @@
 
   & .prefix-icon {
     position: absolute;
-    left: 15px;
+    left: 0.9375rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
     object-fit: contain;
   }
 
   & .suffix-icon {
     position: absolute;
-    right: 15px;
+    right: 0.9375rem;
     top: 50%;
     transform: translateY(-50%);
-    width: 18px;
-    height: 18px;
+    width: 1.125rem;
+    height: 1.125rem;
     object-fit: contain;
   }
 }

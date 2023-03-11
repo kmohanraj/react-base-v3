@@ -15,7 +15,8 @@ export default {
     AUTH_TOKEN_KEY: 'currentUserAuthToken',
     IS_FIRST_LOGIN: 'isFirstLogin',
     CURRENT_ORG_ID: 'currentOrgId',
-    CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id'
+    CURRENT_MANAGE_CUSTOMER_ID: 'current_manage_customer_id',
+    LOGO: 'org_logo'
   },
   STATUS_CODE: {
     STATUS_200: 200,
@@ -43,5 +44,13 @@ export default {
     DISPLAY_MODE: 1,
     INFO_TITLE: 'Info',
     SUCCESS_TITLE: 'Success',
-  }
+  },
+  EMAIL_PATTERN: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+  PASSWORD_PATTERN: /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).{12,}$/m,
+  ERROR: {
+    USER: {
+      EMAIL_VALIDATION: 'Please enter valid email address',
+      PASSWORD_VALIDATION: 'Password Must be more than 12 characters and contain an uppercase, lowercase letter with a number and special character'
+    }
+  } 
 }

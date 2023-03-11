@@ -23,6 +23,10 @@
     .value {
       color: $slate-grey;
     }
+    .chit-amount {
+      color: $green-light;
+      font-family: $font-bold;
+    }
   }
 }
 
@@ -40,6 +44,11 @@
 
     .customer-info {
       cursor: pointer;
+
+      .withdraw-amount {
+        color: $green-light;
+        font-family: $font-bold;
+      }
     }
     .actions {
       display: grid;
@@ -48,6 +57,7 @@
     &:hover {
       transform: scale(1.025);
       transition: all 0.2s ease;
+      background-color: $light-grey2
     }
   }
 
@@ -62,10 +72,10 @@
     padding: 0.4rem;
     width: 0.875rem;
     font-weight: 500;
-    background-color: red;
+    background-color: $green-light;
     border-radius: 10% 30% 50% 70%;
     color: $light-grey;
-    opacity: 0.5;
+    // opacity: 0.5;
     z-index: -1;
     // backdrop-filter: blur(8px) brightness(80%);
 

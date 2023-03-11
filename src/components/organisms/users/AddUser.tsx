@@ -16,14 +16,12 @@ import { AxiosResponse } from 'axios';
 import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
 
-const { STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+const { STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN, ROLE} = CONSTANTS;
 
 const AddUser = () => {
-  const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false)
+  const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { user, isEditUser } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { user, isEditUser } = useSelector((state: RootState) => state.user);
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
@@ -35,6 +33,8 @@ const AddUser = () => {
   );
   const { roleOptions } = useSelector((state: RootState) => state.roles);
   const { branchOptions } = useSelector((state: RootState) => state.branch);
+  const [emailErr, setEmailErr] = useState<string>('')
+  const [passwordErr, setPasswordErr] = useState<string>('')
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,10 +48,32 @@ const AddUser = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
-      return value.replace(/[^0-9]/g, '').substring(0,10)
+      return value.replace(/[^0-9]/g, '').substring(0, 10);
+    } else if(name === 'email') {
+      return emailValidation(value)
+    } else if(name === 'password') {
+      return passwordValidation(value)
     } else {
-      return value
+      return value;
     }
+  };
+
+  const emailValidation = (value: string) => {
+    setEmailErr('')
+    if(value.length > 0 && !EMAIL_PATTERN.test(value)) {
+      setEmailErr(ERROR.USER.EMAIL_VALIDATION)
+      return value;
+    }
+    return value;
+  }
+
+  const passwordValidation = (value: string) => {
+    setPasswordErr('')
+    if(value.length > 0 && !PASSWORD_PATTERN.test(value)) {
+      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION)
+      return value;
+    }
+    return value;
   }
 
   const handleOnSelect = (value: any, name: string) => {
@@ -68,8 +90,8 @@ const AddUser = () => {
     if (Number(currentUserID) !== CONSTANTS.ROLE.SUPER_ID) {
       filterData.branch_id = branch_id;
     }
-   
-    isEditUser ?  updateUser(filterData) : registerUser(filterData)
+
+    isEditUser ? updateUser(filterData) : registerUser(filterData);
   };
 
   const registerUser = async (filterData: any) => {
@@ -77,19 +99,27 @@ const AddUser = () => {
       filterData,
       Number(currentUserID)
     );
-    toastMessage(response)
-  }
+    toastMessage(response);
+  };
 
   const updateUser = async (filterData: any) => {
-    const { id, roles, organizations, branches,is_active, access_token, ...filter} = filterData;
-    const payload = { id: id, data: filter }
-    const response = await UserService.update(payload, Number(currentUserID))
-    toastMessage(response)
-  }
+    const {
+      id,
+      roles,
+      organizations,
+      branches,
+      is_active,
+      access_token,
+      ...filter
+    } = filterData;
+    const payload = { id: id, data: filter };
+    const response = await UserService.update(payload, Number(currentUserID));
+    toastMessage(response);
+  };
   const toastMessage = (response: AxiosResponse) => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(UserSlice.setIsAddUser(false));
-      dispatch(UserSlice.setIsEditUser(false))
+      dispatch(UserSlice.setIsEditUser(false));
       dispatch(UserSlice.clearUser());
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
@@ -113,10 +143,22 @@ const AddUser = () => {
   const checkCurrentOption = (options: any, value: any) => {
     if (isEditUser) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
   };
+
+  const handleOneClear = (field: any) => {
+    dispatch(UserSlice.setUser({
+      ...user, [field]: null
+    }))
+  }
+
+  const checkCurrentUser = () => {
+    if (Number(currentUserID) === ROLE.SUPER_ID) {
+      return true;
+    }
+    return user.branch_id !== null;
+  }
 
   return (
     <>
@@ -139,6 +181,7 @@ const AddUser = () => {
             onChange={handleOnChange}
             placeholder='Enter Email'
             required
+            error={emailErr}
           />
           {/* <Input
             inputId='confirm_email'
@@ -153,11 +196,10 @@ const AddUser = () => {
             onChange={handleOnChange}
             placeholder='Enter Password'
             required
-            message='Ex, Password@123'
-            error=''
+            error={passwordErr}
             inputType={isPasswordShow ? 'text' : 'password'}
-            sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword } 
-            suffixOnClick={() =>  setIsPasswordShow(!isPasswordShow)}
+            sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
+            suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
           />
           <Input
             inputId='phone'
@@ -174,9 +216,8 @@ const AddUser = () => {
             options={roleOptions}
             isLoading={isRoleOptionLoading}
             onSelect={(value) => handleOnSelect(value, 'role_id')}
-            isDisabled={
-              isEditUser && user.role_id === CONSTANTS.ROLE.ORG_ID
-            }
+            isDisabled={isEditUser && user.role_id === CONSTANTS.ROLE.ORG_ID}
+            onClear={handleOneClear}
           />
           <Select
             inputId='org_id'
@@ -187,6 +228,7 @@ const AddUser = () => {
             isLoading={isOrgOptionLoading}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
             isDisabled={isEditUser}
+            onClear={handleOneClear}
           />
           {currentUserID !== '1' && (
             <Select
@@ -197,6 +239,7 @@ const AddUser = () => {
               options={branchOptions}
               isLoading={isBranchOptionLoading}
               onSelect={(value) => handleOnSelect(value, 'branch_id')}
+              onClear={handleOneClear}
             />
           )}
         </div>
@@ -206,6 +249,17 @@ const AddUser = () => {
             type='primary'
             label={isEditUser ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
+            disabled={
+              !user.name ||
+              !user.email ||
+              !user.password ||
+              !user.phone ||
+              !user.role_id ||
+              !user.org_id ||
+              !checkCurrentUser() ||
+              emailErr || 
+              passwordErr
+            }
           />
         </div>
       </div>

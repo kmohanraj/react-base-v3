@@ -31,12 +31,13 @@ const useItToGetAllManages = (
         setLoading(false);
       })
       .catch((err: any) => {
-        console.log(err);
         setLoading(false);
         setTriggerRefresh(false);
       });
   }, [dispatch, groupId, triggerRefresh, userId]);
+
   const handleRefreshManage = (status: boolean) => setTriggerRefresh(status);
+
   return [loading, handleRefreshManage];
 };
 

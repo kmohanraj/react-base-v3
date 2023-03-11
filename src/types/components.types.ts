@@ -9,6 +9,7 @@ export type ModalType = {
   children: React.ReactNode;
   onClose: () => void;
   show: boolean;
+  className?: string;
 };
 
 export type OrganizationType = {

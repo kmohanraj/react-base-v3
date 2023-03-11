@@ -1,4 +1,5 @@
 @use 'colors';
+@use './global-mixin' as g;
 
 .chit-modal {
   width: 100vw;
@@ -14,6 +15,7 @@
   pointer-events: none;
   transition: 0.5s;
   z-index: 13;
+  overflow: auto;
 
   .close-btn {
     float: right;
@@ -27,13 +29,19 @@
 }
 
 .chit-modal-content {
-  padding: 40px 30px 40px 40px;
-  border: 0.5px solid colors.$cool-grey;
+  padding: 2.5rem 1.875rem 2.5rem 1.875rem;
+  border: 0.0313rem solid colors.$cool-grey;
   background-color: white;
   height: fit-content;
-  width: 600px;
+  width: 37.5rem;
   overflow: auto;
   transition: 0.4s all;
+}
+
+.chit-modal.edit-modal .chit-modal-content {
+  @include g.breakpoint(mobile) {
+    padding: 10.5rem 1.875rem 1.5rem 1.875rem;
+  }
 }
 
 .chit-modal_content.active {

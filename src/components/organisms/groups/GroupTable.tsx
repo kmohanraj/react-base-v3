@@ -22,7 +22,7 @@ const columns = [
   { title: 'Chit Amount', dataProperty: 'amount' },
   { title: 'Customers', dataProperty: 'total_members' },
   { title: 'Duration', dataProperty: 'duration', options: durationOptions },
-  { title: 'Is Started', dataProperty: 'is_started', isDate: true },
+  // { title: 'Is Started', dataProperty: 'is_started', isDate: true },
   { title: 'Start Date', dataProperty: 'start_date', isDate: true },
   { title: 'End Date', dataProperty: 'end_date', isDate: true },
   { title: 'Active ', dataProperty: 'is_active' },
@@ -47,6 +47,7 @@ const GroupTable = () => {
 
   const handleOnEdit = (data: any) => {
     dispatch(GroupSlice.setIsEditGroup(true));
+    dispatch(GroupSlice.setIsAddGroup(true))
     dispatch(GroupSlice.setGroup(data));
     dispatch(GroupSlice.setSelectedGroup(data));
   };
@@ -70,6 +71,7 @@ const GroupTable = () => {
           groupsData.filter((ele: any) => ele.id !== groupId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== groupId))
       dispatch(GroupSlice.setIsDeleteGroup(false));
     } else {
       iziToast.info({
@@ -110,7 +112,7 @@ const GroupTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          { groupsData?.length > 1 ? 'Groups' : 'Group'}
+          { groupsData?.length > 1 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
         </div>
         {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>

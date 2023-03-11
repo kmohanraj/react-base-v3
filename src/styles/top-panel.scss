@@ -1,10 +1,11 @@
 @use 'fonts';
 @use 'colors';
+@use './global-mixin' as g;
 
 @mixin panel-style($position) {
   display: flex;
   justify-content: $position;
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 .top-panel {
@@ -14,22 +15,45 @@
     display: grid;
     align-items: center;
     font-family: fonts.$font-bold;
+
+    .collection-amount {
+      color: colors.$green-light;
+    }
   }
   .top-panel-buttons {
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
   }
 }
 
 .breadcrumb {
   @include panel-style(start);
-  gap: 20px;
+  gap: 1.25rem;
 
   img {
     cursor: pointer;
   }
   div {
-    font-size: 18px;
+    font-size: 1.125rem;
     font-family: fonts.$font-medium;
+  }
+}
+
+@include g.breakpoint(mobile) {
+  .top-panel {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+
+    .top-panel-buttons {
+      display: block;
+      width: 100%;
+
+      .chit-btn {
+        width: 100%;
+        margin-bottom: 1.25rem;
+      }
+    }
   }
 }

@@ -78,6 +78,7 @@ const CustomerTable = () => {
           customersData.filter((ele: any) => ele.id !== customerId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== customerId))
       dispatch(CustomerSlice.setIsDeleteCustomerBtnClicked(false));
     } else {
       iziToast.info({

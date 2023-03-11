@@ -17,7 +17,6 @@ import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import { genderOptions, idProofOptions } from 'constants/options';
 
-
 const { STATUS_CODE } = CONSTANTS;
 
 const AddCustomer = () => {
@@ -46,18 +45,22 @@ const AddCustomer = () => {
   };
 
   const checkInputType = (name: string, value: string) => {
-    if(name === 'customer_code') {
-      return value.replace(/[^0-9A-Z]/g, '')
-    } else if (name === 'phone' || name === 'alter_phone' || name === 'nominee_phone') {
-      return value.replace(/[^0-9]{1,10}/g, '').substring(0,10)
+    if (name === 'customer_code') {
+      return value.replace(/[^0-9A-Z]/g, '');
+    } else if (
+      name === 'phone' ||
+      name === 'alter_phone' ||
+      name === 'nominee_phone'
+    ) {
+      return value.replace(/[^0-9]{1,10}/g, '').substring(0, 10);
     } else if (name === 'pincode') {
-      return value.replace(/[^0-9]/g, '').substring(0,6)
+      return value.replace(/[^0-9]/g, '').substring(0, 6);
     } else if (name === 'age') {
-      return value.replace(/[^0-9]/g, '').substring(0,2)
+      return value.replace(/[^0-9]/g, '').substring(0, 2);
     } else {
-      return value
+      return value;
     }
-  }
+  };
 
   const handleOnSelect = (value: ISelectOption, fieldName: string) => {
     dispatch(
@@ -95,8 +98,7 @@ const AddCustomer = () => {
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
       });
-    }
-    if (response?.status === STATUS_CODE.STATUS_409) {
+    } else {
       iziToast.info({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
@@ -113,9 +115,17 @@ const AddCustomer = () => {
   const checkCurrentOption = (options: any, value: any) => {
     if (isEditCustomer) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
+  };
+
+  const handleOneClear = (field: any) => {
+    dispatch(
+      CustomerSlice.setCustomer({
+        ...customer,
+        [field]: null
+      })
+    );
   };
 
   useEffect(() => {}, [isOrgLoading, organizationOptions]);
@@ -143,6 +153,7 @@ const AddCustomer = () => {
             isLoading={isOrgLoading}
             value={checkCurrentOption(organizationOptions, customer.org_id)}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
+            onClear={handleOneClear}
           />
           <Select
             inputId='branch_id'
@@ -152,6 +163,7 @@ const AddCustomer = () => {
             isLoading={isBranchLoading}
             value={checkCurrentOption(branchOptions, customer.branch_id)}
             onSelect={(value) => handleOnSelect(value, 'branch_id')}
+            onClear={handleOneClear}
           />
           <Input
             inputId='customer_name'
@@ -174,6 +186,7 @@ const AddCustomer = () => {
             options={genderOptions}
             value={checkCurrentOption(genderOptions, customer.gender)}
             onSelect={(value) => handleOnSelect(value, 'gender')}
+            onClear={handleOneClear}
           />
           <Input
             inputId='phone'
@@ -224,6 +237,7 @@ const AddCustomer = () => {
             options={idProofOptions}
             value={checkCurrentOption(idProofOptions, customer.id_proof)}
             onSelect={(value) => handleOnSelect(value, 'id_proof')}
+            onClear={handleOneClear}
           />
           <Input
             inputId='locality'
@@ -239,6 +253,22 @@ const AddCustomer = () => {
             type='primary'
             label={isEditCustomer ? 'Update' : 'Create'}
             onClick={handleOnSubmit}
+            disabled={
+              !customer.customer_code ||
+              !customer.org_id ||
+              !customer.branch_id ||
+              !customer.customer_name ||
+              !customer.age ||
+              !customer.gender ||
+              !customer.phone ||
+              !customer.alter_phone ||
+              !customer.address ||
+              !customer.pincode ||
+              !customer.nominee_name ||
+              !customer.nominee_phone ||
+              !customer.id_proof ||
+              !customer.locality
+            }
           />
         </div>
       </div>

@@ -27,30 +27,26 @@ const columns = [
   { title: 'Updated By', dataProperty: 'updated_by' },
 ]
 const { ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+
 const CollectionDetailsTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
+  const [pageList, setPageList] = useState([])
   const [title, setTitle] = useState<string>('')
   const [actionMode, setActionMode] = useState<string>('')
   const [collectionId, setCollectionId] = useState<number>()
-  const [pageList, setPageList] = useState([])
-  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
-    (state: RootState) => state.collection
-  );
-  const { selected_manage } = useSelector(
-    (state: RootState) => state.manage_customer
-  );
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
-  const [loading] = useToGetCollections(
+  const {currentManageCustomerId} = useSelector((state: RootState) => state.manage_customer)
+
+  const [isCollectionLoading] = useToGetCollections(
     Number(currentUserID),
-    Number(
-      sessionStorage.getItem(
-        CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID
-      )
-    )
+    Number(currentManageCustomerId)
+  );
+  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
+    (state: RootState) => state.collection
   );
 
   const handleOnCheckCondition = () => {
@@ -81,7 +77,6 @@ const CollectionDetailsTable = () => {
   }
 
   const deleteCollection = async () => {
-    console.log("delete-collection")
     const response = await CollectionService.remove(Number(collectionId), Number(currentUserID))
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
@@ -93,6 +88,7 @@ const CollectionDetailsTable = () => {
           collectionsData.filter((ele: any) => ele.id !== collectionId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== collectionId))
       dispatch(CollectionSlice.setIsDeleteCollection(false));
     } else {
       iziToast.info({
@@ -110,12 +106,12 @@ const CollectionDetailsTable = () => {
   const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : []);
+    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : [])
   }
 
   useEffect(() => {
     pagination()
-  }, [loading, currentPage]);
+  }, [isCollectionLoading, currentPage]);
 
   return (
     <>
@@ -130,7 +126,7 @@ const CollectionDetailsTable = () => {
 
       <TopPanel panelType='top-panel'>
         <span className='top-panel-entity'>
-          Total Collection Amounts {useItToRupees(totalCollection())}
+          <span>Total Collection Amounts  <span className='collection-amount'> {useItToRupees(totalCollection())}</span></span>
         </span>
         <div className='top-panel-buttons'>
           <Button
@@ -166,33 +162,6 @@ const CollectionDetailsTable = () => {
         }}
         onClick={deleteCollection}
       />
-      {/* <section className='collection-details'>
-        {collectionsData.map((collection: any, index: any) => (
-          <section className='collection-details__item' key={index}>
-            <div>
-              <div>
-                Amount: <span>{collection.collection_amount}</span>
-              </div>
-              <div>
-                Date:{' '}
-                <span>
-                  {moment(collection.collection_date).format(
-                    'DD/MM/YYYY, h:mm a'
-                  )}
-                </span>
-              </div>
-            </div>
-            <div>
-              <button
-                className='collection-details__btn'
-                onClick={() => handleOnEdit(collection)}
-              >
-                <img src={Icons.edit} alt='Edit' />
-              </button>
-            </div>
-          </section>
-        ))}
-      </section> */}
       <Modal
         show={isAddCollection || isEditCollection}
         onClose={handleOnCloseModal}

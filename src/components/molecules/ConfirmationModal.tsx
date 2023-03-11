@@ -9,6 +9,7 @@ type ConfirmationType = {
   onClose: () => void;
   onClick: () => void;
   show?: boolean;
+  className?: string;
 };
 
 const ConfirmationModal: FC<ConfirmationType> = ({
@@ -16,12 +17,13 @@ const ConfirmationModal: FC<ConfirmationType> = ({
   actionMode,
   onClose,
   onClick,
-  show
+  show,
+  className,
 }) => {
   return (
     <>
       {show && (
-        <Modal show={show} onClose={onClose}>
+        <Modal show={show} onClose={onClose} className={className}>
           <h3>
             Are you sure you want to {actionMode.toLowerCase()} the{' '}
             <b>{name}</b>?

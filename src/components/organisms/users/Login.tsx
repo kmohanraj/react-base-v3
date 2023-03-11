@@ -9,8 +9,8 @@ import userService from 'service/user.service';
 import CONSTANTS from 'constants/constants';
 import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
-
-const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
+import cx from 'classnames';
+const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN } = CONSTANTS;
 
 const Login: FC = () => {
   const { login } = useSelector((state: RootState) => state.user);
@@ -18,15 +18,55 @@ const Login: FC = () => {
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const [isNewPasswordShow, setIsNewPasswordShow] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const [emailErr, setEmailErr] = useState<string>('')
+  const [passwordErr, setPasswordErr] = useState<string>('')
+  const [isEmailErr, setIsEmailErr] = useState<boolean>(false)
+  const [isPassErr, setIsPassErr] = useState<boolean>(false)
+  const isFirstClass = cx('login-form', { 'is-first': isFirst})
+
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(
       setLogin({
         ...login,
-        [name]: value
+        [name]: checkInputType(name, value)
       })
     );
   };
+
+  const checkInputType = (name: string, value: string) => {
+    if (name === 'phone') {
+      return value.replace(/[^0-9]/g, '').substring(0, 10);
+    } else if(name === 'email') {
+      return emailValidation(value)
+    } else if(name === 'password') {
+      return passwordValidation(value)
+    } else {
+      return value;
+    }
+  };
+
+  const emailValidation = (value: string) => {
+    setEmailErr('')
+    setIsEmailErr(false)
+    if(value.length > 0 && !EMAIL_PATTERN.test(value)) {
+      setEmailErr(ERROR.USER.EMAIL_VALIDATION)
+      setIsEmailErr(true)
+      return value;
+    }
+    return value;
+  }
+
+  const passwordValidation = (value: string) => {
+    setPasswordErr('')
+    setIsPassErr(false)
+    if(value.length > 0 && !PASSWORD_PATTERN.test(value)) {
+      setIsPassErr(true)
+      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION)
+      return value;
+    }
+    return value;
+  }
   // const isFirstLogin = sessionStorage.getItem(
   //   CONSTANTS.SESSION_STORAGE.IS_FIRST_LOGIN
   // );
@@ -57,6 +97,10 @@ const Login: FC = () => {
       sessionStorage.setItem(
         SESSION_STORAGE.CURRENT_ORG_ID,
         response?.data?.info?.org_id
+      );
+      sessionStorage.setItem(
+        SESSION_STORAGE.LOGO,
+        response?.data?.info?.org_logo
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       response.data?.info.isFirstLogin
@@ -102,7 +146,7 @@ const Login: FC = () => {
 
   return (
     <div className='login-container'>
-      <div className='login-form'>
+      <div className={isFirstClass}>
         <h1>Sign In</h1>
         <div className='wrapper'>
           <Input
@@ -112,7 +156,8 @@ const Login: FC = () => {
             placeholder='Enter Email'
             required
             isDisabled={isFirst}
-            message='Eg: example@gmail.com'
+            error={emailErr}
+            // message='Eg: example@gmail.com'
           />
           <Input
             inputType={isPasswordShow ? 'text' : 'password'}
@@ -121,7 +166,8 @@ const Login: FC = () => {
             onChange={handleOnChange}
             placeholder={isFirst ? 'Old Password' : 'Enter Password'}
             required
-            message='Eg: Password@123'
+            error={passwordErr}
+            // message='Eg: Password@123'
             sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
             suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
           />
@@ -135,7 +181,8 @@ const Login: FC = () => {
               onChange={handleOnChange}
               placeholder='Enter New Password'
               required
-              message='Eg: Password@123'
+              error={passwordErr}
+              // message='Eg: Password@123'
               sufFixIcon={
                 isNewPasswordShow ? Icon.showPassword : Icon.hidePassword
               }
@@ -148,6 +195,7 @@ const Login: FC = () => {
             type='primary'
             label='Login'
             onClick={isFirst ? handleOnResetPassword : handleOnSubmit}
+            disabled={!login.email || !login.password || isEmailErr || isPassErr}
           />
         </div>
       </div>

@@ -20,19 +20,11 @@ const CollectionDetails = () => {
   const { collectionsData, isEditCollection, isAddCollection } = useSelector(
     (state: RootState) => state.collection
   );
-  const { selected_manage } = useSelector(
-    (state: RootState) => state.manage_customer
-  );
-  const currentUserID = sessionStorage.getItem(
-    CONSTANTS.SESSION_STORAGE.USER_ID_KEY
-  );
+  const {currentManageCustomerId} = useSelector((state: RootState) => state.manage_customer)
+
   const [loading] = useToGetCollections(
-    Number(currentUserID),
-    Number(
-      sessionStorage.getItem(
-        CONSTANTS.SESSION_STORAGE.CURRENT_MANAGE_CUSTOMER_ID
-      )
-    )
+    Number(sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)),
+    Number(currentManageCustomerId)
   );
 
   const handleOnCheckCondition = () => {
@@ -60,8 +52,6 @@ const CollectionDetails = () => {
       return acc + Number(ele.collection_amount);
     }, 0);
   };
-
-  useEffect(() => {}, [loading]);
 
   return (
     <>

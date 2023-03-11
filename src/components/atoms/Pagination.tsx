@@ -75,7 +75,7 @@ const Pagination: FC<PaginationProps> = ({
     // <nav className={`page-${direction}`}>
     <>
       {totalPageRecords > perPage && (
-        <nav className='page-right'>
+        <nav className='page-position'>
           {/* <section>
             <li>Show Items:
               <select onChange={ (e) => onChangeRecordsPerPage(e)}>

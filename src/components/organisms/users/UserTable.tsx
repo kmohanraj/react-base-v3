@@ -40,8 +40,6 @@ const UserTable = () => {
   const [title, setTitle] = useState<string>('')
   const [status, setStatus] = useState<boolean>(false)
   const [userId, setUserId] = useState<number>()
-  const [pageStart, setPageStart] = useState<number>()
-  const [pageEnd, setPageEnd] = useState<number>()
   const [pageList, setPageList] = useState([])
 
 
@@ -54,6 +52,7 @@ const UserTable = () => {
   const handleOnRemove = (data: any) => {
     setUserId(data?.id)
     dispatch(UserSlice.setIsDelete(true))
+    setTitle(data?.email)
     setActionMode('Delete')
   };
 
@@ -69,6 +68,7 @@ const UserTable = () => {
           usersData.filter((ele: any) => ele.id !== userId)
         )
       );
+      setPageList(pageList.filter((ele: any) => ele.id !== userId))
       dispatch(UserSlice.setIsDelete(false));
     } else {
       iziToast.info({
@@ -79,7 +79,7 @@ const UserTable = () => {
   }
 
   const handleOnChangeStatus = (column: string, selectedItem: any) => {
-    if (column === 'is_active') {
+    if (selectedItem?.id !== Number(currentUserID) && column === 'is_active') {
       dispatch(UserSlice.setIsUserActive(true))
       setSelectedUserId(selectedItem?.id)
       setActionMode(selectedItem?.is_active ? 'In Active' : 'Active');

@@ -1,29 +1,48 @@
 @import "./colors";
 @import "./fonts";
 
+
+@mixin breakpoint($point) {
+  @if $point == mobile {
+    @media (max-width: 47.9375rem) { @content; }
+  }
+  @if $point == tablet {
+    @media (max-width: 63.875rem) { @content; }
+  }
+  @if $point == small-desktop {
+      @media (max-width: 76.1875rem) { @content; }
+  }
+  @if $point == desktop {
+      @media (max-width: 90rem) { @content; }
+  }
+  @if $point == desktop-lg {
+    @media (min-width: 90.0625rem) { @content; }
+}
+}
+
 @mixin input-field {
   width: inherit;
-  height: 60px;
-  border: 1px solid $dark-grey;
-  border-radius: 4px;
-  font-size: 18px;
+  height: 3.75rem;
+  border: 0.0625rem solid $dark-grey;
+  border-radius: 0.25rem;
+  font-size: 1.125rem;
   color: $slate-grey;
   font-family: $font-regular;
-  // text-indent: 15px;
-  padding: 15px 15px 0 15px;
+  // text-indent: 0.9375rem;
+  padding: 0.9375rem 0.9375rem 0 0.9375rem;
   box-sizing: border-box;
 }
 
 @mixin grid-auto-fit {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));;
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));;
+  gap: 1.25rem;
 }
 
 @mixin chit-box-shadow {
-  border-radius: 5px;
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  border-radius: 0.3125rem;
+  padding: 0.625rem;
+  box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.2);
 }
 
 @mixin custom-btn {
@@ -32,7 +51,7 @@
   font-size: 1.125rem;
   cursor: pointer;
   font-family: "HelveticaNowTextRegular";
-  letter-spacing: -0.35px;
+  letter-spacing: -0.0219rem;
   transition: all 0.2s ease;
   background: transparent;
 

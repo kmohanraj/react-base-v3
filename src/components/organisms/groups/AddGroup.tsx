@@ -144,11 +144,17 @@ const AddGroup: FC = () => {
   const checkCurrentOption = (options: any, value: number) => {
     if (isEditGroup) {
       return options.filter((option: any) => option.id === value)[0];
-    } else {
-      return options[0];
     }
+    return options;
   };
 
+  const handleOneClear = (field: any) => {
+    dispatch(GroupSlice.setGroup({
+      ...group, [field]: null
+    }))
+  }
+
+  console.log("GROUP", group)
   return (
     <>
       <div className='form-section'>
@@ -193,6 +199,7 @@ const AddGroup: FC = () => {
             value={checkCurrentOption(durationOptions, groupData.duration)}
             options={durationOptions}
             onSelect={(value) => handleOnSelect(value, 'duration')}
+            onClear={handleOneClear}
           />
           <Select
             inputId='org_id'
@@ -202,6 +209,7 @@ const AddGroup: FC = () => {
             value={checkCurrentOption(organizationOptions, groupData.org_id)}
             onSelect={(value) => handleOnSelect(value, 'org_id')}
             isLoading={isOrgLoading}
+            onClear={handleOneClear}
           />
           <Select
             inputId='branch_id'
@@ -211,6 +219,7 @@ const AddGroup: FC = () => {
             value={checkCurrentOption(branchOptions, groupData.branch_id)}
             onSelect={(value) => handleOnSelect(value, 'branch_id')}
             isLoading={isBranchLoading}
+            onClear={handleOneClear}
           />
           <DatePicker
             name='start_date'
@@ -224,6 +233,7 @@ const AddGroup: FC = () => {
             dateFormat='dd/MM/yyyy'
             className='chit-start-date-field chit-date'
             disabled={!groupData.duration}
+            autoComplete="off"
           />
           <DatePicker
             name='end_date'
@@ -267,6 +277,15 @@ const AddGroup: FC = () => {
             type='primary'
             label={isEditGroup ? 'Update' : 'Create'}
             onClick={() => handleOnSubmit()}
+            disabled={
+              !groupData.group_code ||
+              !groupData.amount ||
+              !groupData.total_members ||
+              !groupData.duration ||
+              !groupData.org_id ||
+              !groupData.branch_id ||
+              !startDate
+            }
           />
         </div>
       </div>
