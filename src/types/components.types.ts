@@ -10,6 +10,7 @@ export type ModalType = {
   onClose: () => void;
   show: boolean;
   className?: string;
+  isCloseIcon?: boolean;
 };
 
 export type OrganizationType = {
