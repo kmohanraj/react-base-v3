@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ErrorPage from 'components/atoms/ErrorPage';
 import { IAppRouteProps } from 'types/routes.types';
@@ -6,6 +6,7 @@ import Header from 'components/atoms/Header';
 import Footer from 'components/atoms/Footer';
 import 'styles/app-routes.scss';
 import CONSTANTS from 'constants/constants';
+import SessionExpired from 'components/molecules/SessionExpired';
 
 const AppRoutes: FC<IAppRouteProps> = (props) => {
   const currentUserId = sessionStorage.getItem(
@@ -14,6 +15,37 @@ const AppRoutes: FC<IAppRouteProps> = (props) => {
   const isFirstLogin = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.IS_FIRST_LOGIN
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [events, setEvents] = useState(['click', 'load', 'scroll'])
+  const [isExpired, setIsExpired]= useState(false)
+
+  const parseJwt = (token: string) => {
+    try {
+      return JSON.parse(atob(token.split('.')[1]))
+    } catch(e) {
+      return null
+    }
+  }
+
+  let resetTime = useCallback(() => {
+    const decodeJwt = parseJwt(String(sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.AUTH_TOKEN_KEY)))
+    if (decodeJwt?.exp * 1000 < Date.now()) {
+      setIsExpired(true)
+    }
+  }, [])
+
+  const handleOnClearSession = () => {
+    setIsExpired(false)
+    sessionStorage.clear();
+    window.location.pathname = '/login';
+  }
+
+  useEffect(() => {
+    events.forEach((event) => {
+      window.addEventListener(event, resetTime)
+    })
+  },[events, resetTime])
+
   return (
     <BrowserRouter>
       <Routes>
@@ -53,6 +85,12 @@ const AppRoutes: FC<IAppRouteProps> = (props) => {
           element={<ErrorPage title='404' message='Page Not found' />}
         />
       </Routes>
+      <SessionExpired
+        show={isExpired}
+        title={"Your session has timed out. Please log in again"}
+        actionMode={'Login'}
+        onClick={handleOnClearSession}
+      />
     </BrowserRouter>
   );
 };

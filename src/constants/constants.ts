@@ -50,7 +50,7 @@ export default {
   ERROR: {
     USER: {
       EMAIL_VALIDATION: 'Please enter valid email address',
-      PASSWORD_VALIDATION: 'Password Must be more than 12 characters and contain an uppercase, lowercase letter with a number and special character'
+      PASSWORD_VALIDATION: 'Password must be more than 12 characters and contain an uppercase, lowercase letter with a number and special character'
     }
   } 
 }
