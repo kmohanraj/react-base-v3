@@ -46,19 +46,19 @@ const AddCustomer = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'customer_code') {
-      return value.replace(/[^0-9A-Z]/g, '');
+      return value.replace(/[^0-9A-Z]+/g, '');
     } else if (
       name === 'phone' ||
       name === 'alter_phone' ||
       name === 'nominee_phone'
     ) {
-      return value.replace(/[^0-9]{1,10}/g, '').substring(0, 10);
+      return value.replace(/[^0-9]+/g, '').substring(0, 10);
     } else if (name === 'pincode') {
-      return value.replace(/[^0-9]/g, '').substring(0, 6);
+      return value.replace(/[^0-9]+/g, '').substring(0, 6);
     } else if (name === 'age') {
-      return value.replace(/[^0-9]/g, '').substring(0, 2);
+      return value.replace(/[^0-9]+/g, '').substring(0, 2);
     } else {
-      return value;
+      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
   };
 

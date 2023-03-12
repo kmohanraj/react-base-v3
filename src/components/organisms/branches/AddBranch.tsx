@@ -35,7 +35,7 @@ const AddBranch: FC = () => {
     dispatch(
       BranchSlice.setBranch({
         ...branch,
-        [name]: name === 'branch_code' ? value.replace(/[^0-9A-Z]/g, '') : value
+        [name]: name === 'branch_code' ? value.replace(/[^0-9A-Z]+/g, '') : value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')
       })
     );
   };

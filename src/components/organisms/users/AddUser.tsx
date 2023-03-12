@@ -48,13 +48,13 @@ const AddUser = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
-      return value.replace(/[^0-9]/g, '').substring(0, 10);
+      return value.replace(/[^0-9]+/g, '').substring(0, 10);
     } else if(name === 'email') {
       return emailValidation(value)
     } else if(name === 'password') {
       return passwordValidation(value)
     } else {
-      return value;
+      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
   };
 

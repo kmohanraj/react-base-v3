@@ -64,9 +64,9 @@ const AddGroup: FC = () => {
 
   const checkInputType = (name: string, value: string) => {
     if(name === 'group_code') {
-      return value.replace(/[^0-9A-Z]/g, '')
+      return value.replace(/[^0-9A-Z]+/g, '')
     } else if (name === 'amount' || name === 'total_members' || name === 'duration') {
-      return value.replace(/[^0-9]{1,10}/g, '')
+      return value.replace(/[^0-9]+/g, '')
     } else  {
       return value
     }
