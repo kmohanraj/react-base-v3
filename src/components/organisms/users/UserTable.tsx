@@ -132,7 +132,7 @@ const UserTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {useItToPanelTotal(Number(usersData?.length), 'User')}
+          {useItToPanelTotal(Number(usersData?.length ?? 0), 'User')}
         </div>
         <div className='top-panel-buttons'>
           <Button

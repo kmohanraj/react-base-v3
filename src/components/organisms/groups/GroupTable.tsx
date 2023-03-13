@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import Button from 'components/atoms/Button';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
@@ -113,7 +113,7 @@ const GroupTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          { groupsData?.length  === 0 ? 'No Results' : groupsData.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
+          { groupsData?.length  === 0 ? 'No Results' : groupsData?.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
         </div>
         <div className='top-panel-buttons'>
           <Button

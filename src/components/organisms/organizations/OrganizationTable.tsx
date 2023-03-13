@@ -129,7 +129,7 @@ const OrganizationTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {useItToPanelTotal(Number(organizationsData?.length), 'Organization')}
+          {useItToPanelTotal(Number(organizationsData?.length ?? 0), 'Organization')}
         </div>
         <div className='top-panel-buttons'>
           <Button

@@ -99,7 +99,7 @@ const BranchTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {useItToPanelTotal(Number(branchesData?.length), 'Branch')}
+          {useItToPanelTotal(Number(branchesData?.length ?? 0), 'Branch')}
         </div>
         <div className='top-panel-buttons'>
           <Button

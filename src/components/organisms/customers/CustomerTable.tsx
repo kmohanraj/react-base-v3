@@ -114,7 +114,7 @@ const CustomerTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {useItToPanelTotal(Number(customersData?.length), 'Customer')}
+          {useItToPanelTotal(Number(customersData?.length ?? 0), 'Customer')}
         </div>
         <div className='top-panel-buttons'>
           <Button
