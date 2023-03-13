@@ -129,7 +129,7 @@ const UserTable = () => {
   }, [isUsersLoading, currentPage]);
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
           {useItToPanelTotal(Number(usersData?.length ?? 0), 'User')}
@@ -174,7 +174,7 @@ const UserTable = () => {
         }}
         onClick={isDeleteUser ? deleteUser : handleOnStatus}
       />
-    </>
+    </div>
   );
 };
 export default UserTable;

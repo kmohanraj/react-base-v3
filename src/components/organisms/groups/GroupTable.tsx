@@ -110,7 +110,7 @@ const GroupTable = () => {
   }
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
           { groupsData?.length  === 0 ? 'No Results' : groupsData?.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
@@ -154,7 +154,7 @@ const GroupTable = () => {
         }}
         onClick={deleteGroup}
       />
-    </>
+    </div>
   );
 };
 export default GroupTable;

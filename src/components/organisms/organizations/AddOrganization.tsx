@@ -48,7 +48,7 @@ const AddOrganization: FC = () => {
     } else if (name === 'org_email') {
       return emailValidation(value);
     } else if (name === 'org_address') {
-      return value.replace(/[^a-zA-Z0-9\s,.'-]+/g, '').replace(/\s+\s+/g, '');
+      return value.replace(/[^a-zA-Z0-9\s,.'-]+/g, '').replace(/\s+\s+/g, '')?.charAt(0).toUpperCase() + value.slice(1);
     } else {
       return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }

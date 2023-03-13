@@ -131,7 +131,7 @@ const CollectionDetailsTable = () => {
   }, [isCollectionLoading, currentPage]);
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='breadcrumb'>
         <img
           src={Icons.backButton}
@@ -190,7 +190,7 @@ const CollectionDetailsTable = () => {
       >
         <Collection title={isEditCollection ? 'Edit' : 'Add'} />
       </Modal>
-    </>
+    </div>
   );
 };
 

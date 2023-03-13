@@ -45,11 +45,15 @@ export default {
     INFO_TITLE: 'Info',
     SUCCESS_TITLE: 'Success',
   },
+  PINCODE_PATTERN: /^[6]{1}[0-9]{2}\s{0,1}[0-9]{3}$/,
+  PHONE_PATTERN: /^[6-9]\d{9}$/,
   EMAIL_PATTERN: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
   PASSWORD_PATTERN: /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹]).{12,}$/m,
   ERROR: {
     USER: {
-      EMAIL_VALIDATION: 'Please enter valid email address',
+      PINCODE: 'Please enter a valid pincode',
+      PHONE: 'Please enter a valid phone number',
+      EMAIL_VALIDATION: 'Please enter a valid email address',
       PASSWORD_VALIDATION: 'Password must be more than 12 characters and contain an uppercase, lowercase letter with a number and special character'
     }
   } 

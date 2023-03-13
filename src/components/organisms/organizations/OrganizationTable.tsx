@@ -126,7 +126,7 @@ const OrganizationTable = () => {
   }, [loading, currentPage]);
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
           {useItToPanelTotal(Number(organizationsData?.length ?? 0), 'Organization')}
@@ -171,7 +171,7 @@ const OrganizationTable = () => {
         }}
         onClick={isDeleteOrg ? deleteOrg : handleOnStatus}
       />
-    </>
+    </div>
   );
 };
 export default OrganizationTable;

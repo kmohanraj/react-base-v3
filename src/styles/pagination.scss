@@ -19,6 +19,7 @@
 }
 
 .page-position {
+  margin-top: 1.25rem;
   @include setPaginationDirection(right);
   @include g.breakpoint(mobile) {
     justify-content: center

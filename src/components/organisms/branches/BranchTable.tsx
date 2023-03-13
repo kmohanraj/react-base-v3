@@ -96,7 +96,7 @@ const BranchTable = () => {
   }, [loading, currentPage]);
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
           {useItToPanelTotal(Number(branchesData?.length ?? 0), 'Branch')}
@@ -140,7 +140,7 @@ const BranchTable = () => {
         }}
         onClick={deleteBranch}
       />
-    </>
+    </div>
   );
 };
 

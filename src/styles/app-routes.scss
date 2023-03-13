@@ -10,11 +10,14 @@
   right: 0;
   bottom: 2.5rem;
   padding: 1.25rem 40px;
-  height: calc(100vh - 10.9375rem);
+  height: calc(100vh - 11.8375rem);
+
+  .form-section, .container-section,.table-section {
+    margin-bottom: var(--fh);
+  }
 
   @include breakpoint(mobile) {
-    height: calc(100vh - 12.4375rem);
+    // height: calc(100vh - 12.4375rem);
     padding: 1.25rem 1.875rem;
-    // padding: 1.5rem;
   }
 }
