@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { lazy, useState } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import Input from 'components/atoms/TextField';
@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as UserSlice from 'store/slice/users.slice';
 import Button from 'components/atoms/Button';
 import type { RootState } from 'store';
-import Select from 'components/atoms/Select';
 import useItToGetRoles from 'hooks/role/useItToGetRoles';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import CONSTANTS from 'constants/constants';
@@ -15,8 +14,16 @@ import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations'
 import { AxiosResponse } from 'axios';
 import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
+const Select = lazy(() => import('components/atoms/Select'));
 
-const { STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN, ROLE} = CONSTANTS;
+const {
+  STATUS_CODE,
+  TOAST_DEFAULTS,
+  ERROR,
+  EMAIL_PATTERN,
+  PASSWORD_PATTERN,
+  ROLE
+} = CONSTANTS;
 
 const AddUser = () => {
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
@@ -33,8 +40,8 @@ const AddUser = () => {
   );
   const { roleOptions } = useSelector((state: RootState) => state.roles);
   const { branchOptions } = useSelector((state: RootState) => state.branch);
-  const [emailErr, setEmailErr] = useState<string>('')
-  const [passwordErr, setPasswordErr] = useState<string>('')
+  const [emailErr, setEmailErr] = useState<string>('');
+  const [passwordErr, setPasswordErr] = useState<string>('');
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,32 +56,32 @@ const AddUser = () => {
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
       return value.replace(/[^0-9]+/g, '').substring(0, 10);
-    } else if(name === 'email') {
-      return emailValidation(value)
-    } else if(name === 'password') {
-      return passwordValidation(value)
+    } else if (name === 'email') {
+      return emailValidation(value);
+    } else if (name === 'password') {
+      return passwordValidation(value);
     } else {
       return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
   };
 
   const emailValidation = (value: string) => {
-    setEmailErr('')
-    if(value.length > 0 && !EMAIL_PATTERN.test(value)) {
-      setEmailErr(ERROR.USER.EMAIL_VALIDATION)
+    setEmailErr('');
+    if (value.length > 0 && !EMAIL_PATTERN.test(value)) {
+      setEmailErr(ERROR.USER.EMAIL_VALIDATION);
       return value;
     }
     return value;
-  }
+  };
 
   const passwordValidation = (value: string) => {
-    setPasswordErr('')
-    if(value.length > 0 && !PASSWORD_PATTERN.test(value)) {
-      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION)
+    setPasswordErr('');
+    if (value.length > 0 && !PASSWORD_PATTERN.test(value)) {
+      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION);
       return value;
     }
     return value;
-  }
+  };
 
   const handleOnSelect = (value: any, name: string) => {
     dispatch(
@@ -148,17 +155,20 @@ const AddUser = () => {
   };
 
   const handleOneClear = (field: any) => {
-    dispatch(UserSlice.setUser({
-      ...user, [field]: null
-    }))
-  }
+    dispatch(
+      UserSlice.setUser({
+        ...user,
+        [field]: null
+      })
+    );
+  };
 
   const checkCurrentUser = () => {
     if (Number(currentUserID) === ROLE.SUPER_ID) {
       return true;
     }
     return user.branch_id !== null;
-  }
+  };
 
   return (
     <>
@@ -257,7 +267,7 @@ const AddUser = () => {
               !user.role_id ||
               !user.org_id ||
               !checkCurrentUser() ||
-              emailErr || 
+              emailErr ||
               passwordErr
             }
           />

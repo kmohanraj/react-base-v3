@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, useEffect } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as CustomerSlice from 'store/slice/customers.slice';
@@ -6,16 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import Button from 'components/atoms/Button';
 import { RootState } from 'store';
-import Select from 'components/atoms/Select';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import CONSTANTS from 'constants/constants';
 import * as customerService from 'service/customer.service';
 import { AxiosResponse } from 'axios';
-import { clearCustomer } from 'store/slice/customers.slice';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import { genderOptions, idProofOptions } from 'constants/options';
+const Select = lazy(() => import('components/atoms/Select'));
 
 const { STATUS_CODE } = CONSTANTS;
 
@@ -93,7 +92,7 @@ const AddCustomer = () => {
   const toastMessage = (response: AxiosResponse) => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false));
-      dispatch(clearCustomer());
+      dispatch(CustomerSlice.clearCustomer());
       iziToast.success({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info

@@ -18,10 +18,10 @@ const useItToGetOrganizations = (userId: number): [boolean, (status: boolean) =>
       .getAll(userId)
       .then((response: any) => {
         dispatch(setOrganizationsData(response?.info));
-        const data = response?.info.filter(
+        const data = response?.info?.filter(
           (ele: any) => ele.is_active !== false
         );
-        const orgOptions = data.map((ele: any) => ({
+        const orgOptions = data?.map((ele: any) => ({
           id: ele.id,
           label: ele.org_name
         }));

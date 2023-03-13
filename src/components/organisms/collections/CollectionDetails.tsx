@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { lazy } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import * as Icons from 'constants/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,18 +9,20 @@ import 'styles/collection-details.scss';
 import useItToRupees from 'hooks/common/useItToRupees';
 import Button from 'components/atoms/Button';
 import Modal from 'components/atoms/Modal';
-import Collection from './Collection';
 import { RootState } from 'store';
 import useToGetCollections from 'hooks/collection/useToGetCollections';
 import CONSTANTS from 'constants/constants';
 import moment from 'moment';
+const Collection = lazy(() => import('./Collection'));
 
 const CollectionDetails = () => {
   const dispatch = useDispatch();
   const { collectionsData, isEditCollection, isAddCollection } = useSelector(
     (state: RootState) => state.collection
   );
-  const {currentManageCustomerId} = useSelector((state: RootState) => state.manage_customer)
+  const { currentManageCustomerId } = useSelector(
+    (state: RootState) => state.manage_customer
+  );
 
   const [loading] = useToGetCollections(
     Number(sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.USER_ID_KEY)),

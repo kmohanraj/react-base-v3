@@ -18,7 +18,6 @@
   // gap: 1.875rem;
   display: flex;
   flex-direction: column;
- 
   gap: 2.5rem;
 
   .chit-checkbox-set.horizontal {
@@ -33,7 +32,7 @@
   display: flex;
   gap: 1.25rem;
   margin-top: 2.5rem;
-  justify-content: end;
+  justify-content: flex-end;
 
   @include g.breakpoint(mobile) {
     flex-wrap: wrap;

@@ -1,5 +1,4 @@
-import React, { FC, useEffect } from 'react';
-import Select from 'components/atoms/Select';
+import React, { FC, lazy, useEffect } from 'react';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +14,7 @@ import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 import { collectionTypeOptions } from 'constants/options'
+const Select = lazy(() => import('components/atoms/Select'));
 
 
 type CustomerMappingProps = {

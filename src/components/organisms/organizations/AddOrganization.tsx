@@ -11,7 +11,6 @@ import organizationService from 'service/organization.service';
 import CONSTANTS from 'constants/constants';
 import iziToast from 'izitoast';
 import { OrganizationType } from 'types/components.types';
-import e from 'express';
 
 const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS, EMAIL_PATTERN, ERROR } =
   CONSTANTS;

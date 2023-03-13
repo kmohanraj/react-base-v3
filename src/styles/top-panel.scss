@@ -27,7 +27,7 @@
 }
 
 .breadcrumb {
-  @include panel-style(start);
+  @include panel-style(flex-start);
   gap: 1.25rem;
 
   img {

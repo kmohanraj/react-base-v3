@@ -1,4 +1,4 @@
-import { FC, lazy } from 'react';
+import { FC, Suspense, lazy } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import AddOrganization from './AddOrganization';
@@ -10,7 +10,11 @@ const Organizations: FC = () => {
   );
 
   return (
-    <>{!isAddOrgBtnClicked ? <OrganizationTable /> : <AddOrganization />}</>
+    <>
+      <Suspense fallback={<div>Loading...</div>}>
+        {!isAddOrgBtnClicked ? <OrganizationTable /> : <AddOrganization />}
+      </Suspense>
+    </>
   );
 };
 export default Organizations;

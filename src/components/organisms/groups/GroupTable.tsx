@@ -1,18 +1,19 @@
+import { lazy, useEffect, useState } from 'react';
 import Button from 'components/atoms/Button';
-import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as GroupSlice from 'store/slice/groups.slice';
-import { useEffect, useState } from 'react';
-import Pagination from 'components/atoms/Pagination';
 import CONSTANTS from 'constants/constants';
 import useItToGetGroups from 'hooks/group/useItToGetGroups';
 import { RootState } from 'store';
-import ManageCustomer from './ManageCustomer';
-import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as GroupService from 'service/group.service';
 import iziToast from 'izitoast';
 import { durationOptions } from 'constants/options';
+import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
+const Table = lazy(() => import('components/atoms/Table'));
+const ManageCustomer = lazy(() => import('./ManageCustomer'));
+const ConfirmationModal = lazy(() => import('components/molecules/ConfirmationModal'));
+const Pagination = lazy(() => import('components/atoms/Pagination'));
 
 const { SESSION_STORAGE, ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS, ROLE } =
   CONSTANTS;
@@ -112,9 +113,8 @@ const GroupTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          { groupsData?.length > 1 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
+          { groupsData?.length  === 0 ? 'No Results' : groupsData.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
         </div>
-        {/* <span className='top-panel-entity'>No Results</span> */}
         <div className='top-panel-buttons'>
           <Button
             type='ghost'

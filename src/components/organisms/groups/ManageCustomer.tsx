@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, lazy, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'store';
 import 'styles/manage-customer.scss';
@@ -12,19 +12,23 @@ import * as CollectionSlice from 'store/slice/collection.slice';
 import CustomerMapping from './CustomerMapping';
 import TopPanel from 'components/molecules/TopPanel';
 import useItToRupees from 'hooks/common/useItToRupees';
-import Collection from '../collections/Collection';
-// import CollectionDetails from '../collections/CollectionDetails';
-import CollectionDetailsTable from '../collections/CollectionDetailsTable';
 import { addMoney, backButton, deleteIcon, edit } from 'constants/icons';
 import CONSTANTS from 'constants/constants';
 import * as ManageSlice from 'store/slice/manage_customer.slice';
-import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as ManageCustomerService from 'service/manage_customer.service';
 import iziToast from 'izitoast';
 import { collectionTypeOptions } from 'constants/options';
 import { ISelectOption } from 'types/components.types';
+const CollectionDetailsTable = lazy(
+  () => import('../collections/CollectionDetailsTable')
+);
+const Collection = lazy(() => import('../collections/Collection'));
+const ConfirmationModal = lazy(
+  () => import('components/molecules/ConfirmationModal')
+);
 
 const { STATUS_CODE, TOAST_DEFAULTS, ROLE } = CONSTANTS;
+
 const ManageCustomer = () => {
   const dispatch = useDispatch();
   const currentUserID = sessionStorage.getItem(
@@ -150,7 +154,13 @@ const ManageCustomer = () => {
   };
 
   if (isCollectionDetail) {
-    return <CollectionDetailsTable />;
+    return (
+      <>
+        <Suspense fallback={<div>Loading...</div>}>
+          <CollectionDetailsTable />
+        </Suspense>
+      </>
+    );
   }
 
   return (
@@ -196,7 +206,9 @@ const ManageCustomer = () => {
               className='customer-info'
               onClick={() => {
                 handleOnCollectionDetails(manage.customer_code);
-                dispatch(ManageCustomerSlice.setCurrentManageCustomerId(manage?.id))
+                dispatch(
+                  ManageCustomerSlice.setCurrentManageCustomerId(manage?.id)
+                );
                 dispatch(ManageSlice.setSelectedManage(manage));
               }}
             >
@@ -243,7 +255,9 @@ const ManageCustomer = () => {
                   dispatch(
                     CustomerSlice.setCurrentCustomerCode(manage?.customer_code)
                   );
-                  dispatch(ManageCustomerSlice.setCurrentManageCustomerId(manage?.id))
+                  dispatch(
+                    ManageCustomerSlice.setCurrentManageCustomerId(manage?.id)
+                  );
                   handleOnAddCollection();
                 }}
               >
