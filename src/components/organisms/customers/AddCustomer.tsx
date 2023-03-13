@@ -57,7 +57,7 @@ const AddCustomer = () => {
     } else if (name === 'age') {
       return value.replace(/[^0-9]+/g, '').substring(0, 2);
     } else if(name === 'address') {
-      return value.replace(/[^a-zA-Z0-9\s,.'-]+/g, '').replace(/\s+\s+/g, '');
+      return value.replace(/[^a-zA-Z0-9\s,'-]+/g, '').replace(/\s+\s+/g, '');
     } else {
       return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
