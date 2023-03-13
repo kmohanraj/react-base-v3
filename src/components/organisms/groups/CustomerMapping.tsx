@@ -1,5 +1,4 @@
-import React, { FC, useEffect } from 'react';
-import Select from 'components/atoms/Select';
+import React, { FC, lazy, useEffect } from 'react';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +14,7 @@ import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import useItToGetAllManages from 'hooks/manage_customer/useItToGetAllManages';
 import { collectionTypeOptions } from 'constants/options'
+const Select = lazy(() => import('components/atoms/Select'));
 
 
 type CustomerMappingProps = {
@@ -56,9 +56,9 @@ const CustomerMapping: FC<CustomerMappingProps> = ({ currentGroupId }) => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'taken_amount') {
-      return value.replace(/[^0-9]/g, '').substring(0,8)
+      return value.replace(/[^0-9]+/g, '').substring(0,8)
     } else if (name === 'taken_position') {
-      return value.replace(/[^0-9]/g, '').substring(0,2)
+      return value.replace(/[^0-9]+/g, '').substring(0,2)
     } else {
       return value
     }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, lazy } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as BranchSlice from 'store/slice/branches.slice';
@@ -15,7 +15,7 @@ import iziToast from 'izitoast';
 import { AxiosResponse } from 'axios';
 import { ISelectOption } from 'types/components.types';
 
-const Select = React.lazy(() => import('components/atoms/Select'));
+const Select = lazy(() => import('components/atoms/Select'));
 
 const { STATUS_CODE, SESSION_STORAGE } = CONSTANTS;
 
@@ -35,7 +35,10 @@ const AddBranch: FC = () => {
     dispatch(
       BranchSlice.setBranch({
         ...branch,
-        [name]: name === 'branch_code' ? value.replace(/[^0-9A-Z]/g, '') : value
+        [name]:
+          name === 'branch_code'
+            ? value.replace(/[^0-9A-Z]+/g, '')
+            : value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')
       })
     );
   };
@@ -97,10 +100,13 @@ const AddBranch: FC = () => {
   };
 
   const handleOneClear = (field: any) => {
-    dispatch(BranchSlice.setBranch({
-      ...branch, [field]: null
-    }))
-  }
+    dispatch(
+      BranchSlice.setBranch({
+        ...branch,
+        [field]: null
+      })
+    );
+  };
 
   return (
     <>

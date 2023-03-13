@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, lazy, useState } from 'react';
 import { backButton } from 'constants/icons';
 import TopPanel from 'components/molecules/TopPanel';
 import Input from 'components/atoms/TextField';
@@ -8,17 +8,17 @@ import Button from 'components/atoms/Button';
 import type { RootState } from 'store';
 import * as GroupService from 'service/group.service';
 import CONSTANTS from 'constants/constants';
-import Select from 'components/atoms/Select';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'styles/date-picker.scss';
 import { AxiosResponse } from 'axios';
-import { clearGroup } from 'store/slice/groups.slice';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import { durationOptions } from 'constants/options';
+const Select = lazy(() => import('components/atoms/Select'))
+
 
 const { SESSION_STORAGE, STATUS_CODE } = CONSTANTS;
 
@@ -64,9 +64,9 @@ const AddGroup: FC = () => {
 
   const checkInputType = (name: string, value: string) => {
     if(name === 'group_code') {
-      return value.replace(/[^0-9A-Z]/g, '')
+      return value.replace(/[^0-9A-Z]+/g, '')
     } else if (name === 'amount' || name === 'total_members' || name === 'duration') {
-      return value.replace(/[^0-9]{1,10}/g, '')
+      return value.replace(/[^0-9]+/g, '')
     } else  {
       return value
     }
@@ -122,7 +122,7 @@ const AddGroup: FC = () => {
   const toastMessage = (response: AxiosResponse) => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(GroupSlice.setIsAddGroup(false));
-      dispatch(clearGroup());
+      dispatch(GroupSlice.clearGroup());
       iziToast.success({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info

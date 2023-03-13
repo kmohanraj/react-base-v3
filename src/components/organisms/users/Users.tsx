@@ -1,15 +1,17 @@
-import { FC, Suspense } from 'react';
-import UserTable from './UserTable';
+import { FC, Suspense, lazy } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import AddUser from './AddUser';
+const UserTable = lazy(() => import('./UserTable'));
 
 const Users: FC = () => {
   const { isAddUser } = useSelector((state: RootState) => state.user);
 
   return (
     <>
-      <Suspense>{!isAddUser ? <UserTable /> : <AddUser />}</Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
+        {!isAddUser ? <UserTable /> : <AddUser />}
+      </Suspense>
     </>
   );
 };

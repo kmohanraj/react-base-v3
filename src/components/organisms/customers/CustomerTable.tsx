@@ -1,18 +1,20 @@
+import { lazy, useEffect, useState } from 'react';
 import Button from 'components/atoms/Button';
-import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as CustomerSlice from 'store/slice/customers.slice';
-import { useEffect, useState } from 'react';
-import Pagination from 'components/atoms/Pagination';
 import useItToGetCustomers from 'hooks/customer/useItToGetCustomers';
 import CONSTANTS from 'constants/constants';
 import { RootState } from 'store';
-// import { setIsModalShow } from 'store/slice/groups.slice';
-import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as CustomerService from 'service/customer.service';
 import iziToast from 'izitoast';
 import { genderOptions } from 'constants/options';
+import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
+const Pagination = lazy(() => import('components/atoms/Pagination'));
+const ConfirmationModal = lazy(
+  () => import('components/molecules/ConfirmationModal')
+);
+const Table = lazy(() => import('components/atoms/Table'));
 
 const columns = [
   { title: 'Customer Code', dataProperty: 'customer_code' },
@@ -44,7 +46,7 @@ const CustomerTable = () => {
   const [actionMode, setActionMode] = useState<string>('');
   const [customerId, setCustomerId] = useState<number>();
   const [isCustomersLoading] = useItToGetCustomers(Number(currentUserID));
-  const [pageList, setPageList] = useState([])
+  const [pageList, setPageList] = useState([]);
 
   const handleOnEdit = (data: any) => {
     dispatch(CustomerSlice.setIsAddCustomerBtnClicked(true));
@@ -78,7 +80,7 @@ const CustomerTable = () => {
           customersData.filter((ele: any) => ele.id !== customerId)
         )
       );
-      setPageList(pageList.filter((ele: any) => ele.id !== customerId))
+      setPageList(pageList.filter((ele: any) => ele.id !== customerId));
       dispatch(CustomerSlice.setIsDeleteCustomerBtnClicked(false));
     } else {
       iziToast.info({
@@ -99,19 +101,20 @@ const CustomerTable = () => {
   const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    setPageList(customersData?.length ? customersData.slice(Number(start), end) : []);
-  }
+    setPageList(
+      customersData?.length ? customersData.slice(Number(start), end) : []
+    );
+  };
 
   useEffect(() => {
-    pagination()
+    pagination();
   }, [isCustomersLoading, currentPage]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {customersData?.length}{' '}
-          {customersData?.length > 1 ? 'Customers' : 'Customer'}
+          {useItToPanelTotal(Number(customersData?.length), 'Customer')}
         </div>
         <div className='top-panel-buttons'>
           <Button

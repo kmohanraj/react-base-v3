@@ -10,6 +10,7 @@ import CONSTANTS from 'constants/constants';
 import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
 import cx from 'classnames';
+
 const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN } = CONSTANTS;
 
 const Login: FC = () => {
@@ -36,7 +37,7 @@ const Login: FC = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
-      return value.replace(/[^0-9]/g, '').substring(0, 10);
+      return value.replace(/[^0-9]+/g, '').substring(0, 10);
     } else if(name === 'email') {
       return emailValidation(value)
     } else if(name === 'password') {
@@ -67,9 +68,6 @@ const Login: FC = () => {
     }
     return value;
   }
-  // const isFirstLogin = sessionStorage.getItem(
-  //   CONSTANTS.SESSION_STORAGE.IS_FIRST_LOGIN
-  // );
 
   const handleOnSubmit = async () => {
     const response = await userService.login(login);
@@ -133,13 +131,13 @@ const Login: FC = () => {
         response?.data?.info?.isFirstLogin
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      response?.data?.info.isFirstLogin
+      response?.data?.info?.isFirstLogin
         ? null
         : (window.location.pathname = '/');
     } else {
       iziToast.info({
         title: CONSTANTS.TOAST_DEFAULTS.INFO_TITLE,
-        message: response.data.info
+        message: response?.data?.info
       });
     }
   };
@@ -157,7 +155,6 @@ const Login: FC = () => {
             required
             isDisabled={isFirst}
             error={emailErr}
-            // message='Eg: example@gmail.com'
           />
           <Input
             inputType={isPasswordShow ? 'text' : 'password'}
@@ -167,7 +164,6 @@ const Login: FC = () => {
             placeholder={isFirst ? 'Old Password' : 'Enter Password'}
             required
             error={passwordErr}
-            // message='Eg: Password@123'
             sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
             suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
           />
@@ -182,7 +178,6 @@ const Login: FC = () => {
               placeholder='Enter New Password'
               required
               error={passwordErr}
-              // message='Eg: Password@123'
               sufFixIcon={
                 isNewPasswordShow ? Icon.showPassword : Icon.hidePassword
               }

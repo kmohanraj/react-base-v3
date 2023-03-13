@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import 'styles/table.scss';
 import * as Icons from 'constants/icons';
 import ErrorPage from 'components/atoms/ErrorPage';
@@ -12,7 +12,7 @@ type TableType = {
     selector?: any;
     isDate?: any;
     isTime?: any;
-    options?: {}
+    options?: {};
   }[];
   data: any[];
   action?: string[];
@@ -32,10 +32,8 @@ const Table: FC<TableType> = ({
   onManageCustomer,
   onChangeStatus
 }) => {
-  // const [selected, setSelected] = useState<number>();
 
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
-    // setSelected(selectedId);
     onEdit(selectedRow);
   };
   const handleOnRemove = (data: any) => {
@@ -50,17 +48,32 @@ const Table: FC<TableType> = ({
     return <ErrorPage />;
   }
 
-  const manageData = (filterColumn: any, selector: string, isDate: boolean, isTime: boolean, options: any) => {
-    if(isDate) {
-      return moment(filterColumn).utcOffset(330).format( isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY')
+  const manageData = (
+    filterColumn: any,
+    selector: string,
+    isDate: boolean,
+    isTime: boolean,
+    options: any
+  ) => {
+    if (isDate) {
+      return moment(filterColumn)
+        .utcOffset(330)
+        .format(isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY');
     } else if (typeof filterColumn === 'string') {
       return filterColumn ?? '';
     } else if (typeof filterColumn === 'number') {
-      return options && options.filter((ele: any) => ele.id === filterColumn)[0].label
+      return (
+        options &&
+        options.filter((ele: any) => ele.id === filterColumn)[0].label
+      );
     } else if (filterColumn !== null && typeof filterColumn === 'object') {
       return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
-      return filterColumn === true ? <span className='active'>Active</span> : <span className='in-active'>In-Active</span>;
+      return filterColumn === true ? (
+        <span className='active'>Active</span>
+      ) : (
+        <span className='in-active'>In-Active</span>
+      );
     } else {
       return '';
     }
@@ -68,7 +81,7 @@ const Table: FC<TableType> = ({
 
   return (
     <div className='table-wrapper'>
-      <table className={`table ${tableName}`} style={{overflowX: 'auto'}}>
+      <table className={`table ${tableName}`}>
         <thead>
           <tr>
             {columns.map((col, i) => (
@@ -79,48 +92,50 @@ const Table: FC<TableType> = ({
         </thead>
         <tbody>
           {data.map((d, j) => (
-            // <tr className={cx({ active: Number(selected) === i})} key={i} onClick={() => handleOnSelect(d, i)} >
             <tr key={j}>
               {columns.map((col, k) => (
                 <>
                   <td
-                    key={k}
+                    key={col.dataProperty + k}
                     onClick={() =>
                       onChangeStatus && onChangeStatus(col.dataProperty, d)
                     }
                   >
                     <>
-                      {/* <span className='action-btn'>
-                      <span className='edit-col edit' onClick={() => handleOnSelectRow()}><img src={editIcon} alt="" /></span>
-                      <span className='edit-col delete' onClick={() => handleOnRemoveRow()}><img src={deleteIcon} alt="" /></span>
-                    </span> */}
-                      {manageData(d[col.dataProperty], col.selector, col.isDate, col.isTime, col.options)}
-                      {/* {d[col.dataProperty]} */}
+                      {manageData(
+                        d[col.dataProperty],
+                        col.selector,
+                        col.isDate,
+                        col.isTime,
+                        col.options
+                      )}
                     </>
                   </td>
                 </>
               ))}
               {action && (
                 <td className='actions'>
-                  {action.map((ac: string) => (
-                    <>
-                      {ac === 'Edit' && (
-                        <span onClick={() => handleOnEdit(d, j)}>
-                          <img src={Icons.edit} alt='Edit' />
-                        </span>
-                      )}
-                      {ac === 'Delete' && (
-                        <span onClick={() => handleOnRemove(d)}>
-                          <img src={Icons.deleteIcon} alt='Delete' />
-                        </span>
-                      )}
-                      {ac === 'Create' && (
-                        <span onClick={() => handleOnManageCustomer(d)}>
-                          <img src={Icons.addGroup} alt='Manage Customer' />
-                        </span>
-                      )}
-                    </>
-                  ))}
+                  <div className='action-container'>
+                    {action.map((ac: string) => (
+                      <>
+                        {ac === 'Edit' && (
+                          <span onClick={() => handleOnEdit(d, j)}>
+                            <img src={Icons.edit} alt='Edit' />
+                          </span>
+                        )}
+                        {ac === 'Delete' && (
+                          <span onClick={() => handleOnRemove(d)}>
+                            <img src={Icons.deleteIcon} alt='Delete' />
+                          </span>
+                        )}
+                        {ac === 'Create' && (
+                          <span onClick={() => handleOnManageCustomer(d)}>
+                            <img src={Icons.addGroup} alt='Manage Customer' />
+                          </span>
+                        )}
+                      </>
+                    ))}
+                  </div>
                 </td>
               )}
             </tr>

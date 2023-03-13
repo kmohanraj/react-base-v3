@@ -10,7 +10,7 @@ const Branches: FC = () => {
   );
   return (
     <>
-      <Suspense>
+      <Suspense fallback={<div>Loading...</div>}>
         {!isAddBranchBtnClicked ? <BranchTable /> : <AddBranch />}
       </Suspense>
     </>

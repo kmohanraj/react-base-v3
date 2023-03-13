@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, useEffect } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as CustomerSlice from 'store/slice/customers.slice';
@@ -6,16 +6,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import Input from 'components/atoms/TextField';
 import Button from 'components/atoms/Button';
 import { RootState } from 'store';
-import Select from 'components/atoms/Select';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import CONSTANTS from 'constants/constants';
 import * as customerService from 'service/customer.service';
 import { AxiosResponse } from 'axios';
-import { clearCustomer } from 'store/slice/customers.slice';
 import iziToast from 'izitoast';
 import { ISelectOption } from 'types/components.types';
 import { genderOptions, idProofOptions } from 'constants/options';
+const Select = lazy(() => import('components/atoms/Select'));
 
 const { STATUS_CODE } = CONSTANTS;
 
@@ -46,19 +45,19 @@ const AddCustomer = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'customer_code') {
-      return value.replace(/[^0-9A-Z]/g, '');
+      return value.replace(/[^0-9A-Z]+/g, '');
     } else if (
       name === 'phone' ||
       name === 'alter_phone' ||
       name === 'nominee_phone'
     ) {
-      return value.replace(/[^0-9]{1,10}/g, '').substring(0, 10);
+      return value.replace(/[^0-9]+/g, '').substring(0, 10);
     } else if (name === 'pincode') {
-      return value.replace(/[^0-9]/g, '').substring(0, 6);
+      return value.replace(/[^0-9]+/g, '').substring(0, 6);
     } else if (name === 'age') {
-      return value.replace(/[^0-9]/g, '').substring(0, 2);
+      return value.replace(/[^0-9]+/g, '').substring(0, 2);
     } else {
-      return value;
+      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
   };
 
@@ -93,7 +92,7 @@ const AddCustomer = () => {
   const toastMessage = (response: AxiosResponse) => {
     if (response.status === STATUS_CODE.STATUS_200) {
       dispatch(CustomerSlice.setIsAddCustomerBtnClicked(false));
-      dispatch(clearCustomer());
+      dispatch(CustomerSlice.clearCustomer());
       iziToast.success({
         title: CONSTANTS.TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info

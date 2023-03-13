@@ -1,16 +1,17 @@
 import Button from 'components/atoms/Button';
-import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import * as BranchSlice from 'store/slice/branches.slice';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from 'components/atoms/Pagination';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import useToGetBranches from 'hooks/branch/useToGetBranches';
 import type { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
 import BranchService from 'service/branch.service';
 import iziToast from 'izitoast';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
+import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
+const Table = lazy(() => import('components/atoms/Table'))
 
 const columns = [
   { title: 'Branch Name', dataProperty: 'branch_name' },
@@ -98,7 +99,7 @@ const BranchTable = () => {
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {branchesData?.length > 1 ? `${branchesData?.length} Branches` : `${branchesData?.length} Branch`}
+          {useItToPanelTotal(Number(branchesData?.length), 'Branch')}
         </div>
         <div className='top-panel-buttons'>
           <Button

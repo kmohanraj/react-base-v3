@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import * as Icons from 'constants/icons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,45 +9,57 @@ import 'styles/collection-details.scss';
 import useItToRupees from 'hooks/common/useItToRupees';
 import Button from 'components/atoms/Button';
 import Modal from 'components/atoms/Modal';
-import Collection from './Collection';
 import { RootState } from 'store';
 import useToGetCollections from 'hooks/collection/useToGetCollections';
 import CONSTANTS from 'constants/constants';
-import Table from 'components/atoms/Table';
-import Pagination from 'components/atoms/Pagination';
-import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import * as CollectionService from 'service/collection.service';
 import iziToast from 'izitoast';
+const Table = lazy(() => import('components/atoms/Table'));
+const Collection = lazy(() => import('./Collection'));
+const Pagination = lazy(() => import('components/atoms/Pagination'));
+const ConfirmationModal = lazy(
+  () => import('components/molecules/ConfirmationModal')
+);
 
 const columns = [
   { title: 'Collection Amount', dataProperty: 'collection_amount' },
   { title: 'Description', dataProperty: 'description' },
-  { title: 'Collection Date', dataProperty: 'updated_at', isDate: true, isTime: true },
+  {
+    title: 'Collection Date',
+    dataProperty: 'updated_at',
+    isDate: true,
+    isTime: true
+  },
   { title: 'Created By', dataProperty: 'created_by' },
-  { title: 'Updated By', dataProperty: 'updated_by' },
-]
+  { title: 'Updated By', dataProperty: 'updated_by' }
+];
 const { ACTION_BTN, STATUS_CODE, TOAST_DEFAULTS } = CONSTANTS;
 
 const CollectionDetailsTable = () => {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [perPageSize, setPerPageSize] = useState(10);
-  const [pageList, setPageList] = useState([])
-  const [title, setTitle] = useState<string>('')
-  const [actionMode, setActionMode] = useState<string>('')
-  const [collectionId, setCollectionId] = useState<number>()
+  const [pageList, setPageList] = useState([]);
+  const [title, setTitle] = useState<string>('');
+  const [actionMode, setActionMode] = useState<string>('');
+  const [collectionId, setCollectionId] = useState<number>();
   const currentUserID = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.USER_ID_KEY
   );
-  const {currentManageCustomerId} = useSelector((state: RootState) => state.manage_customer)
+  const { currentManageCustomerId } = useSelector(
+    (state: RootState) => state.manage_customer
+  );
 
   const [isCollectionLoading] = useToGetCollections(
     Number(currentUserID),
     Number(currentManageCustomerId)
   );
-  const { collectionsData, isEditCollection, isAddCollection, isDeleteCollection } = useSelector(
-    (state: RootState) => state.collection
-  );
+  const {
+    collectionsData,
+    isEditCollection,
+    isAddCollection,
+    isDeleteCollection
+  } = useSelector((state: RootState) => state.collection);
 
   const handleOnCheckCondition = () => {
     dispatch(GroupSlice.setIsCollectionDetail(false));
@@ -68,16 +80,19 @@ const CollectionDetailsTable = () => {
     dispatch(CollectionSlice.setIsEditCollection(true));
     dispatch(CollectionSlice.setCollection(collection));
   };
-  
+
   const handleOnDelete = (data: any) => {
-    setCollectionId(data?.id)
-    dispatch(CollectionSlice.setIsDeleteCollection(true))
-    setActionMode('Delete')
-    setTitle(data?.collection_amount)
-  }
+    setCollectionId(data?.id);
+    dispatch(CollectionSlice.setIsDeleteCollection(true));
+    setActionMode('Delete');
+    setTitle(data?.collection_amount);
+  };
 
   const deleteCollection = async () => {
-    const response = await CollectionService.remove(Number(collectionId), Number(currentUserID))
+    const response = await CollectionService.remove(
+      Number(collectionId),
+      Number(currentUserID)
+    );
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
@@ -88,7 +103,7 @@ const CollectionDetailsTable = () => {
           collectionsData.filter((ele: any) => ele.id !== collectionId)
         )
       );
-      setPageList(pageList.filter((ele: any) => ele.id !== collectionId))
+      setPageList(pageList.filter((ele: any) => ele.id !== collectionId));
       dispatch(CollectionSlice.setIsDeleteCollection(false));
     } else {
       iziToast.info({
@@ -96,7 +111,7 @@ const CollectionDetailsTable = () => {
         message: response?.data?.info
       });
     }
-  }
+  };
   const totalCollection = () => {
     return collectionsData.reduce((acc: any, ele: any) => {
       return acc + Number(ele.collection_amount);
@@ -106,11 +121,13 @@ const CollectionDetailsTable = () => {
   const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    setPageList(collectionsData?.length ? collectionsData.slice(Number(start), end) : [])
-  }
+    setPageList(
+      collectionsData?.length ? collectionsData.slice(Number(start), end) : []
+    );
+  };
 
   useEffect(() => {
-    pagination()
+    pagination();
   }, [isCollectionLoading, currentPage]);
 
   return (
@@ -126,7 +143,12 @@ const CollectionDetailsTable = () => {
 
       <TopPanel panelType='top-panel'>
         <span className='top-panel-entity'>
-          <span>Total Collection Amounts  <span className='collection-amount'> {useItToRupees(totalCollection())}</span></span>
+          <span>
+            Total Collection Amounts{' '}
+            <span className='collection-amount'>
+              {useItToRupees(totalCollection())}
+            </span>
+          </span>
         </span>
         <div className='top-panel-buttons'>
           <Button

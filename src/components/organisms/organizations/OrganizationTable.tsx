@@ -1,16 +1,17 @@
 import Button from 'components/atoms/Button';
-import Table from 'components/atoms/Table';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
 import * as OrgSlice from 'store/slice/organizations.slice';
 import Pagination from 'components/atoms/Pagination';
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import useItToGetOrganizations from 'hooks/organization/useItToGetOrganizations';
 import { RootState } from 'store';
 import CONSTANTS from 'constants/constants';
 import ConfirmationModal from 'components/molecules/ConfirmationModal';
 import organizationService from 'service/organization.service';
 import iziToast from 'izitoast';
+import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
+const Table = lazy(() => import('components/atoms/Table'));
 
 const columns = [
   { title: 'Organization Name', dataProperty: 'org_name' },
@@ -30,11 +31,13 @@ const OrganizationTable = () => {
   const currentUserID = sessionStorage.getItem(SESSION_STORAGE.USER_ID_KEY);
   const [title, setTitle] = useState<string>('');
   const [actionMode, setActionMode] = useState<string>('');
-  const [currentOrgId, setCurrentOrgId] = useState<number>()
-  const [status, setStatus] = useState<boolean>(false)
-  const [pageList, setPageList] = useState([])
+  const [currentOrgId, setCurrentOrgId] = useState<number>();
+  const [status, setStatus] = useState<boolean>(false);
+  const [pageList, setPageList] = useState([]);
 
-  const [loading, handleRefreshOrgTable] = useItToGetOrganizations(Number(currentUserID));
+  const [loading, handleRefreshOrgTable] = useItToGetOrganizations(
+    Number(currentUserID)
+  );
   const { organizationsData, isDeleteOrg, isStatus } = useSelector(
     (state: RootState) => state.organization
   );
@@ -46,14 +49,17 @@ const OrganizationTable = () => {
   };
 
   const handleOnRemove = (data: any) => {
-    setCurrentOrgId(data?.id)
-    dispatch(OrgSlice.setIsDeleteOrg(true))
+    setCurrentOrgId(data?.id);
+    dispatch(OrgSlice.setIsDeleteOrg(true));
     setTitle(data.org_name);
     setActionMode('Delete');
   };
 
   const deleteOrg = async () => {
-    const response = await organizationService.remove(Number(currentOrgId), Number(currentUserID))
+    const response = await organizationService.remove(
+      Number(currentOrgId),
+      Number(currentUserID)
+    );
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
@@ -64,7 +70,7 @@ const OrganizationTable = () => {
           organizationsData.filter((ele: any) => ele.id !== currentOrgId)
         )
       );
-      setPageList(pageList.filter((ele: any) => ele.id !== currentOrgId))
+      setPageList(pageList.filter((ele: any) => ele.id !== currentOrgId));
       dispatch(OrgSlice.setIsDeleteOrg(false));
     } else {
       iziToast.info({
@@ -72,51 +78,58 @@ const OrganizationTable = () => {
         message: response?.data?.info
       });
     }
-  }
+  };
 
   const handleOnChangeStatus = (column: string, selectedItem: any) => {
     if (column === 'is_active') {
-      dispatch(OrgSlice.setIsStatus(true))
-      setCurrentOrgId(selectedItem?.id)
-      setStatus(selectedItem.is_active ? false : true)
+      dispatch(OrgSlice.setIsStatus(true));
+      setCurrentOrgId(selectedItem?.id);
+      setStatus(selectedItem.is_active ? false : true);
       setActionMode(selectedItem.is_active ? 'In Active' : 'Active');
       setTitle(selectedItem.org_name);
     }
   };
 
   const handleOnStatus = async () => {
-    const response = await organizationService.status(Number(currentOrgId), status, Number(currentUserID))
+    const response = await organizationService.status(
+      Number(currentOrgId),
+      status,
+      Number(currentUserID)
+    );
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
         message: response?.data?.info
-      })
-      dispatch(OrgSlice.setIsStatus(false))
-      handleRefreshOrgTable(true)
+      });
+      dispatch(OrgSlice.setIsStatus(false));
+      handleRefreshOrgTable(true);
     } else {
       iziToast.info({
         title: TOAST_DEFAULTS.INFO_TITLE,
         message: response?.data?.info
-      })
+      });
     }
-  }
+  };
 
   const pagination = () => {
     const start = currentPage * perPageSize - perPageSize;
     const end = Number(start) + perPageSize;
-    setPageList(organizationsData?.length ? organizationsData.slice(Number(start), end) : []);
-  }
+    setPageList(
+      organizationsData?.length
+        ? organizationsData.slice(Number(start), end)
+        : []
+    );
+  };
 
   useEffect(() => {
-    pagination()
-  },[loading, currentPage]);
+    pagination();
+  }, [loading, currentPage]);
 
   return (
     <>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {organizationsData?.length}{' '}
-          {organizationsData?.length > 1 ? 'Organizations' : 'Organization'}
+          {useItToPanelTotal(Number(organizationsData?.length), 'Organization')}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -154,7 +167,7 @@ const OrganizationTable = () => {
         actionMode={actionMode}
         onClose={() => {
           dispatch(OrgSlice.setIsDeleteOrg(false));
-          dispatch(OrgSlice.setIsStatus(false))
+          dispatch(OrgSlice.setIsStatus(false));
         }}
         onClick={isDeleteOrg ? deleteOrg : handleOnStatus}
       />
