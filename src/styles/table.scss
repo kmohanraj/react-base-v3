@@ -32,13 +32,6 @@
     border-spacing: 0;
     user-select: none;
 
-    // &>:not(caption)>*>* {
-    //   padding: 0.5rem 0.5rem;
-    // }
-
-    thead {
-      vertical-align: bottom;
-    }
     .active {
       color: colors.$green-light;
       font-family: fonts.$font-bold;
@@ -55,30 +48,31 @@
       position: sticky;
       top: 0;
     }
-
+    th {
+      text-align: center;
+      // font-family: fonts.$font-bold;
+      font-family: fonts.$font-regular;
+      letter-spacing: -0.03rem;
+      vertical-align: bottom;
+      background-color: colors.$header-bg;
+    }
     th,
     td {
-      text-align-last: left;
       padding-right: 0.625rem;
       padding-left: 0.625rem;
       border: 0.0625rem solid colors.$cool-grey;
       height: 2.1875rem;
-      color: colors.$stone-grey;
+      color: colors.$header-color;
       line-height: 1.71;
     }
 
     td {
+      text-align: left;
       position: relative;
       color: colors.$carbon;
       letter-spacing: -0.0344rem;
       font-family: fonts.$font-regular;
     }
-
-    th {
-      font-family: fonts.$font-bold;
-      letter-spacing: -0.03rem;
-    }
-    th,
     tr {
       td {
         cursor: pointer;

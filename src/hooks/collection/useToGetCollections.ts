@@ -25,7 +25,8 @@ const useToGetCollections = (
       });
   }, [dispatch, manageCustomerId, userId, triggerRefresh]);
 
-  const handleRefreshCollection = (status: boolean) => setTriggerRefresh(status);
+  const handleRefreshCollection = (status: boolean) =>
+    setTriggerRefresh(status);
 
   return [loading, handleRefreshCollection];
 };

@@ -9,7 +9,6 @@ import { RootState } from 'store';
 import * as GroupService from 'service/group.service';
 import iziToast from 'izitoast';
 import { durationOptions } from 'constants/options';
-import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
 const Table = lazy(() => import('components/atoms/Table'));
 const ManageCustomer = lazy(() => import('./ManageCustomer'));
 const ConfirmationModal = lazy(() => import('components/molecules/ConfirmationModal'));

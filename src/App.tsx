@@ -10,7 +10,6 @@ function App() {
   const handleSize = () => {
     // let vh = window.innerHeight * 0.01;
     const footerHeight = document.getElementsByTagName('footer')[0]?.clientHeight
-    console.log("ssssss", footerHeight)
     document.documentElement.style.setProperty('--fh', `${footerHeight}px`)
   }
 

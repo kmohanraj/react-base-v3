@@ -5,10 +5,9 @@ footer {
   bottom: 0;
   left: 0;
   right: 0;
-  background: colors.$light-grey;
+  background: colors.$header-bg;
   .footer-content {
-    background-color: colors.$charcoal-grey;
-    color: colors.$medium-grey;
+    color: colors.$header-color;
     padding: 1.25rem 1.5rem;
     p {
       font-size: 0.6rem;

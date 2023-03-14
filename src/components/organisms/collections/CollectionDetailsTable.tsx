@@ -128,7 +128,7 @@ const CollectionDetailsTable = () => {
 
   useEffect(() => {
     pagination();
-  }, [isCollectionLoading, currentPage]);
+  }, [currentPage]);
 
   return (
     <div className='table-section'>

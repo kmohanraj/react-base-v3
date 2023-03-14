@@ -154,7 +154,6 @@ const AddGroup: FC = () => {
     }))
   }
 
-  console.log("GROUP", group)
   return (
     <>
       <div className='form-section'>
