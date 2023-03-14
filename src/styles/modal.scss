@@ -36,6 +36,10 @@
   width: 37.5rem;
   overflow: auto;
   transition: 0.4s all;
+
+  h3 {
+    width: 95%;
+  }
 }
 
 .chit-modal.edit-modal .chit-modal-content {

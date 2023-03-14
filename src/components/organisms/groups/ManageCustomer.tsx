@@ -164,7 +164,7 @@ const ManageCustomer = () => {
   }
 
   return (
-    <>
+    <div className='container-section'>
       <TopPanel panelType='breadcrumb'>
         <img src={backButton} alt='Back' onClick={handleOnBackBtn} />
         <div>Manage Customers</div>
@@ -292,7 +292,7 @@ const ManageCustomer = () => {
         }}
         onClick={deleteManageCustomer}
       />
-    </>
+    </div>
   );
 };
 

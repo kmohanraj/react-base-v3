@@ -1,4 +1,4 @@
-import { lazy, useEffect, useState } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import Button from 'components/atoms/Button';
 import TopPanel from 'components/molecules/TopPanel';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,6 @@ import { RootState } from 'store';
 import * as GroupService from 'service/group.service';
 import iziToast from 'izitoast';
 import { durationOptions } from 'constants/options';
-import useItToPanelTotal from 'hooks/common/useItToPanelTotal';
 const Table = lazy(() => import('components/atoms/Table'));
 const ManageCustomer = lazy(() => import('./ManageCustomer'));
 const ConfirmationModal = lazy(() => import('components/molecules/ConfirmationModal'));
@@ -110,10 +109,10 @@ const GroupTable = () => {
   }
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          { groupsData?.length  === 0 ? 'No Results' : groupsData.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
+          { groupsData?.length  === 0 ? 'No Results' : groupsData?.length > 0 ? `${groupsData?.length} Groups` : `${groupsData?.length} Group`}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -154,7 +153,7 @@ const GroupTable = () => {
         }}
         onClick={deleteGroup}
       />
-    </>
+    </div>
   );
 };
 export default GroupTable;

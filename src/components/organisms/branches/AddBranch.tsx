@@ -38,7 +38,7 @@ const AddBranch: FC = () => {
         [name]:
           name === 'branch_code'
             ? value.replace(/[^0-9A-Z]+/g, '')
-            : value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')
+            : value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')?.charAt(0)?.toUpperCase() + value?.slice(1)
       })
     );
   };

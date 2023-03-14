@@ -30,7 +30,7 @@ const useToGetBranches = (userId: number): [boolean] => {
         setLoading(false);
         return response;
       });
-  }, []);
+  }, [dispatch, userId]);
   return [loading];
 };
 

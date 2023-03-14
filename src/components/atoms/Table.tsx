@@ -85,7 +85,7 @@ const Table: FC<TableType> = ({
         <thead>
           <tr>
             {columns.map((col, i) => (
-              <th key={i}>{col.title}</th>
+              <th key={i} scope='col'>{col.title}</th>
             ))}
             {action && <th className='action-head'>Action</th>}
           </tr>

@@ -15,8 +15,8 @@
   transition: all 0.2s ease;
 
   &__primary {
-    background-color: $charcoal-grey;
-    color: #fff;
+    background-color: $primary-button-bg;
+    color: $grey-2;
     &:disabled {
       background-color: $light-grey;
       cursor: default;

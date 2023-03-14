@@ -111,10 +111,10 @@ const CustomerTable = () => {
   }, [isCustomersLoading, currentPage]);
 
   return (
-    <>
+    <div className='table-section'>
       <TopPanel panelType='top-panel'>
         <div className='top-panel-entity'>
-          {useItToPanelTotal(Number(customersData?.length), 'Customer')}
+          {useItToPanelTotal(Number(customersData?.length ?? 0), 'Customer')}
         </div>
         <div className='top-panel-buttons'>
           <Button
@@ -156,7 +156,7 @@ const CustomerTable = () => {
         }}
         onClick={deleteCustomer}
       />
-    </>
+    </div>
   );
 };
 export default CustomerTable;

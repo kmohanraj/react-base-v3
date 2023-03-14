@@ -21,6 +21,7 @@ const {
   TOAST_DEFAULTS,
   ERROR,
   EMAIL_PATTERN,
+  PHONE_PATTERN,
   PASSWORD_PATTERN,
   ROLE
 } = CONSTANTS;
@@ -42,6 +43,7 @@ const AddUser = () => {
   const { branchOptions } = useSelector((state: RootState) => state.branch);
   const [emailErr, setEmailErr] = useState<string>('');
   const [passwordErr, setPasswordErr] = useState<string>('');
+  const [phoneErr, setPhoneErr] = useState<string>('')
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +57,9 @@ const AddUser = () => {
 
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
-      return value.replace(/[^0-9]+/g, '').substring(0, 10);
+      return phoneValidation(value)
+    } else if(name === 'name') {
+      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')?.charAt(0).toUpperCase() + value.slice(1)
     } else if (name === 'email') {
       return emailValidation(value);
     } else if (name === 'password') {
@@ -64,6 +68,16 @@ const AddUser = () => {
       return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
   };
+
+  const phoneValidation = (value: string) => {
+    setPhoneErr('')
+    const phone = value.substring(0,10)
+    if (!PHONE_PATTERN.test(phone)) {
+      setPhoneErr(ERROR.USER.PHONE)
+      return phone.replace(/[^0-9]+/g, '');
+    }
+    return phone;
+  }
 
   const emailValidation = (value: string) => {
     setEmailErr('');
@@ -217,6 +231,7 @@ const AddUser = () => {
             onChange={handleOnChange}
             placeholder='Enter phone'
             required
+            error={phoneErr}
           />
           <Select
             inputId='role_id'
@@ -268,7 +283,8 @@ const AddUser = () => {
               !user.org_id ||
               !checkCurrentUser() ||
               emailErr ||
-              passwordErr
+              passwordErr ||
+              phoneErr
             }
           />
         </div>

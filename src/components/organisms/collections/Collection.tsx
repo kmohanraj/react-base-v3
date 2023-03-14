@@ -45,7 +45,7 @@ const Collection: FC<CollectionProps> = ({ title, onClose }) => {
     if (name === 'collection_amount') {
       return value.replace(/[^0-9]/g, '').substring(0,8);
     } else {
-      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
+      return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '')?.charAt(0).toUpperCase() + value.slice(1);
     }
   };
 

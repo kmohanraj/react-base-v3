@@ -1,4 +1,4 @@
-import React, { lazy, useEffect } from 'react';
+import React, { lazy, useEffect, useState } from 'react';
 import TopPanel from 'components/molecules/TopPanel';
 import { backButton } from 'constants/icons';
 import * as CustomerSlice from 'store/slice/customers.slice';
@@ -16,7 +16,7 @@ import { ISelectOption } from 'types/components.types';
 import { genderOptions, idProofOptions } from 'constants/options';
 const Select = lazy(() => import('components/atoms/Select'));
 
-const { STATUS_CODE } = CONSTANTS;
+const { STATUS_CODE, PHONE_PATTERN, ERROR, PINCODE_PATTERN } = CONSTANTS;
 
 const AddCustomer = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,10 @@ const AddCustomer = () => {
     (state: RootState) => state.organization
   );
   const [isBranchLoading] = useToGetBranches(Number(currentUserID));
-
+  const [phoneErr, setPhoneErr] = useState<string>('');
+  const [altPhoneErr, setAltPhoneErr] = useState<string>('');
+  const [nomPhoneErro, setNomPhoneErr] = useState<string>('');
+  const [pincodeErr, setPincodeErr] = useState<string>('');
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(
@@ -51,14 +54,68 @@ const AddCustomer = () => {
       name === 'alter_phone' ||
       name === 'nominee_phone'
     ) {
-      return value.replace(/[^0-9]+/g, '').substring(0, 10);
+      return phoneValidation(value, name);
+    } else if (
+      name === 'customer_name' ||
+      name === 'nominee_name' ||
+      name === 'locality'
+    ) {
+      return (
+        value
+          .replace(/[^a-zA-Z\s]+/g, '')
+          .replace(/\s+\s+/g, '')
+          ?.charAt(0)
+          .toUpperCase() + value.slice(1)
+      );
     } else if (name === 'pincode') {
-      return value.replace(/[^0-9]+/g, '').substring(0, 6);
+      return pinCodeValidation(value);
     } else if (name === 'age') {
       return value.replace(/[^0-9]+/g, '').substring(0, 2);
+    } else if (name === 'address') {
+      return (
+        value
+          .replace(/[^a-zA-Z0-9\s,'-]+/g, '')
+          .replace(/\s+\s+/g, '')
+          ?.charAt(0)
+          .toUpperCase() + value.slice(1)
+      );
     } else {
       return value.replace(/[^a-zA-Z\s]+/g, '').replace(/\s+\s+/g, '');
     }
+  };
+
+  const phoneValidation = (value: string, name: string) => {
+    const phone = value.substring(0, 10);
+    if (name === 'phone' && !PHONE_PATTERN.test(phone)) {
+      setPhoneErr(ERROR.USER.PHONE);
+      return phone.replace(/[^0-9]+/g, '');
+    } else if (name === 'alter_phone' && !PHONE_PATTERN.test(phone)) {
+      setAltPhoneErr(ERROR.USER.PHONE);
+      return phone.replace(/[^0-9]+/g, '');
+    } else if (name === 'nominee_phone' && !PHONE_PATTERN.test(phone)) {
+      setNomPhoneErr(ERROR.USER.PHONE);
+      return phone.replace(/[^0-9]+/g, '');
+    }
+    if (name === 'phone') {
+      setPhoneErr('');
+    }
+    if (name === 'alter_phone') {
+      setAltPhoneErr('');
+    }
+    if (name === 'nominee_phone') {
+      setNomPhoneErr('');
+    }
+    return phone;
+  };
+
+  const pinCodeValidation = (value: string) => {
+    setPincodeErr('');
+    const postalCode = value.substring(0, 6);
+    if (!PINCODE_PATTERN.test(postalCode)) {
+      setPincodeErr(ERROR.USER.PINCODE);
+      return postalCode.replace(/[^0-9]+/g, '');
+    }
+    return postalCode;
   };
 
   const handleOnSelect = (value: ISelectOption, fieldName: string) => {
@@ -193,6 +250,7 @@ const AddCustomer = () => {
             onChange={handleOnChange}
             placeholder='Enter Phone'
             required
+            error={phoneErr}
           />
           <Input
             inputId='alter_phone'
@@ -200,6 +258,7 @@ const AddCustomer = () => {
             onChange={handleOnChange}
             placeholder='Enter Alternative Phone'
             required
+            error={altPhoneErr}
           />
           <Input
             inputId='address'
@@ -214,6 +273,7 @@ const AddCustomer = () => {
             onChange={handleOnChange}
             placeholder='Enter Pincode'
             required
+            error={pincodeErr}
           />
           <Input
             inputId='nominee_name'
@@ -228,6 +288,7 @@ const AddCustomer = () => {
             onChange={handleOnChange}
             placeholder='Enter Nominee Phone'
             required
+            error={nomPhoneErro}
           />
           <Select
             inputId='id_proof'
@@ -242,7 +303,7 @@ const AddCustomer = () => {
             inputId='locality'
             value={customer.locality}
             onChange={handleOnChange}
-            placeholder='Select Locality'
+            placeholder='Enter Locality'
             required
           />
         </div>
@@ -266,7 +327,11 @@ const AddCustomer = () => {
               !customer.nominee_name ||
               !customer.nominee_phone ||
               !customer.id_proof ||
-              !customer.locality
+              !customer.locality ||
+              phoneErr ||
+              altPhoneErr ||
+              nomPhoneErro ||
+              pincodeErr
             }
           />
         </div>
