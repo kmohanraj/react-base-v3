@@ -57,8 +57,8 @@
     cursor: pointer;
     @include pagination-button();
     &.active {
-      background: colors.$charcoal-grey;
-      color: colors.$off-white;
+      background: colors.$header-bg;
+      color: colors.$header-color;
       border: none;
       &:hover {
         transform: scale(1.025);
