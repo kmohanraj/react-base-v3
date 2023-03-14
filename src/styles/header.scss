@@ -32,6 +32,7 @@
     .profile {
       .dropdown-menu {
         a {
+          color: colors.$header-bg;
           padding: 1.0313rem 0.625rem;
         }
       }
@@ -39,7 +40,7 @@
   }
   li a:hover,
   .menu-btn:hover {
-    color: colors.$off-white;
+    color: colors.$header-color;
     font-weight: bold;
   }
   .logged-user::after {
@@ -117,7 +118,7 @@
   user-select: none;
 }
 .menu-icon .navicon {
-  background: #ed7676;
+  background: $charcoal-grey;
   display: block;
   height: 0.125rem;
   position: relative;
@@ -126,7 +127,7 @@
 }
 .menu-icon .navicon:before,
 .menu-icon .navicon:after {
-  background: #ed7676;
+  background: $charcoal-grey;
   content: '';
   display: block;
   height: 100%;

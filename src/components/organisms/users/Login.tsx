@@ -11,7 +11,14 @@ import iziToast from 'izitoast';
 import * as Icon from 'constants/icons';
 import cx from 'classnames';
 
-const { SESSION_STORAGE, STATUS_CODE, TOAST_DEFAULTS, ERROR, EMAIL_PATTERN, PASSWORD_PATTERN } = CONSTANTS;
+const {
+  SESSION_STORAGE,
+  STATUS_CODE,
+  TOAST_DEFAULTS,
+  ERROR,
+  EMAIL_PATTERN,
+  PASSWORD_PATTERN
+} = CONSTANTS;
 
 const Login: FC = () => {
   const { login } = useSelector((state: RootState) => state.user);
@@ -19,11 +26,9 @@ const Login: FC = () => {
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const [isNewPasswordShow, setIsNewPasswordShow] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const [emailErr, setEmailErr] = useState<string>('')
-  const [passwordErr, setPasswordErr] = useState<string>('')
-  const [isEmailErr, setIsEmailErr] = useState<boolean>(false)
-  const [isPassErr, setIsPassErr] = useState<boolean>(false)
-  const isFirstClass = cx('login-form', { 'is-first': isFirst})
+  const [emailErr, setEmailErr] = useState<string>('');
+  const [passwordErr, setPasswordErr] = useState<string>('');
+  const isFirstClass = cx('login-form', { 'is-first': isFirst });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,36 +43,32 @@ const Login: FC = () => {
   const checkInputType = (name: string, value: string) => {
     if (name === 'phone') {
       return value.replace(/[^0-9]+/g, '').substring(0, 10);
-    } else if(name === 'email') {
-      return emailValidation(value)
-    } else if(name === 'password') {
-      return passwordValidation(value)
+    } else if (name === 'email') {
+      return emailValidation(value);
+    } else if (name === 'password') {
+      return passwordValidation(value);
     } else {
       return value;
     }
   };
 
   const emailValidation = (value: string) => {
-    setEmailErr('')
-    setIsEmailErr(false)
-    if(value.length > 0 && !EMAIL_PATTERN.test(value)) {
-      setEmailErr(ERROR.USER.EMAIL_VALIDATION)
-      setIsEmailErr(true)
+    setEmailErr('');
+    if (value.length > 0 && !EMAIL_PATTERN.test(value)) {
+      setEmailErr(ERROR.USER.EMAIL_VALIDATION);
       return value;
     }
     return value;
-  }
+  };
 
   const passwordValidation = (value: string) => {
-    setPasswordErr('')
-    setIsPassErr(false)
-    if(value.length > 0 && !PASSWORD_PATTERN.test(value)) {
-      setIsPassErr(true)
-      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION)
+    setPasswordErr('');
+    if (value.length > 0 && !PASSWORD_PATTERN.test(value)) {
+      setPasswordErr(ERROR.USER.PASSWORD_VALIDATION);
       return value;
     }
     return value;
-  }
+  };
 
   const handleOnSubmit = async () => {
     const response = await userService.login(login);
@@ -116,7 +117,7 @@ const Login: FC = () => {
       iziToast.info({
         title: TOAST_DEFAULTS.INFO_TITLE,
         message: response?.data?.info
-      })
+      });
     }
   };
 
@@ -142,6 +143,14 @@ const Login: FC = () => {
     }
   };
 
+  const checkFirstLoginCondition = () => {
+    if (isFirst) {
+      return !login.email || !login.password || passwordErr?.length !== 0;
+    } else {
+      return !login.email || emailErr.length !== 0;
+    }
+  };
+
   return (
     <div className='login-container'>
       <div className={isFirstClass}>
@@ -163,7 +172,7 @@ const Login: FC = () => {
             onChange={handleOnChange}
             placeholder={isFirst ? 'Old Password' : 'Enter Password'}
             required
-            error={passwordErr}
+            error={ isFirst ? passwordErr : ''}
             sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
             suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
           />
@@ -190,7 +199,7 @@ const Login: FC = () => {
             type='primary'
             label='Login'
             onClick={isFirst ? handleOnResetPassword : handleOnSubmit}
-            disabled={!login.email || !login.password || isEmailErr || isPassErr}
+            disabled={checkFirstLoginCondition()}
           />
         </div>
       </div>

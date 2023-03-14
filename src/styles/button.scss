@@ -15,17 +15,17 @@
   transition: all 0.2s ease;
 
   &__primary {
-    background-color: $primary-button-bg;
-    color: $grey-2;
+    background-color: $primary-btn-bg;
+    color: $primary-btn-color;
     &:disabled {
       background-color: $light-grey;
-      cursor: default;
+      cursor: no-drop;
     }
   }
   &__ghost {
-    background-color: transparent;
-    border: 0.0625rem solid $slate-grey;
-    color: $slate-grey;
+    background-color: $secondary-btn-bg;
+    border: 0.0625rem solid $header-bg;
+    color: $header-bg;
     &:disabled {
       border: 0.0625rem solid $medium-grey;
       color: $medium-grey;
