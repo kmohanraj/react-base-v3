@@ -152,58 +152,62 @@ const Login: FC = () => {
   };
 
   return (
-    <div className='login-container'>
-      <div className={isFirstClass}>
-        <h1>Sign In</h1>
-        <div className='wrapper'>
-          <Input
-            inputId='email'
-            value={login.email}
-            onChange={handleOnChange}
-            placeholder='Enter Email'
-            required
-            isDisabled={isFirst}
-            error={emailErr}
-          />
-          <Input
-            inputType={isPasswordShow ? 'text' : 'password'}
-            inputId={isFirst ? 'Old password' : 'password'}
-            value={login.password}
-            onChange={handleOnChange}
-            placeholder={isFirst ? 'Old Password' : 'Enter Password'}
-            required
-            error={ isFirst ? passwordErr : ''}
-            sufFixIcon={isPasswordShow ? Icon.showPassword : Icon.hidePassword}
-            suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
-          />
-        </div>
-        {isFirst && (
-          <div>
+    <>
+      <div className='login-container'>
+        <div className={isFirstClass}>
+          <h1>Sign In</h1>
+          <div className='wrapper'>
             <Input
-              inputType={isNewPasswordShow ? 'text' : 'password'}
-              inputId='new_password'
-              value={login.new_password}
+              inputId='email'
+              value={login.email}
               onChange={handleOnChange}
-              placeholder='Enter New Password'
+              placeholder='Enter Email'
               required
-              error={passwordErr}
+              isDisabled={isFirst}
+              error={emailErr}
+            />
+            <Input
+              inputType={isPasswordShow ? 'text' : 'password'}
+              inputId={isFirst ? 'Old password' : 'password'}
+              value={login.password}
+              onChange={handleOnChange}
+              placeholder={isFirst ? 'Old Password' : 'Enter Password'}
+              required
+              error={isFirst ? passwordErr : ''}
               sufFixIcon={
-                isNewPasswordShow ? Icon.showPassword : Icon.hidePassword
+                isPasswordShow ? Icon.showPassword : Icon.hidePassword
               }
-              suffixOnClick={() => setIsNewPasswordShow(!isNewPasswordShow)}
+              suffixOnClick={() => setIsPasswordShow(!isPasswordShow)}
             />
           </div>
-        )}
-        <div className='form-submit'>
-          <Button
-            type='primary'
-            label='Login'
-            onClick={isFirst ? handleOnResetPassword : handleOnSubmit}
-            disabled={checkFirstLoginCondition()}
-          />
+          {isFirst && (
+            <div>
+              <Input
+                inputType={isNewPasswordShow ? 'text' : 'password'}
+                inputId='new_password'
+                value={login.new_password}
+                onChange={handleOnChange}
+                placeholder='Enter New Password'
+                required
+                error={passwordErr}
+                sufFixIcon={
+                  isNewPasswordShow ? Icon.showPassword : Icon.hidePassword
+                }
+                suffixOnClick={() => setIsNewPasswordShow(!isNewPasswordShow)}
+              />
+            </div>
+          )}
+          <div className='form-submit'>
+            <Button
+              type='primary'
+              label='Login'
+              onClick={isFirst ? handleOnResetPassword : handleOnSubmit}
+              disabled={checkFirstLoginCondition()}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 export default Login;

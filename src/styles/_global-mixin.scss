@@ -1,23 +1,68 @@
-@import "./colors";
-@import "./fonts";
-
+@import './colors';
+@import './fonts';
 
 @mixin breakpoint($point) {
   @if $point == mobile {
-    @media (max-width: 47.9375rem) { @content; }
+    @media (max-width: 47.9375rem) {
+      @content;
+    }
   }
   @if $point == tablet {
-    @media (max-width: 63.875rem) { @content; }
+    @media (max-width: 63.875rem) {
+      @content;
+    }
   }
   @if $point == small-desktop {
-      @media (max-width: 76.1875rem) { @content; }
+    @media (max-width: 76.1875rem) {
+      @content;
+    }
   }
   @if $point == desktop {
-      @media (max-width: 90rem) { @content; }
+    @media (max-width: 90rem) {
+      @content;
+    }
   }
   @if $point == desktop-lg {
-    @media (min-width: 90.0625rem) { @content; }
+    @media (min-width: 90.0625rem) {
+      @content;
+    }
+  }
 }
+
+@mixin xs {
+  @media (max-width: 767px) {
+    @content;
+  }
+}
+
+@mixin sm {
+  @media (max-width: 1023px) {
+    @content;
+  }
+}
+
+@mixin md {
+  @media (max-width: 1219px) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @media (max-width: 1439px) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @media (min-width: 1440px) and (max-width: 1919px) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @media (min-width: 1920px) {
+    @content;
+  }
 }
 
 @mixin input-field {
@@ -35,14 +80,14 @@
 
 @mixin grid-auto-fit {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));;
+  grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));
   gap: 1.25rem;
 }
 
 @mixin chit-box-shadow {
   border-radius: 0.3125rem;
   padding: 0.625rem;
-  box-shadow: 0 0.125rem 0.625rem rgba(0,0,0,0.2);
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.2);
 }
 
 @mixin custom-btn {
@@ -50,7 +95,7 @@
   border: none;
   font-size: 1.125rem;
   cursor: pointer;
-  font-family: "HelveticaNowTextRegular";
+  font-family: 'HelveticaNowTextRegular';
   letter-spacing: -0.0219rem;
   transition: all 0.2s ease;
   background: transparent;

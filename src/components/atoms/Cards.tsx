@@ -1,16 +1,21 @@
 import { FC } from 'react';
 import 'styles/cards.scss';
 
-const Cards: FC = () => {
+type CardsType = {
+  customClass?: string;
+  cardData: any[];
+};
+
+const Cards: FC<CardsType> = ({ customClass, cardData }) => {
   return (
     <>
-      <div className='cards'>
-        <div className='card'>as</div>
-        <div className='card'>akj</div>
-        <div className='card'>kjhk</div>
-        <div className='card'>kljk</div>
-        <div className='card'>lkjk</div>
-      </div>
+      {cardData.map((card: any) => (
+        <div className='card'>
+          <h4>{card.label}</h4>
+          <h3>{card.amount}</h3>
+          <p>Today</p>
+        </div>
+      ))}
     </>
   );
 };

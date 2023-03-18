@@ -9,6 +9,8 @@ import deleteIcon from 'assets/images/delete.svg';
 import edit from 'assets/images/edit.svg';
 import showPassword from 'assets/images/show-password.svg';
 import hidePassword from 'assets/images/hide-password.svg';
+import wavy from 'assets/images/wavy.svg';
+import trade from 'assets/images/trade.svg';
 
 export {
   addGroup,
@@ -21,5 +23,7 @@ export {
   deleteIcon,
   edit,
   showPassword,
-  hidePassword
+  hidePassword,
+  wavy,
+  trade
 }

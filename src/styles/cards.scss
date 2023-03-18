@@ -1,12 +1,127 @@
 @use 'colors';
 @use 'fonts';
+@import './global-mixin';
 
-.cards {
+@mixin card-ui {
+  border: 0.0625rem solid transparent;
+  border-radius: 10px;
+  transition: 0.5s;
+  padding: 20px 30px;
+  position: relative;
+  background-color: colors.$off-white;
+  box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.2);
+  color: colors.$charcoal-grey;
+}
+
+@mixin col-2($gtc) {
+  padding: 1.5rem 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
   gap: 1.25rem;
+  // grid-template-columns: repeat(2, 1fr);
+  @if $gtc != null {
+    grid-template-columns: auto $gtc;
+  }
+}
 
+@mixin col-3($isGts) {
+  padding: 1.5rem 0;
+  display: grid;
+  gap: 1.25rem;
+  @if $isGts == true {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@mixin col-4 {
+  padding: 1.5rem 0;
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.col-2 {
+  @include xs {
+    @include col-2(null);
+  }
+  @include sm {
+    @include col-2(null);
+  }
+  @include md {
+    @include col-2(null);
+  }
+  // @include lg {
+  //   @include col-2(25rem);
+  // }
+  @include xl {
+    @include col-2(25rem);
+  }
+  @include xxl {
+    @include col-2(25rem);
+  }
   .card {
-    border: 0.0625rem solid red;
+    @include card-ui();
+  }
+}
+
+.col-3 {
+  @include xs {
+    @include col-3(false);
+  }
+  @include xl {
+    @include col-3(true);
+  }
+  @include xxl {
+    @include col-3(true);
+  }
+  .card {
+    @include card-ui();
+  }
+}
+
+.col-4 {
+  @include col-4();
+  @include breakpoint(desktop) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @include breakpoint(mobile) {
+    grid-template-columns: repeat(auto-fit, minmax(18.75rem, 1fr));
+  }
+  @include breakpoint(desktop-lg) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .card {
+    @include card-ui();
+  }
+}
+
+.collection-details {
+  .card {
+    &:nth-child(1) {
+      // background-color: #3b76ef;
+      background-color: #f3f6f9;
+      color: colors.$charcoal-grey;
+    }
+    &:nth-child(2) {
+      background-color: #63c7ff;
+    }
+    &:nth-child(3) {
+      // background-color: #a66dd4;
+      background-color: #17a2b8;
+    }
+    &:nth-child(4) {
+      background-color: #6dd4b1;
+    }
+  }
+}
+
+.collection-history {
+  overflow-x: auto;
+  padding: 20px 30px;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+  border: 0 solid #ecf2f5;
+  background-color: #f3f6f9;
+  h4 {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
   }
 }

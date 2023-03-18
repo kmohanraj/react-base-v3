@@ -32,7 +32,6 @@ const Table: FC<TableType> = ({
   onManageCustomer,
   onChangeStatus
 }) => {
-
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
     onEdit(selectedRow);
   };
@@ -70,9 +69,9 @@ const Table: FC<TableType> = ({
       return filterColumn[selector];
     } else if (typeof filterColumn === 'boolean') {
       return filterColumn === true ? (
-        <span className='active'>Active</span>
+        <span className='active badge'>Active</span>
       ) : (
-        <span className='in-active'>In-Active</span>
+        <span className='in-active badge'>In-Active</span>
       );
     } else {
       return '';
@@ -85,7 +84,9 @@ const Table: FC<TableType> = ({
         <thead>
           <tr>
             {columns.map((col, i) => (
-              <th key={i} scope='col'>{col.title}</th>
+              <th key={i} scope='col'>
+                {col.title}
+              </th>
             ))}
             {action && <th className='action-head'>Action</th>}
           </tr>
