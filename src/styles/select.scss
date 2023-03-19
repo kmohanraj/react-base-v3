@@ -12,13 +12,13 @@
   border-radius: 0.25rem;
   min-height: 3.75rem;
   box-sizing: border-box;
-  // background-color: colors.$white;
+  background-color: colors.$white;
 
   &.is-disabled {
     background-color: #f2f2f2;
     cursor: no-drop;
 
-    .right-section  {
+    .right-section {
       &:hover {
         cursor: no-drop;
       }
@@ -27,7 +27,7 @@
   &.is-focused {
     border: 0.0625rem solid colors.$slate-grey;
   }
-  
+
   .select_value_container {
     display: flex;
     position: relative;
@@ -48,7 +48,7 @@
         gap: 0.3125rem;
         overflow: hidden;
         user-select: none;
-        
+
         .select__multi__value {
           display: flex;
           border-radius: 0.125rem;
@@ -98,14 +98,14 @@
       .loader {
         height: 1.25rem;
       }
-      .loader, .clear-all {
+      .loader,
+      .clear-all {
         position: absolute;
         right: 3.125rem;
         transform: translateY(-50%);
         object-fit: contain;
       }
     }
-    
 
     input {
       border: 0;
@@ -130,7 +130,7 @@
         transition: all 0.3s ease;
       }
     }
-    
+
     label {
       // color: colors.$dark-grey;
       color: colors.$medium-grey;
@@ -142,9 +142,10 @@
       top: 60%;
       -webkit-transform: translateY(-50%);
       transform: translateY(-50%);
-      transition: all .2s ease-out;
+      transition: all 0.2s ease-out;
 
-      &.is-focus, &.has-value {
+      &.is-focus,
+      &.has-value {
         top: 0.3125rem;
         transform: none !important;
         letter-spacing: -0.0219rem;
@@ -170,9 +171,10 @@
 
 .select__menu {
   top: 100%;
-  background-color: hsl(0,0%,100%);
+  background-color: hsl(0, 0%, 100%);
   border-radius: 0.25rem;
-  box-shadow: 0 0 0 0.0625rem hsl(0deg 0% 0% / 10%), 0 4px 11px hsl(0deg 0% 0% / 10%);
+  box-shadow: 0 0 0 0.0625rem hsl(0deg 0% 0% / 10%),
+    0 4px 11px hsl(0deg 0% 0% / 10%);
   margin-bottom: 0.5rem;
   margin-top: 0.5rem;
   position: absolute;
@@ -212,7 +214,10 @@
   }
 }
 
-.select_control.is-disabled .select_value_container .select__values .select__multi__value__remove:hover {
+.select_control.is-disabled
+  .select_value_container
+  .select__values
+  .select__multi__value__remove:hover {
   cursor: no-drop !important;
   background-color: transparent;
 }
