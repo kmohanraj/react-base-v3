@@ -1,29 +1,29 @@
-@import './global-mixin';
+@import "./global-mixin";
 
-.container {
-  overflow: scroll;
-  // position: absolute;
-  // margin-top: 3.625rem;
-  margin-top: 5.0625rem;
-  top: 6.0625rem;
-  left: 0;
-  right: 0;
-  bottom: 2.5rem;
-  padding: 1.25rem 40px;
-  height: calc(100vh - 11.8375rem);
+// .container {
+//   overflow: scroll;
+//   // position: absolute;
+//   // margin-top: 3.625rem;
+//   margin-top: 5.0625rem;
+//   top: 6.0625rem;
+//   left: 0;
+//   right: 0;
+//   bottom: 2.5rem;
+//   padding: 1.25rem 40px;
+//   height: calc(100vh - 11.8375rem);
 
-  @include breakpoint(mobile) {
-    padding: 1.25rem 1.875rem;
-    height: calc(100vh - 11.8375rem);
-  }
-  @include breakpoint(desktop) {
-    height: calc(100vh - 10.9375rem);
-  }
-  @include breakpoint(desktop-lg) {
-    height: calc(100vh - 10.9375rem);
-  }
+//   @include breakpoint(mobile) {
+//     padding: 1.25rem 1.875rem;
+//     height: calc(100vh - 11.8375rem);
+//   }
+//   @include breakpoint(desktop) {
+//     height: calc(100vh - 10.9375rem);
+//   }
+//   @include breakpoint(desktop-lg) {
+//     height: calc(100vh - 10.9375rem);
+//   }
 
-  .form-section, .container-section,.table-section {
-    margin-bottom: var(--fh);
-  }
-}
+//   .form-section, .container-section,.table-section {
+//     margin-bottom: var(--fh);
+//   }
+// }

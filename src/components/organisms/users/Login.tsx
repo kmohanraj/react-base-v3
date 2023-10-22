@@ -1,15 +1,15 @@
-import React, { FC, useState } from 'react';
-import Button from 'components/atoms/Button';
-import Input from 'components/atoms/TextField';
-import 'styles/login.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { setLogin } from 'store/slice/users.slice';
-import type { RootState } from 'store';
-import userService from 'service/user.service';
-import CONSTANTS from 'constants/constants';
-import iziToast from 'izitoast';
-import * as Icon from 'constants/icons';
-import cx from 'classnames';
+import React, { FC, useState } from "react";
+import Button from "components/atoms/Button";
+import Input from "components/atoms/TextField";
+import "styles/login.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogin } from "store/slice/users.slice";
+import type { RootState } from "store";
+import userService from "service/user.service";
+import CONSTANTS from "constants/constants";
+import iziToast from "izitoast";
+import * as Icon from "constants/icons";
+import cx from "classnames";
 
 const {
   SESSION_STORAGE,
@@ -17,7 +17,7 @@ const {
   TOAST_DEFAULTS,
   ERROR,
   EMAIL_PATTERN,
-  PASSWORD_PATTERN
+  PASSWORD_PATTERN,
 } = CONSTANTS;
 
 const Login: FC = () => {
@@ -26,26 +26,26 @@ const Login: FC = () => {
   const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false);
   const [isNewPasswordShow, setIsNewPasswordShow] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const [emailErr, setEmailErr] = useState<string>('');
-  const [passwordErr, setPasswordErr] = useState<string>('');
-  const isFirstClass = cx('login-form', { 'is-first': isFirst });
+  const [emailErr, setEmailErr] = useState<string>("");
+  const [passwordErr, setPasswordErr] = useState<string>("");
+  const isFirstClass = cx("login-form", { "is-first": isFirst });
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     dispatch(
       setLogin({
         ...login,
-        [name]: checkInputType(name, value)
+        [name]: checkInputType(name, value),
       })
     );
   };
 
   const checkInputType = (name: string, value: string) => {
-    if (name === 'phone') {
-      return value.replace(/[^0-9]+/g, '').substring(0, 10);
-    } else if (name === 'email') {
+    if (name === "phone") {
+      return value.replace(/[^0-9]+/g, "").substring(0, 10);
+    } else if (name === "email") {
       return emailValidation(value);
-    } else if (name === 'password') {
+    } else if (name === "password") {
       return passwordValidation(value);
     } else {
       return value;
@@ -53,7 +53,7 @@ const Login: FC = () => {
   };
 
   const emailValidation = (value: string) => {
-    setEmailErr('');
+    setEmailErr("");
     if (value.length > 0 && !EMAIL_PATTERN.test(value)) {
       setEmailErr(ERROR.USER.EMAIL_VALIDATION);
       return value;
@@ -62,7 +62,7 @@ const Login: FC = () => {
   };
 
   const passwordValidation = (value: string) => {
-    setPasswordErr('');
+    setPasswordErr("");
     if (value.length > 0 && !PASSWORD_PATTERN.test(value)) {
       setPasswordErr(ERROR.USER.PASSWORD_VALIDATION);
       return value;
@@ -75,7 +75,7 @@ const Login: FC = () => {
     if (response?.status === STATUS_CODE.STATUS_200) {
       sessionStorage.setItem(
         SESSION_STORAGE.AUTH_TOKEN_KEY,
-        response.headers['authorization']
+        response.headers["authorization"]
       );
       sessionStorage.setItem(
         SESSION_STORAGE.IS_FIRST_LOGIN,
@@ -104,19 +104,19 @@ const Login: FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       response.data?.info.isFirstLogin
         ? null
-        : (window.location.pathname = '/');
+        : (window.location.pathname = "/");
       setIsFirst(response.data?.info.isFirstLogin ? true : false);
     }
 
     if (response?.status === STATUS_CODE.STATUS_200) {
       iziToast.success({
         title: TOAST_DEFAULTS.SUCCESS_TITLE,
-        message: response?.data?.info
+        message: response?.data?.info,
       });
     } else {
       iziToast.info({
         title: TOAST_DEFAULTS.INFO_TITLE,
-        message: response?.data?.info
+        message: response?.data?.info,
       });
     }
   };
@@ -134,11 +134,11 @@ const Login: FC = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       response?.data?.info?.isFirstLogin
         ? null
-        : (window.location.pathname = '/');
+        : (window.location.pathname = "/");
     } else {
       iziToast.info({
         title: CONSTANTS.TOAST_DEFAULTS.INFO_TITLE,
-        message: response?.data?.info
+        message: response?.data?.info,
       });
     }
   };
@@ -153,27 +153,27 @@ const Login: FC = () => {
 
   return (
     <>
-      <div className='login-container'>
+      <div className="login-container">
         <div className={isFirstClass}>
           <h1>Sign In</h1>
-          <div className='wrapper'>
+          <div className="wrapper">
             <Input
-              inputId='email'
+              inputId="email"
               value={login.email}
               onChange={handleOnChange}
-              placeholder='Enter Email'
+              placeholder="Enter Email"
               required
               isDisabled={isFirst}
               error={emailErr}
             />
             <Input
-              inputType={isPasswordShow ? 'text' : 'password'}
-              inputId={isFirst ? 'Old password' : 'password'}
+              inputType={isPasswordShow ? "text" : "password"}
+              inputId={isFirst ? "Old password" : "password"}
               value={login.password}
               onChange={handleOnChange}
-              placeholder={isFirst ? 'Old Password' : 'Enter Password'}
+              placeholder={isFirst ? "Old Password" : "Enter Password"}
               required
-              error={isFirst ? passwordErr : ''}
+              error={isFirst ? passwordErr : ""}
               sufFixIcon={
                 isPasswordShow ? Icon.showPassword : Icon.hidePassword
               }
@@ -183,11 +183,11 @@ const Login: FC = () => {
           {isFirst && (
             <div>
               <Input
-                inputType={isNewPasswordShow ? 'text' : 'password'}
-                inputId='new_password'
+                inputType={isNewPasswordShow ? "text" : "password"}
+                inputId="new_password"
                 value={login.new_password}
                 onChange={handleOnChange}
-                placeholder='Enter New Password'
+                placeholder="Enter New Password"
                 required
                 error={passwordErr}
                 sufFixIcon={
@@ -197,10 +197,10 @@ const Login: FC = () => {
               />
             </div>
           )}
-          <div className='form-submit'>
+          <div className="form-submit">
             <Button
-              type='primary'
-              label='Login'
+              type="primary"
+              label="Login"
               onClick={isFirst ? handleOnResetPassword : handleOnSubmit}
               disabled={checkFirstLoginCondition()}
             />

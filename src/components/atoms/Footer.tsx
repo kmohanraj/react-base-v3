@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import 'styles/footer.scss';
+import React, { useEffect, useState } from "react";
+import "styles/footer.scss";
 
 const Footer = () => {
   const [year, setYear] = useState<number>();
@@ -15,11 +15,11 @@ const Footer = () => {
 
   return (
     <footer>
-      <div className='footer-content'>
+      <div className="footer-content">
         <p>
           You agree to our Terms of Service, Cookie Policy, Privacy Policy and
-          Content Policy. {year} &copy;{' '}
-          <span className='company-name'>Company Name Ltd.</span> All rights
+          Content Policy. {year} &copy;
+          <span className="company-name">Company Name Ltd.</span> All rights
           reserved
         </p>
       </div>

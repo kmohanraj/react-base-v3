@@ -1,6 +1,6 @@
-import { FC } from 'react';
-import 'styles/pagination.scss';
-import cx from 'classnames';
+import { FC } from "react";
+import "styles/pagination.scss";
+import cx from "classnames";
 
 type PaginationProps = {
   totalPageRecords: number;
@@ -17,14 +17,14 @@ const Pagination: FC<PaginationProps> = ({
   perPage,
   maxVisibleButton,
   setCurrentPage,
-  setPerPageSize
+  setPerPageSize,
 }) => {
-  const previousClass = cx('page-previous', {
-    'is-disabled': currentPage === 1
+  const previousClass = cx("page-previous", {
+    "is-disabled": currentPage === 1,
   });
   const totalPages = Math.ceil(totalPageRecords / perPage);
-  const nextClass = cx('page-next', {
-    'is-disabled': currentPage === totalPages
+  const nextClass = cx("page-next", {
+    "is-disabled": currentPage === totalPages,
   });
 
   const goToPage = (page: number) => {
@@ -58,7 +58,7 @@ const Pagination: FC<PaginationProps> = ({
 
     return pages.map((index) => (
       <button
-        className={index === currentPage ? 'page-item active' : 'page-item'}
+        className={index === currentPage ? "page-item active" : "page-item"}
         key={index}
         onClick={() => goToPage(index)}
       >
@@ -75,7 +75,7 @@ const Pagination: FC<PaginationProps> = ({
     // <nav className={`page-${direction}`}>
     <>
       {totalPageRecords > perPage && (
-        <nav className='page-position'>
+        <nav className="page-position">
           {/* <section>
             <li>Show Items:
               <select onChange={ (e) => onChangeRecordsPerPage(e)}>
@@ -87,20 +87,20 @@ const Pagination: FC<PaginationProps> = ({
               </select>
             </li>
           </section> */}
-          <section className='pagination'>
+          <section className="pagination">
             <button
               className={previousClass}
               disabled={currentPage === 1}
               onClick={() => goToPage(1)}
             >
-              {'<<'}
+              {"<<"}
             </button>
             <button
               className={previousClass}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
             >
-              {'<'}
+              {"<"}
             </button>
             {renderControlIndexes()}
             <button
@@ -108,14 +108,14 @@ const Pagination: FC<PaginationProps> = ({
               disabled={totalPages === currentPage}
               onClick={() => setCurrentPage((prev: any) => prev + 1)}
             >
-              {'>'}
+              {">"}
             </button>
             <button
               className={nextClass}
               disabled={totalPages === currentPage}
               onClick={() => goToPage(totalPages)}
             >
-              {'>>'}
+              {">>"}
             </button>
           </section>
         </nav>

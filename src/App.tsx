@@ -5,10 +5,9 @@ import CONSTANTS from 'constants/constants';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const { POSITION, TIMEOUT, DISPLAY_MODE } = CONSTANTS.TOAST_DEFAULTS
-function App() {
 
+const App = () => {
   const handleSize = () => {
-    // let vh = window.innerHeight * 0.01;
     const footerHeight = document.getElementsByTagName('footer')[0]?.clientHeight
     document.documentElement.style.setProperty('--fh', `${footerHeight}px`)
   }
@@ -18,6 +17,7 @@ function App() {
     window.addEventListener('resize', handleSize)
     return () => window.removeEventListener('resize', handleSize)
   }, [])
+
   return (
     <React.Fragment>
       <>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import 'styles/header.scss';
-import CONSTANTS from 'constants/constants';
-import cx from 'classnames';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import "styles/header.scss";
+import CONSTANTS from "constants/constants";
+import cx from "classnames";
 
 export interface IMenusProps {
   path: string;
@@ -11,29 +11,29 @@ export interface IMenusProps {
 
 const menuConfigs = [
   {
-    path: '/',
-    name: 'Dashboard'
+    path: "/",
+    name: "Dashboard",
   },
   {
-    path: '/organizations',
-    name: 'Organizations'
+    path: "#",
+    name: "Organizations",
   },
   {
-    path: '/branches',
-    name: 'Branches'
+    path: "#",
+    name: "Branches",
   },
   {
-    path: '/users',
-    name: 'Users'
+    path: "#",
+    name: "Users",
   },
   {
-    path: '/customers',
-    name: 'Customers'
+    path: "#",
+    name: "Customers",
   },
   {
-    path: '/groups',
-    name: 'Groups'
-  }
+    path: "#",
+    name: "Groups",
+  },
 ];
 
 const Header = () => {
@@ -44,9 +44,7 @@ const Header = () => {
   const currentUserRole = sessionStorage.getItem(
     CONSTANTS.SESSION_STORAGE.ROLE_KEY
   );
-  const orgLogo = sessionStorage.getItem(
-    CONSTANTS.SESSION_STORAGE.LOGO
-  );
+  const orgLogo = sessionStorage.getItem(CONSTANTS.SESSION_STORAGE.LOGO);
   const isMenuOpenClass = cx({ show: isToggle });
   const [isProfileShow, setIsProfileShow] = useState(false);
 
@@ -76,41 +74,41 @@ const Header = () => {
   };
 
   return (
-    <header className='header'>
-      <Link to='/' className='logo'>
-        { orgLogo ?? '{}'}
+    <header className="header">
+      <Link to="/" className="logo">
+        {orgLogo ?? "{}"}
       </Link>
       <input
         className={`menu-btn ${isMenuOpenClass}`}
-        type='checkbox'
-        id='menu-btn'
+        type="checkbox"
+        id="menu-btn"
       />
       <label className={`menu-icon ${isMenuOpenClass}`}>
-        <span className='navicon' onClick={() => setIsToggle(!isToggle)}></span>
+        <span className="navicon" onClick={() => setIsToggle(!isToggle)}></span>
       </label>
       <ul className={`menu ${isMenuOpenClass}`}>
         {createMenuConfig(menuConfigs).map((ele: IMenusProps, i: number) => (
-          <li key={i} id='menu-btn' onClick={() => setIsToggle(!isToggle)}>
-            <Link to={ele.path} id='menu-btn'>
+          <li key={i} id="menu-btn" onClick={() => setIsToggle(!isToggle)}>
+            <Link to={ele.path} id="menu-btn">
               {ele.name}
             </Link>
           </li>
         ))}
         <li
-          id='menu-btn'
-          className='profile'
+          id="menu-btn"
+          className="profile"
           onClick={() => setIsProfileShow(!isProfileShow)}
         >
-          <Link className='logged-user' to='' id='menu-btn'>
+          <Link className="logged-user" to="" id="menu-btn">
             {currentUserName}
           </Link>
           {isProfileShow && (
-            <div className='dropdown-menu'>
+            <div className="dropdown-menu">
               <Link
-                to=''
+                to=""
                 onClick={() => {
                   sessionStorage.clear();
-                  window.location.pathname = '/login';
+                  window.location.pathname = "/login";
                 }}
               >
                 Logout

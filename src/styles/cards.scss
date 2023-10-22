@@ -1,6 +1,6 @@
-@use 'colors';
-@use 'fonts';
-@import './global-mixin';
+@use "colors";
+@use "fonts";
+@import "./global-mixin";
 
 @mixin card-ui {
   border: 0.0625rem solid transparent;
@@ -17,7 +17,6 @@
   padding: 1.5rem 0;
   display: grid;
   gap: 1.25rem;
-  // grid-template-columns: repeat(2, 1fr);
   @if $gtc != null {
     grid-template-columns: auto $gtc;
   }
@@ -49,9 +48,6 @@
   @include md {
     @include col-2(null);
   }
-  // @include lg {
-  //   @include col-2(25rem);
-  // }
   @include xl {
     @include col-2(25rem);
   }
@@ -97,26 +93,25 @@
 .collection-details {
   .card {
     &:nth-child(1) {
-      // background-color: #3b76ef;
-      background-color: #f3f6f9;
-      color: colors.$charcoal-grey;
+      color: colors.$off-white;
+      background-color: colors.$green-light;
     }
     &:nth-child(2) {
-      background-color: #63c7ff;
+      background-color: #6dd4b1;
     }
     &:nth-child(3) {
-      // background-color: #a66dd4;
-      background-color: #17a2b8;
+      background-color: colors.$danger-light;
     }
     &:nth-child(4) {
-      background-color: #6dd4b1;
+      color: colors.$off-white;
+      background-color: colors.$primary-btn-bg;
     }
   }
 }
 
 .collection-history {
   overflow-x: auto;
-  padding: 20px 30px;
+  border-radius: 0.3125rem;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
   border: 0 solid #ecf2f5;
   background-color: #f3f6f9;

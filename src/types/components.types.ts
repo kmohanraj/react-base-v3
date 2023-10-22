@@ -1,4 +1,6 @@
 import React from 'react';
+import { TableColumn } from 'react-data-table-component';
+
 
 export interface IErrorProps {
   title?: string;
@@ -13,17 +15,6 @@ export type ModalType = {
   isCloseIcon?: boolean;
 };
 
-export type OrganizationType = {
-  id: number;
-  org_name: string;
-  org_email: string;
-  branch_limit: string;
-  group_limit: string;
-  org_logo: string;
-  org_phone: string;
-  org_address: string;
-};
-
 export type CollectionProps = {
   title?: string;
   onClose?: () => void;
@@ -34,14 +25,14 @@ export interface ISelectOption {
   label: string
 }
 
-export interface IManageCustomer {
-  id: null;
-  customer_id: null;
-  customer_name: string;
-  customer_code: string;
-  group_id: null;
-  collection_type_id: null;
-  taken_amount: null;
-  taken_at: null;
-  taken_position: null;
+export interface ITableProps {
+  title?: string;
+  cols: TableColumn<any>[];
+  loading: boolean;
+  isPaginated?: boolean;
+  totalRowCount?: number;
+  onPageChange?: (page: number) => void;
+  selectedRows?: (selectedRowsData: any[]) => void;
+  onPageRowsChange?: (newPageRowCount: number, page: number) => void;
+  data: any[];
 }

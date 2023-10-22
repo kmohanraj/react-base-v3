@@ -11,6 +11,15 @@ import showPassword from 'assets/images/show-password.svg';
 import hidePassword from 'assets/images/hide-password.svg';
 import wavy from 'assets/images/wavy.svg';
 import trade from 'assets/images/trade.svg';
+import search from 'assets/images/search.svg';
+import bar from 'assets/images/bar.svg';
+import bar1 from 'assets/images/bar1.svg';
+import bar_black from 'assets/images/bar_black.svg';
+import bar_white from 'assets/images/bar_white.svg';
+import bar3 from 'assets/images/bar3.svg';
+import cross from 'assets/images/cross.svg';
+import arrow1 from 'assets/images/arrow1.svg'
+
 
 export {
   addGroup,
@@ -25,5 +34,13 @@ export {
   showPassword,
   hidePassword,
   wavy,
-  trade
+  trade,
+  search,
+  bar,
+  cross,
+  bar3,
+  bar1,
+  bar_black,
+  bar_white,
+  arrow1
 }

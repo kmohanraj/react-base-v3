@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
+  COMPANY_NAME: 'Ananya',
   CLASS_NAMES: {
     BRAND_CLASS: 'chit'
   },

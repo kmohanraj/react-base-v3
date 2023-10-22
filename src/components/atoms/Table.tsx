@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
-import 'styles/table.scss';
-import * as Icons from 'constants/icons';
-import ErrorPage from 'components/atoms/ErrorPage';
-import moment from 'moment';
+import React, { FC, useEffect } from "react";
+import moment from "moment";
+import ErrorPage from "components/atoms/ErrorPage";
+import NoRecord from "./NoRecord";
+import * as Icons from "constants/icons";
+import "styles/table.scss";
 
 type TableType = {
   tableName: string;
@@ -16,8 +17,8 @@ type TableType = {
   }[];
   data: any[];
   action?: string[];
-  onEdit: (data: any) => void;
-  onRemove: (id: number) => void;
+  onEdit?: (data: any) => void;
+  onRemove?: (id: number) => void;
   onManageCustomer?: (data: any) => void;
   onChangeStatus?: (columnName: string, selectedItem: any) => void;
 };
@@ -30,22 +31,18 @@ const Table: FC<TableType> = ({
   onEdit,
   onRemove,
   onManageCustomer,
-  onChangeStatus
+  onChangeStatus,
 }) => {
   const handleOnEdit = (selectedRow: any, selectedId: any) => {
-    onEdit(selectedRow);
+    onEdit && onEdit(selectedRow);
   };
   const handleOnRemove = (data: any) => {
-    onRemove(data);
+    onRemove && onRemove(data);
   };
 
   const handleOnManageCustomer = (selectedRow: any) => {
     onManageCustomer && onManageCustomer(selectedRow);
   };
-
-  if (data.length === 0) {
-    return <ErrorPage />;
-  }
 
   const manageData = (
     filterColumn: any,
@@ -57,38 +54,38 @@ const Table: FC<TableType> = ({
     if (isDate) {
       return moment(filterColumn)
         .utcOffset(330)
-        .format(isTime ? 'DD/MM/YYYY : hh:mm' : 'DD/MM/YYYY');
-    } else if (typeof filterColumn === 'string') {
-      return filterColumn ?? '';
-    } else if (typeof filterColumn === 'number') {
+        .format(isTime ? "DD/MM/YYYY : hh:mm" : "DD/MM/YYYY");
+    } else if (typeof filterColumn === "string") {
+      return filterColumn ?? "";
+    } else if (typeof filterColumn === "number") {
       return (
         options &&
         options.filter((ele: any) => ele.id === filterColumn)[0].label
       );
-    } else if (filterColumn !== null && typeof filterColumn === 'object') {
+    } else if (filterColumn !== null && typeof filterColumn === "object") {
       return filterColumn[selector];
-    } else if (typeof filterColumn === 'boolean') {
+    } else if (typeof filterColumn === "boolean") {
       return filterColumn === true ? (
-        <span className='active badge'>Active</span>
+        <span className="active badge">Active</span>
       ) : (
-        <span className='in-active badge'>In-Active</span>
+        <span className="in-active badge">In-Active</span>
       );
     } else {
-      return '';
+      return "";
     }
   };
 
   return (
-    <div className='table-wrapper'>
+    <div className="table-wrapper">
       <table className={`table ${tableName}`}>
         <thead>
           <tr>
             {columns.map((col, i) => (
-              <th key={i} scope='col'>
+              <th key={i} scope="col">
                 {col.title}
               </th>
             ))}
-            {action && <th className='action-head'>Action</th>}
+            {action && <th className="action-head">Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -115,23 +112,23 @@ const Table: FC<TableType> = ({
                 </>
               ))}
               {action && (
-                <td className='actions'>
-                  <div className='action-container'>
+                <td className="actions">
+                  <div className="action-container">
                     {action.map((ac: string) => (
                       <>
-                        {ac === 'Edit' && (
+                        {ac === "Edit" && (
                           <span onClick={() => handleOnEdit(d, j)}>
-                            <img src={Icons.edit} alt='Edit' />
+                            <img src={Icons.edit} alt="Edit" />
                           </span>
                         )}
-                        {ac === 'Delete' && (
+                        {ac === "Delete" && (
                           <span onClick={() => handleOnRemove(d)}>
-                            <img src={Icons.deleteIcon} alt='Delete' />
+                            <img src={Icons.deleteIcon} alt="Delete" />
                           </span>
                         )}
-                        {ac === 'Create' && (
+                        {ac === "Create" && (
                           <span onClick={() => handleOnManageCustomer(d)}>
-                            <img src={Icons.addGroup} alt='Manage Customer' />
+                            <img src={Icons.addGroup} alt="Manage Customer" />
                           </span>
                         )}
                       </>
@@ -143,6 +140,7 @@ const Table: FC<TableType> = ({
           ))}
         </tbody>
       </table>
+      {!data.length && <NoRecord message="There are no records to display" />}
     </div>
   );
 };

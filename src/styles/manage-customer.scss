@@ -9,20 +9,25 @@
 
 .manage-customer {
   @include grid-auto-fit();
+
   .section {
     @include chit-box-shadow();
   }
+
   .group-content {
     display: flex;
     column-gap: 10px;
     justify-content: space-between;
+
     .name {
       color: $slate-grey;
       padding: 5px 0;
     }
+
     .value {
       color: $slate-grey;
     }
+
     .chit-amount {
       color: $green-light;
       font-family: $font-bold;
@@ -50,10 +55,12 @@
         font-family: $font-bold;
       }
     }
+
     .actions {
       display: grid;
       row-gap: 5px;
     }
+
     &:hover {
       transform: scale(1.025);
       transition: all 0.2s ease;
@@ -74,7 +81,7 @@
     font-weight: 500;
     background-color: $green-light;
     border-radius: 10% 30% 50% 70%;
-    color: $light-grey;
+    color: white;
     // opacity: 0.5;
     z-index: -1;
     // backdrop-filter: blur(8px) brightness(80%);
